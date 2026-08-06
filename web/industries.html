@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Industries - VoiceKernel</title>
+<meta name="description" content="VoiceKernel use cases by industry: banking, insurance, superannuation, telco & utilities, government and health administration.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1C2E;
+  --ink-soft:#31445A;
+  --porcelain:#F4F7F9;
+  --panel:#0B1626;
+  --panel-line:#1D2F45;
+  --amber:#E8A13D;
+  --amber-deep:#B87716;
+  --teal:#0F5D5D;
+  --teal-bright:#2E9E8F;
+  --mist:#DEE7ED;
+  --white:#FFFFFF;
+  --radius:10px;
+  --maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;color:var(--ink);background:var(--porcelain);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--amber);color:var(--ink)}
+a{color:inherit}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--teal)}
+h1,h2,h3{font-family:'Archivo',sans-serif;line-height:1.06;letter-spacing:-.015em}
+h2{font-size:clamp(1.6rem,3.2vw,2.3rem);font-weight:800}
+.sub{color:var(--ink-soft);max-width:58ch}
+.btn{display:inline-block;font-weight:600;font-size:.9rem;padding:11px 20px;border-radius:var(--radius);text-decoration:none;border:1px solid transparent;transition:transform .12s ease,background .12s ease}
+.btn:focus-visible,a:focus-visible{outline:2px solid var(--amber-deep);outline-offset:2px}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:#16283E;transform:translateY(-1px)}
+.btn-amber{background:var(--amber);color:var(--ink)}
+.btn-amber:hover{background:#F0B055;transform:translateY(-1px)}
+.btn-ghost{border-color:var(--ink);color:var(--ink)}
+.btn-ghost:hover{background:var(--white)}
+
+nav{position:sticky;top:0;z-index:50;background:rgba(244,247,249,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--mist)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Archivo';font-weight:800;font-size:1.12rem;letter-spacing:-.02em;text-decoration:none}
+.logo-mark{width:26px;height:26px;display:block}
+.logo em{font-style:normal;color:var(--amber-deep)}
+.nav-links{display:flex;gap:26px;align-items:center;font-size:.9rem;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--ink-soft)}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{color:var(--ink);border-bottom:2px solid var(--amber)}
+
+/* page hero */
+.phero{padding:76px 0 44px}
+.phero h1{font-size:clamp(2.2rem,4.6vw,3.4rem);font-weight:900;margin:16px 0 18px;max-width:22ch}
+.phero h1 .amber{color:var(--amber-deep)}
+.phero .sub{font-size:1.08rem}
+
+/* industry index */
+.index{border-top:1px solid var(--mist);border-bottom:1px solid var(--mist);background:var(--white);position:sticky;top:64px;z-index:40}
+.index-inner{display:flex;gap:6px;overflow-x:auto;padding:12px 0;font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+.index-inner a{text-decoration:none;color:var(--ink-soft);padding:7px 13px;border-radius:20px;white-space:nowrap;border:1px solid transparent}
+.index-inner a:hover{border-color:var(--mist);color:var(--ink)}
+
+section.industry{padding:84px 0;border-bottom:1px solid var(--mist)}
+section.industry.dark{background:var(--panel);color:#D7E3EE;border-bottom:1px solid var(--panel-line)}
+.dark .eyebrow{color:var(--teal-bright)}
+.dark .eyebrow::before{background:var(--teal-bright)}
+.dark .sub{color:#8FA9BF}
+.dark h2{color:#EAF2F8}
+
+.ind-head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:44px}
+.ind-head h2{margin-top:14px}
+.ind-stat{font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:var(--ink-soft);text-align:right}
+.dark .ind-stat{color:#5A7690}
+.ind-stat b{display:block;font-family:'Archivo';font-size:1.9rem;font-weight:800;color:var(--amber-deep);letter-spacing:-.02em;line-height:1.1}
+.dark .ind-stat b{color:var(--amber)}
+
+.ind-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:start}
+.cases{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--mist);border:1px solid var(--mist);border-radius:14px;overflow:hidden}
+.dark .cases{background:var(--panel-line);border-color:var(--panel-line)}
+.case{background:var(--white);padding:24px 22px}
+.dark .case{background:#0E1C2E}
+.case h3{font-size:.98rem;font-weight:800;margin-bottom:8px;display:flex;gap:10px;align-items:baseline}
+.dark .case h3{color:#EAF2F8}
+.case p{font-size:.86rem;color:var(--ink-soft)}
+.dark .case p{color:#8FA9BF}
+.roles{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.chip{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.1em;padding:3px 8px;border-radius:4px;font-weight:500}
+.chip.a{background:rgba(232,161,61,.16);color:var(--amber-deep)}
+.chip.b{background:rgba(46,158,143,.14);color:var(--teal)}
+.chip.c{background:var(--porcelain);color:var(--ink-soft)}
+.dark .chip.a{color:var(--amber)}
+.dark .chip.b{color:var(--teal-bright)}
+.dark .chip.c{background:#1D2F45;color:#9FBBD1}
+
+/* mini console */
+.console{background:var(--panel);border:1px solid var(--panel-line);border-radius:14px;color:#D7E3EE;overflow:hidden;font-size:.85rem;box-shadow:0 26px 54px -30px rgba(14,28,46,.5)}
+.dark .console{border-color:#31445A}
+.console-head{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-bottom:1px solid var(--panel-line);font-family:'IBM Plex Mono',monospace;font-size:.7rem;letter-spacing:.06em}
+.live-dot{display:inline-flex;align-items:center;gap:7px;color:#8FB3C9}
+.live-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.call-id{color:#5A7690}
+.transcript{padding:16px 18px 6px}
+.line{display:flex;gap:12px;margin-bottom:13px}
+.tag{flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:5px;height:fit-content;margin-top:2px}
+.tag.caller{background:#1D2F45;color:#9FBBD1}
+.tag.agent{background:rgba(232,161,61,.16);color:var(--amber)}
+.tag.listen{background:rgba(46,158,143,.16);color:var(--teal-bright)}
+.line p{line-height:1.5;font-size:.84rem}
+.redact{background:rgba(208,106,78,.22);color:#F0A48D;padding:1px 7px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:.76rem}
+.cite{display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;font-size:.66rem;background:rgba(46,158,143,.12);color:var(--teal-bright);border:1px solid rgba(46,158,143,.35);padding:3px 9px;border-radius:20px;margin-top:6px}
+.console-foot{border-top:1px solid var(--panel-line);padding:10px 18px;display:flex;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:#5A7690}
+.console-foot b{color:#9FBBD1;font-weight:500}
+.console-label{font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:12px}
+.dark .console-label{color:#5A7690}
+
+/* final cta */
+.final{padding:100px 0}
+.final h2{font-size:clamp(1.9rem,4vw,2.9rem);font-weight:900;max-width:20ch}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-top:30px}
+
+footer{background:var(--panel);color:#8FA9BF;padding:44px 0;font-size:.85rem}
+.foot-base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:#5A7690}
+
+@media (max-width:960px){
+  .ind-grid{grid-template-columns:1fr;gap:36px}
+  .nav-links{display:none}
+  .ind-head{grid-template-columns:1fr}
+  .ind-stat{text-align:left}
+  .ind-stat b{display:inline;margin-right:8px}
+}
+@media (max-width:600px){
+  .cases{grid-template-columns:1fr}
+  section.industry{padding:60px 0}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+.nav-signin{font-size:.9rem;font-weight:600;text-decoration:none;color:var(--ink-soft);margin-right:4px}
+.nav-signin:hover{color:var(--ink)}
+.nav-links a[aria-current="page"]{color:var(--ink);font-weight:600}
+</style>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0E1C2E">
+<script>
+(function () {
+  try {
+    var saved = localStorage.getItem('vk-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  } catch (e) {}
+})();
+</script>
+<style>
+:root{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;
+  --ink:#E4EDF5;
+  --ink-soft:#8FA9BF;
+  --porcelain:#0A1220;
+  --panel:#0E1A2C;
+  --panel-line:#1D2F45;
+  --mist:#1D2F45;
+  --white:#0E1A2C;
+  /* Brightened for contrast against the dark background - the light-mode
+     values are tuned for white and go muddy here. */
+  --amber:#E8A13D;
+  --amber-deep:#E8A13D;
+  --teal:#2E9E8F;
+  --teal-bright:#3FBFAE;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]){color-scheme:dark;
+  --ink:#E4EDF5;
+  --ink-soft:#8FA9BF;
+  --porcelain:#0A1220;
+  --panel:#0E1A2C;
+  --panel-line:#1D2F45;
+  --mist:#1D2F45;
+  --white:#0E1A2C;
+  /* Brightened for contrast against the dark background - the light-mode
+     values are tuned for white and go muddy here. */
+  --amber:#E8A13D;
+  --amber-deep:#E8A13D;
+  --teal:#2E9E8F;
+  --teal-bright:#3FBFAE;
+}
+}
+:root .eyebrow::before,:root .eyebrow::after,:root .kicker::before,:root .kicker::after{display:none}
+:root .eyebrow,:root .kicker{gap:0}
+:root .logo .wordmark{white-space:nowrap}
+:root .wrap{margin-left:auto;margin-right:auto}
+:root .pillar .glyph{background:rgba(46,158,143,.12);color:#0F7A6C}
+:root[data-theme="light"] .pillar .glyph{background:rgba(46,158,143,.12);color:#0F7A6C}
+:root[data-theme="dark"] nav{background:rgba(10,18,32,.88);border-bottom-color:var(--panel-line)}
+:root[data-theme="dark"] .btn-primary{background:var(--amber);color:#0A1220}
+:root[data-theme="dark"] .btn-primary:hover{background:#F0B055;color:#0A1220}
+:root[data-theme="dark"] .btn-ghost{border-color:var(--ink-soft);color:var(--ink)}
+:root[data-theme="dark"] .btn-ghost:hover{background:var(--panel)}
+:root[data-theme="dark"] .strip,:root[data-theme="dark"] .comply,:root[data-theme="dark"] .pillar,:root[data-theme="dark"] .plan,:root[data-theme="dark"] .rate-table,:root[data-theme="dark"] .card{border-color:var(--panel-line)}
+:root[data-theme="dark"] .pillars{background:var(--panel-line);border-color:var(--panel-line)}
+:root[data-theme="dark"] .term{background:var(--panel);border-color:var(--panel-line)}
+:root[data-theme="dark"] .term button.on{background:var(--amber);color:#0A1220}
+:root[data-theme="dark"] .matrix tr:hover td{background:var(--panel)}
+:root[data-theme="dark"] .rate-table th{background:var(--panel)}
+:root[data-theme="dark"] .faq-item,:root[data-theme="dark"] .comply-item,:root[data-theme="dark"] .deploy-item{border-top-color:var(--panel-line)}
+:root[data-theme="dark"] .nav-signin{color:var(--ink-soft)}
+:root[data-theme="dark"] .nav-signin:hover{color:var(--ink)}
+:root[data-theme="dark"] .pillar .glyph{background:rgba(46,158,143,.16);color:#3FBFAE}
+:root[data-theme="dark"] .pillar[style*="var(--ink)"]{background:#16283E !important;color:#EAF2F8 !important}
+:root[data-theme="dark"] .pillar[style*="var(--ink)"] h3{color:#EAF2F8 !important}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme]) nav{background:rgba(10,18,32,.88);border-bottom-color:var(--panel-line)}
+:root:not([data-theme]) .btn-primary{background:var(--amber);color:#0A1220}
+:root:not([data-theme]) .btn-primary:hover{background:#F0B055;color:#0A1220}
+:root:not([data-theme]) .btn-ghost{border-color:var(--ink-soft);color:var(--ink)}
+:root:not([data-theme]) .btn-ghost:hover{background:var(--panel)}
+:root:not([data-theme]) .strip,:root:not([data-theme]) .comply,:root:not([data-theme]) .pillar,:root:not([data-theme]) .plan,:root:not([data-theme]) .rate-table,:root:not([data-theme]) .card{border-color:var(--panel-line)}
+:root:not([data-theme]) .pillars{background:var(--panel-line);border-color:var(--panel-line)}
+:root:not([data-theme]) .term{background:var(--panel);border-color:var(--panel-line)}
+:root:not([data-theme]) .term button.on{background:var(--amber);color:#0A1220}
+:root:not([data-theme]) .matrix tr:hover td{background:var(--panel)}
+:root:not([data-theme]) .rate-table th{background:var(--panel)}
+:root:not([data-theme]) .faq-item,:root:not([data-theme]) .comply-item,:root:not([data-theme]) .deploy-item{border-top-color:var(--panel-line)}
+:root:not([data-theme]) .nav-signin{color:var(--ink-soft)}
+:root:not([data-theme]) .nav-signin:hover{color:var(--ink)}
+:root:not([data-theme]) .pillar .glyph{background:rgba(46,158,143,.16);color:#3FBFAE}
+:root:not([data-theme]) .pillar[style*="var(--ink)"]{background:#16283E !important;color:#EAF2F8 !important}
+:root:not([data-theme]) .pillar[style*="var(--ink)"] h3{color:#EAF2F8 !important}
+}
+/* The console panel is already dark in both themes; keep its text legible. */
+:root[data-theme="dark"] .console,
+:root[data-theme="dark"] .codeblock,
+:root[data-theme="dark"] footer{border-color:var(--panel-line)}
+:root[data-theme="dark"] img{opacity:.92}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:38px;
+  border:1px solid var(--mist);border-radius:10px;background:var(--white);color:var(--ink-soft);
+  padding:0;cursor:pointer;flex-shrink:0}
+.theme-toggle:hover{color:var(--ink);border-color:var(--ink-soft)}
+.theme-toggle svg{width:17px;height:17px}
+/* Show the icon for the theme the click would give you, not the current one. */
+.theme-toggle .i-sun{display:none}
+.theme-toggle .i-moon{display:block}
+:root[data-theme="dark"] .theme-toggle .i-sun{display:block}
+:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]) .theme-toggle .i-sun{display:block}
+  :root:not([data-theme]) .theme-toggle .i-moon{display:none}
+}
+</style>
+<style>
+.nav-toggle{
+  display:none;align-items:center;justify-content:center;
+  /* flex-shrink defaults to 1, and the nav row is a flex container: without
+     this the 44px target gets squeezed to ~36px on a 390px viewport, below
+     the minimum comfortable tap size. */
+  flex:0 0 auto;
+  width:44px;height:40px;border:1px solid var(--mist);border-radius:9px;
+  background:var(--white);color:var(--ink);cursor:pointer;padding:0;
+}
+.nav-toggle svg{width:19px;height:19px}
+.nav-toggle[aria-expanded="true"]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+</style>
+<style>
+/* A 1fr track has min-width:auto, so a wide child (a code block, a long mono
+   string) grows the track instead of scrolling inside it. minmax(0,1fr) is
+   what actually lets these scroll. */
+.api-grid,.hero-grid,.topo,.plans,.comply-grid,.faq,.deploy-grid,.pillars{min-width:0}
+.api-grid>*,.hero-grid>*,.topo>*,.plans>*,.comply-grid>*,.faq>*{min-width:0}
+.codeblock,pre,.code{max-width:100%;overflow-x:auto}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+@media (max-width:960px){
+  .api-grid,.hero-grid,.topo{grid-template-columns:minmax(0,1fr)}
+  .nav-inner{gap:10px}
+  /* The menu replaces the hidden link row. */
+  .nav-toggle{display:inline-flex}
+  .nav-links{
+    display:none;position:absolute;top:64px;left:0;right:0;
+    flex-direction:column;gap:0;align-items:stretch;
+    background:var(--porcelain);border-bottom:1px solid var(--mist);
+    padding:6px 20px 14px;
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 4px;border-bottom:1px solid var(--mist);font-size:1rem}
+  .nav-links a:last-child{border-bottom:none}
+  nav{position:sticky}
+}
+
+/* Touch targets. Several shipped well under the 44px minimum: the switcher at
+   28x24, footer links at 22px tall, the logo at 26px. */
+@media (pointer:coarse){
+  .theme-toggle{min-width:44px;min-height:42px}
+  .nav-signin,.nav-links a{min-height:44px;display:inline-flex;align-items:center}
+  .industries-nav a,.strip-inner a{min-height:42px;display:inline-flex;align-items:center}
+  .foot-grid a{min-height:42px;display:flex;align-items:center;margin-bottom:0}
+  .logo{min-height:40px}
+  .btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+}
+
+/* Menu-only sign-in link, so hiding the bar's does not strand the console. */
+.nav-links .menu-console{display:none}
+
+@media (max-width:600px){
+  .plans{grid-template-columns:minmax(0,1fr)}
+  /* Secondary sign-in links leave the bar; the menu carries one instead, so
+     the primary CTA stops being squeezed off the right edge. */
+  .nav-signin,.nav-cta .btn-quiet{display:none}
+  .nav-links .menu-console{display:flex}
+
+  /* Footer columns sit side by side until they cannot. At 390 the last column
+     was running past the viewport. */
+  .foot-grid{flex-direction:column;gap:22px}
+  .foot-col{max-width:100% !important}
+  .foot-base{flex-direction:column;gap:8px}
+  /* The nav CTA was overflowing the bar at full size. */
+  .nav-inner .btn-primary{padding:9px 12px;font-size:.82rem;white-space:nowrap}
+  .logo{font-size:1rem}
+  .logo-mark{width:22px;height:22px}
+  /* One compact button fits the bar now, so it stays where people expect it. */
+  .nav-links .theme-toggle{display:none}
+}
+@media (max-width:380px){
+  .nav-inner .btn-primary{padding:8px 10px;font-size:.78rem}
+  .logo{font-size:.95rem}
+}
+.nav-links .theme-toggle{display:none}
+
+/* Last-resort guard: a single stray wide element should not make the whole
+   page pan sideways. */
+@media (max-width:960px){ html,body{overflow-x:hidden} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="/">
+      <svg class="logo-mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="6" fill="#0E1C2E"/>
+        <rect x="6" y="11" width="2.4" height="4" rx="1.2" fill="#2E9E8F"/>
+        <rect x="10" y="7" width="2.4" height="12" rx="1.2" fill="#E8A13D"/>
+        <rect x="14" y="4" width="2.4" height="18" rx="1.2" fill="#E8A13D"/>
+        <rect x="18" y="9" width="2.4" height="8" rx="1.2" fill="#2E9E8F"/>
+      </svg><span class="wordmark">Voice<em>Kernel</em><span style="font-weight:600;opacity:.55;font-size:.82em">.ai</span></span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="/#platform">Platform</a>
+      <a href="#" aria-current="page">Industries</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/#api">API</a>
+      <a href="/#compliance">Compliance</a>
+      <a href="/docs">Docs</a>
+      <a class="menu-console" href="/app">Console</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+      <a class="nav-signin" href="/app">Console</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+      </button>
+      <a class="btn btn-primary" href="#contact">Talk to us</a>
+  </div>
+</nav>
+
+<header class="phero">
+  <div class="wrap">
+    <span class="eyebrow">Industries</span>
+    <h1>One voice layer. <span class="amber">Every regulated conversation.</span></h1>
+    <p class="sub">The same infrastructure - grounded answers, in-stream compliance, multi-agent calls - configured for the conversations your industry actually has.</p>
+  </div>
+</header>
+
+<div class="index">
+  <div class="wrap index-inner">
+    <a href="#banking">Banking</a>
+    <a href="#insurance">Insurance</a>
+    <a href="#super">Superannuation</a>
+    <a href="#telco">Telco &amp; Utilities</a>
+    <a href="#government">Government</a>
+    <a href="#health">Health Admin</a>
+  </div>
+</div>
+
+<!-- ================= BANKING ================= -->
+<section class="industry" id="banking">
+  <div class="wrap">
+    <div class="ind-head">
+      <div>
+        <span class="eyebrow">Banking</span>
+        <h2>Answer like the branch. Audit like the regulator.</h2>
+      </div>
+      <div class="ind-stat"><b>60-80%</b>of routine card &amp; account calls contained without escalation*</div>
+    </div>
+    <div class="ind-grid">
+      <div class="cases">
+        <div class="case">
+          <h3>Card disputes &amp; fraud</h3>
+          <p>Intake disputes, apply provisional-credit policy, and run outbound fraud-verification calls that customers actually answer - with PAN redaction in-stream.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · PCI</span></div>
+        </div>
+        <div class="case">
+          <h3>Account servicing</h3>
+          <p>Balances, blocks, limit changes, travel notices, card replacement - grounded in product T&amp;Cs and executed via secure core-banking actions.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">CRM WRITE-BACK</span></div>
+        </div>
+        <div class="case">
+          <h3>Collections &amp; hardship</h3>
+          <p>Payment reminders and arrangement calls with vulnerable-customer detection that forces a human handoff the moment hardship signals appear.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · VULNERABILITY</span></div>
+        </div>
+        <div class="case">
+          <h3>Mortgage &amp; lending servicing</h3>
+          <p>Rate queries, repayment changes, discharge requests and document chasing - cited against your credit policy so answers survive review.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">LEARN · INTEL</span></div>
+        </div>
+        <div class="case">
+          <h3>Identity verification callbacks</h3>
+          <p>Automated KYC and step-up verification calls with consent capture and full audio + reasoning trails.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · CONSENT</span></div>
+        </div>
+        <div class="case">
+          <h3>Agent assist on human calls</h3>
+          <p>Attach a silent listener to your contact centre: live policy answers on the banker's screen, compliance flags in real time.</p>
+          <div class="roles"><span class="chip b">LISTEN</span><span class="chip c">LEARN</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="console-label">Featured call · outbound fraud verification</p>
+        <div class="console">
+          <div class="console-head"><span class="live-dot">LIVE CALL</span><span class="call-id">call_b41a · outbound · fraud queue</span></div>
+          <div class="transcript">
+            <div class="line"><span class="tag agent">Agent</span><p>Hi, this is the fraud team at your bank. We've paused a $1,240 transaction that doesn't match your usual activity. To confirm - did you attempt this purchase this morning?</p></div>
+            <div class="line"><span class="tag caller">Customer</span><p>No, that wasn't me. My card number is <span class="redact">•••• 8830 - redacted</span></p></div>
+            <div class="line"><span class="tag listen">Comply</span><p style="color:#8FA9BF;font-size:.78rem">PAN masked · fraud confirmation logged · case escalated to blocklist action</p></div>
+            <div class="line"><span class="tag agent">Agent</span><p>Thanks - I've blocked the card and reversed the hold. A replacement arrives in 3-5 days, and nothing is owed on the disputed amount.<br><span class="cite">⌕ grounded · Fraud Response Runbook §2.3</span></p></div>
+          </div>
+          <div class="console-foot"><span>latency <b>402ms</b></span><span>outcome <b>card blocked · resolved</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INSURANCE ================= -->
+<section class="industry dark" id="insurance">
+  <div class="wrap">
+    <div class="ind-head">
+      <div>
+        <span class="eyebrow">Insurance</span>
+        <h2>From FNOL to renewal, every claim conversation covered.</h2>
+      </div>
+      <div class="ind-stat"><b>24/7</b>claims lodgement - no queue at the worst moment of a customer's day</div>
+    </div>
+    <div class="ind-grid">
+      <div>
+        <p class="console-label">Featured call · first notice of loss</p>
+        <div class="console">
+          <div class="console-head"><span class="live-dot">LIVE CALL</span><span class="call-id">call_c982 · inbound · claims</span></div>
+          <div class="transcript">
+            <div class="line"><span class="tag caller">Customer</span><p>I've just been in an accident - the other driver ran a red light. Everyone's okay but my car's not drivable.</p></div>
+            <div class="line"><span class="tag agent">Agent</span><p>I'm glad everyone's safe. I've opened a claim and arranged towing to an approved repairer near you. You're covered for a hire car from today under your comprehensive policy.<br><span class="cite">⌕ grounded · PDS Motor Comprehensive §7 - hire car benefit</span></p></div>
+            <div class="line"><span class="tag listen">Comply</span><p style="color:#8FA9BF;font-size:.78rem">Distress check passed · claim data structured → core claims system · liability keywords logged</p></div>
+            <div class="line"><span class="tag agent">Agent</span><p>Your claim number is by SMS now. An assessor will call within 4 business hours - is this the best number?</p></div>
+          </div>
+          <div class="console-foot"><span>lodged in <b>3m 40s</b></span><span>outcome <b>tow booked · hire car approved</b></span></div>
+        </div>
+      </div>
+      <div class="cases">
+        <div class="case">
+          <h3>Claims intake (FNOL)</h3>
+          <p>Lodge motor, home and travel claims around the clock - structured straight into your claims platform, with empathy checks on every distressed caller.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · DISTRESS</span></div>
+        </div>
+        <div class="case">
+          <h3>Claims status &amp; follow-up</h3>
+          <p>"Where's my claim?" answered from the live claim record, plus proactive outbound updates that cut inbound volume at the source.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">CRM WRITE-BACK</span></div>
+        </div>
+        <div class="case">
+          <h3>Renewals &amp; retention</h3>
+          <p>Outbound renewal calls that explain premium changes from the actual rating factors - and save at-risk policies with authorised retention offers.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">LEARN · CHURN INTEL</span></div>
+        </div>
+        <div class="case">
+          <h3>Quote follow-up</h3>
+          <p>Call every abandoned quote within minutes, answer PDS questions with citations, and hand hot leads to licensed staff for bind.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · ADVICE BOUNDARY</span></div>
+        </div>
+        <div class="case">
+          <h3>Policy servicing</h3>
+          <p>Address changes, certificates of currency, payment updates and cover questions - resolved in one call, cited to the PDS.</p>
+          <div class="roles"><span class="chip a">SPEAK</span></div>
+        </div>
+        <div class="case">
+          <h3>General-advice guardrails</h3>
+          <p>A compliance listener enforces the general/personal advice boundary in real time, escalating before a line is crossed - with the transcript to prove it.</p>
+          <div class="roles"><span class="chip b">LISTEN · RG 244</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SUPERANNUATION ================= -->
+<section class="industry" id="super">
+  <div class="wrap">
+    <div class="ind-head">
+      <div>
+        <span class="eyebrow">Superannuation</span>
+        <h2>Member service that scales without scaling headcount.</h2>
+      </div>
+      <div class="ind-stat"><b>EOFY</b>peak-season call spikes absorbed with zero extra seats</div>
+    </div>
+    <div class="ind-grid">
+      <div class="cases">
+        <div class="case">
+          <h3>Member servicing</h3>
+          <p>Balances, contributions, investment options and insurance-in-super questions answered from fund documents - with the advice boundary enforced on every call.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · ADVICE BOUNDARY</span></div>
+        </div>
+        <div class="case">
+          <h3>Retirement &amp; access queries</h3>
+          <p>Preservation age, conditions of release, pension setup steps - high-stakes questions with citations to the trust deed and ATO rules, escalated when personal advice is needed.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN</span></div>
+        </div>
+        <div class="case">
+          <h3>Consolidation &amp; rollovers</h3>
+          <p>Guide members through lost-super search and rollover requests, chase paperwork by outbound call, and write status back to your registry.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">CRM WRITE-BACK</span></div>
+        </div>
+        <div class="case">
+          <h3>Member outreach campaigns</h3>
+          <p>Beneficiary nominations, insurance opt-ins, unclaimed super - compliant outbound at a scale letters never achieve.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">LEARN</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="console-label">Featured call · access to super</p>
+        <div class="console">
+          <div class="console-head"><span class="live-dot">LIVE CALL</span><span class="call-id">call_s217 · inbound · member line</span></div>
+          <div class="transcript">
+            <div class="line"><span class="tag caller">Member</span><p>I'm turning 60 next year and want to know when I can actually access my super.</p></div>
+            <div class="line"><span class="tag agent">Agent</span><p>At 60, you can access your super if you've ceased an employment arrangement - or start a transition-to-retirement pension while still working. I can send you the fund's guide on both options.<br><span class="cite">⌕ grounded · Fund Guide - Accessing Your Super, p.4</span></p></div>
+            <div class="line"><span class="tag listen">Comply</span><p style="color:#8FA9BF;font-size:.78rem">General information only · no personal advice given · offer to refer to adviser logged</p></div>
+          </div>
+          <div class="console-foot"><span>outcome <b>guide sent · adviser referral offered</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TELCO & UTILITIES ================= -->
+<section class="industry dark" id="telco">
+  <div class="wrap">
+    <div class="ind-head">
+      <div>
+        <span class="eyebrow">Telco &amp; Utilities</span>
+        <h2>Kill the queue on bill day. Call every customer on outage day.</h2>
+      </div>
+      <div class="ind-stat"><b>10k+</b>concurrent outbound calls during an outage or price-change event</div>
+    </div>
+    <div class="ind-grid">
+      <div class="cases">
+        <div class="case">
+          <h3>Outage notifications</h3>
+          <p>Proactively call affected customers with restoration estimates from your outage management system - and take their questions on the same call.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">OMS-GROUNDED</span></div>
+        </div>
+        <div class="case">
+          <h3>Billing &amp; payment plans</h3>
+          <p>Explain the bill line by line from actual usage data, set up payment plans, and route hardship cases to your support program instantly.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · HARDSHIP</span></div>
+        </div>
+        <div class="case">
+          <h3>Connections &amp; moving home</h3>
+          <p>Book connections, disconnections and technician visits end-to-end, with address validation and appointment write-back.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">CRM WRITE-BACK</span></div>
+        </div>
+        <div class="case">
+          <h3>Plan changes &amp; retention</h3>
+          <p>Compare plans from the live catalogue, apply authorised retention offers, and log every save-desk conversation as structured churn intelligence.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">LEARN · CHURN</span></div>
+        </div>
+        <div class="case">
+          <h3>Faults &amp; triage</h3>
+          <p>Walk customers through modem or meter diagnostics, resolve what's resolvable, and book a truck roll only when it's warranted.</p>
+          <div class="roles"><span class="chip a">SPEAK</span></div>
+        </div>
+        <div class="case">
+          <h3>Price-change notifications</h3>
+          <p>Regulated notice calls delivered, explained and evidenced - consent, delivery and comprehension all in the audit trail.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · CONSENT</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="console-label">Featured call · outage notification</p>
+        <div class="console">
+          <div class="console-head"><span class="live-dot">LIVE CALL</span><span class="call-id">call_u550 · outbound · outage wave 3</span></div>
+          <div class="transcript">
+            <div class="line"><span class="tag agent">Agent</span><p>Hi - calling about the power outage in your area. Crews are on site; current restoration estimate is 4:30pm. Do you have anyone at the property who relies on life-support equipment?</p></div>
+            <div class="line"><span class="tag caller">Customer</span><p>No, we're fine - but will we be compensated? We've lost a freezer full of food.</p></div>
+            <div class="line"><span class="tag agent">Agent</span><p>If the outage exceeds 12 hours you're eligible for a guaranteed service payment - I've registered your claim now, so it's automatic if the threshold is met.<br><span class="cite">⌕ grounded · GSL Scheme - Distribution Code §9</span></p></div>
+          </div>
+          <div class="console-foot"><span>wave size <b>8,200 calls</b></span><span>outcome <b>GSL claim registered</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GOVERNMENT ================= -->
+<section class="industry" id="government">
+  <div class="wrap">
+    <div class="ind-head">
+      <div>
+        <span class="eyebrow">Government</span>
+        <h2>Every citizen answered. Every language. Every time.</h2>
+      </div>
+      <div class="ind-stat"><b>40+</b>languages on the same line, grounded in the same policy source</div>
+    </div>
+    <div class="ind-grid">
+      <div class="cases">
+        <div class="case">
+          <h3>Service hotlines</h3>
+          <p>Answer eligibility, process and entitlement questions from published policy - with the citation read into the record, not a call-centre paraphrase.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">POLICY-GROUNDED</span></div>
+        </div>
+        <div class="case">
+          <h3>Application status</h3>
+          <p>Visa, licence, permit and grant status from the case system in seconds - the single biggest driver of inbound volume, contained.</p>
+          <div class="roles"><span class="chip a">SPEAK</span></div>
+        </div>
+        <div class="case">
+          <h3>Appointments &amp; reminders</h3>
+          <p>Book, confirm and reschedule appointments across service centres; outbound reminders that measurably cut no-shows.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">CRM WRITE-BACK</span></div>
+        </div>
+        <div class="case">
+          <h3>Multilingual access</h3>
+          <p>The same grounded agent in the caller's language - reducing interpreter wait times without losing accuracy or the audit trail.</p>
+          <div class="roles"><span class="chip a">SPEAK · 40+ LANG</span></div>
+        </div>
+        <div class="case">
+          <h3>Emergency &amp; surge lines</h3>
+          <p>Stand up a fully briefed information line in hours during floods, fires or health events - capacity that scales with the crisis.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · DISTRESS</span></div>
+        </div>
+        <div class="case">
+          <h3>Sovereign deployment</h3>
+          <p>On-shore, in-tenancy processing with IRAP-aligned controls - audio never leaves the jurisdiction.</p>
+          <div class="roles"><span class="chip b">RESIDENCY · AU</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="console-label">Why agencies choose VoiceKernel</p>
+        <div class="console">
+          <div class="console-head"><span class="live-dot">DEPLOYMENT</span><span class="call-id">sovereign · au-syd</span></div>
+          <div class="transcript">
+            <div class="line"><span class="tag agent">Fact</span><p>Citizens still pick up the phone: voice remains the highest-volume channel for government service delivery - and the most expensive one to staff.</p></div>
+            <div class="line"><span class="tag listen">Fact</span><p>Every VoiceKernel answer carries its policy citation, so FOI requests and Ombudsman reviews are answered from the log, not from memory.</p></div>
+            <div class="line"><span class="tag caller">Fact</span><p>Surge capacity is an API parameter, not a recruitment drive.</p></div>
+          </div>
+          <div class="console-foot"><span>controls <b>IRAP-aligned · consent · retention</b></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HEALTH ADMIN ================= -->
+<section class="industry dark" id="health">
+  <div class="wrap">
+    <div class="ind-head">
+      <div>
+        <span class="eyebrow">Health Administration</span>
+        <h2>Fill the schedule. Free the front desk.</h2>
+      </div>
+      <div class="ind-stat"><b>−30%</b>typical no-show reduction with confirmed outbound reminders*</div>
+    </div>
+    <div class="ind-grid">
+      <div>
+        <p class="console-label">Featured call · appointment rebooking</p>
+        <div class="console">
+          <div class="console-head"><span class="live-dot">LIVE CALL</span><span class="call-id">call_h103 · outbound · reminders</span></div>
+          <div class="transcript">
+            <div class="line"><span class="tag agent">Agent</span><p>Hi - confirming your appointment on Thursday at 2:15pm at the city clinic. Does that still work for you?</p></div>
+            <div class="line"><span class="tag caller">Patient</span><p>Actually no - can I move it to next week? Mornings are better.</p></div>
+            <div class="line"><span class="tag agent">Agent</span><p>Done - Tuesday at 9:40am is available and now booked. Please bring your referral; it expires at the end of the month.</p></div>
+            <div class="line"><span class="tag listen">Comply</span><p style="color:#8FA9BF;font-size:.78rem">Identity confirmed before details shared · no clinical content discussed · PMS updated</p></div>
+          </div>
+          <div class="console-foot"><span>outcome <b>rebooked · slot backfilled</b></span></div>
+        </div>
+      </div>
+      <div class="cases">
+        <div class="case">
+          <h3>Scheduling &amp; reminders</h3>
+          <p>Book, confirm and rebook against the live practice-management calendar - and backfill cancellations from the waitlist automatically.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip c">PMS WRITE-BACK</span></div>
+        </div>
+        <div class="case">
+          <h3>Intake &amp; pre-admission</h3>
+          <p>Collect referrals, insurance details and pre-admission questionnaires by phone - structured straight into the record, identity-verified first.</p>
+          <div class="roles"><span class="chip a">SPEAK</span><span class="chip b">LISTEN · IDENTITY</span></div>
+        </div>
+        <div class="case">
+          <h3>Billing &amp; gap queries</h3>
+          <p>Fees, item numbers, gap estimates and payment follow-ups answered from your fee schedule - the front desk's least favourite calls, gone.</p>
+          <div class="roles"><span class="chip a">SPEAK</span></div>
+        </div>
+        <div class="case">
+          <h3>Non-clinical boundary</h3>
+          <p>A listener agent enforces a hard line: administrative only. Any clinical question routes to a clinician, with the handoff logged.</p>
+          <div class="roles"><span class="chip b">LISTEN · CLINICAL BOUNDARY</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FINAL CTA ================= -->
+<section class="final" id="contact">
+  <div class="wrap">
+    <span class="eyebrow">Your industry</span>
+    <h2>Bring us your hardest queue.</h2>
+    <p class="sub" style="margin-top:16px">A 30-minute session on your highest-volume call type - we'll configure a grounded agent on your own documents and let you hear it.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-amber" href="mailto:hello@voicekernel.ai">Book a technical demo</a>
+      <a class="btn btn-ghost" href="/#api">Start with the API</a>
+    </div>
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:var(--ink-soft);margin-top:36px">* Illustrative targets based on deployment configuration; results vary by call mix and knowledge coverage.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-base">
+    <span>© 2026 VoiceKernel · PayFar Global Ltd</span>
+    <span>au-syd · eu-fra · us-east</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var KEY = 'vk-theme';
+  var button = document.getElementById('themeToggle');
+
+  // Before the first click there is no stored preference, so the OS decides via
+  // prefers-color-scheme. The button reflects whatever is actually on screen,
+  // which is why it reads the media query rather than assuming a default.
+  function effective() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  }
+
+  function paint(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem(KEY, theme); } catch (e) {}
+    document.querySelectorAll('.theme-toggle').forEach(function (b) {
+      b.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      b.setAttribute('title', theme === 'dark' ? 'Light theme' : 'Dark theme');
+    });
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0A1220' : '#0E1C2E');
+  }
+
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.addEventListener('click', function () {
+      paint(effective() === 'dark' ? 'light' : 'dark');
+    });
+  });
+
+  // Label only - do not write the attribute, or the OS would stop being followed.
+  var current = effective();
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.setAttribute('aria-label', current === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  });
+})();
+</script>
+<script>
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+
+  function setOpen(open) {
+    links.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(!links.classList.contains('open'));
+  });
+  // Following a link should close the menu, including same-page anchors where
+  // no navigation happens to close it for us.
+  links.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setOpen(false);
+  });
+})();
+</script>
+</body>
+</html>

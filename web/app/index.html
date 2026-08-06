@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoiceKernel Console</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="shortcut icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0A1220">
+<script>
+// Resolve the theme before the stylesheet paints. Inline and synchronous on
+// purpose: deferring this to app.js would show a flash of the wrong theme on
+// every load, which is worse than the cost of a few lines in <head>.
+(function () {
+  try {
+    var saved = localStorage.getItem('vk-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+    // No saved choice: the CSS falls back to prefers-color-scheme on its own.
+  } catch (e) { /* private mode - dark default is fine */ }
+})();
+</script>
+<link rel="stylesheet" href="/app/console.css">
+</head>
+<body>
+
+<!-- ============ AUTH GATE ============ -->
+<div class="auth-veil" id="authVeil">
+  <div class="auth-card">
+    <a class="side-logo" href="/">
+      <svg class="logo-mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="6" fill="#13233A"/>
+        <rect x="6" y="11" width="2.4" height="4" rx="1.2" fill="#2E9E8F"/>
+        <rect x="10" y="7" width="2.4" height="12" rx="1.2" fill="#E8A13D"/>
+        <rect x="14" y="4" width="2.4" height="18" rx="1.2" fill="#E8A13D"/>
+        <rect x="18" y="9" width="2.4" height="8" rx="1.2" fill="#2E9E8F"/>
+      </svg><span class="wordmark">Voice<em>Kernel</em><span style="font-weight:600;opacity:.55;font-size:.82em">.ai</span></span></a>
+    <h2 id="authTitle">Sign in to the console</h2>
+    <p class="lede" id="authLede">Operate your voice agents, inspect calls, and manage integrations.</p>
+
+    <form class="auth-box" id="authForm" autocomplete="on">
+      <div class="auth-err hidden" id="authErr"></div>
+
+      <div class="field" id="authNameField" hidden>
+        <label for="authName">Your name</label>
+        <input id="authName" name="name" type="text" autocomplete="name" placeholder="Alex Chen">
+      </div>
+      <div class="field" id="authOrgField" hidden>
+        <label for="authOrg">Organisation</label>
+        <input id="authOrg" name="organization" type="text" autocomplete="organization" placeholder="PayFar Global">
+      </div>
+      <div class="field">
+        <label for="authEmail">Work email</label>
+        <input id="authEmail" name="email" type="email" autocomplete="username" required placeholder="you@company.com">
+      </div>
+      <div class="field">
+        <label for="authPassword">Password</label>
+        <input id="authPassword" name="password" type="password" autocomplete="current-password" required placeholder="••••••••••••">
+        <div class="hint" id="authPwHint" hidden>Minimum 12 characters.</div>
+      </div>
+
+      <button class="btn btn-amber" style="width:100%;padding:10px" type="submit" id="authSubmit">Sign in</button>
+
+      <div class="auth-switch">
+        <span id="authSwitchText">No account yet?</span>
+        <button type="button" id="authSwitch">Create one</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- ============ CONSOLE ============ -->
+<div class="app hidden" id="app">
+
+  <aside class="side" id="sidebar">
+    <a class="side-logo" href="/">
+      <svg class="logo-mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="6" fill="#13233A"/>
+        <rect x="6" y="11" width="2.4" height="4" rx="1.2" fill="#2E9E8F"/>
+        <rect x="10" y="7" width="2.4" height="12" rx="1.2" fill="#E8A13D"/>
+        <rect x="14" y="4" width="2.4" height="18" rx="1.2" fill="#E8A13D"/>
+        <rect x="18" y="9" width="2.4" height="8" rx="1.2" fill="#2E9E8F"/>
+      </svg><span class="wordmark">Voice<em>Kernel</em><span style="font-weight:600;opacity:.55;font-size:.82em">.ai</span></span></a>
+
+    <button class="org" id="orgSwitch">
+      <span id="orgName">-</span>
+      <span class="env" id="orgEnv">-</span>
+    </button>
+
+    <button class="cmdk" id="cmdk">⌕ Ask or jump to… <kbd>⌘K</kbd></button>
+
+    <div class="nav-sec">OPERATE</div>
+    <button class="nav-item active" data-view="overview">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 13h6V3H3v10Zm0 8h6v-6H3v6Zm12 0h6V11h-6v10Zm0-18v6h6V3h-6Z"/></svg>
+      Overview
+    </button>
+    <button class="nav-item" data-view="calls">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg>
+      Calls <span class="count" data-count="calls"></span>
+    </button>
+    <button class="nav-item" data-view="analytics">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M6 16v-5M11 16V7M16 16v-8M21 16V11" stroke-linecap="round"/></svg>
+      Analytics
+    </button>
+    <button class="nav-item" data-view="audit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 5 6v5c0 5 3.5 8.5 7 10 3.5-1.5 7-5 7-10V6l-7-3Z"/></svg>
+      Compliance log
+    </button>
+
+    <div class="nav-sec">BUILD</div>
+    <button class="nav-item" data-view="agents">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M12 7.5v4M10.5 13.5 6.5 16M13.5 13.5l4 2.5"/></svg>
+      Agents <span class="count" data-count="assistant"></span>
+    </button>
+    <button class="nav-item" data-view="knowledge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2Z"/><path d="M9 7h6M9 11h6"/></svg>
+      Knowledge <span class="count" data-count="file"></span>
+    </button>
+    <button class="nav-item" data-view="actions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/></svg>
+      Actions <span class="count" data-count="tool"></span>
+    </button>
+    <button class="nav-item" data-view="numbers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h2M7 13h2M13 9h4M13 13h4"/></svg>
+      Numbers &amp; trunks <span class="count" data-count="phoneNumber"></span>
+    </button>
+    <button class="nav-item" data-view="campaigns">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 11 18-7-7 18-2.5-7.5L3 11Z"/></svg>
+      Campaigns <span class="count" data-count="campaign"></span>
+    </button>
+
+    <div class="nav-sec">TEST &amp; OBSERVE</div>
+    <button class="nav-item" data-view="simulator">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 3v6L5 19a2 2 0 0 0 2 3h10a2 2 0 0 0 2-3L14 9V3M8 3h8"/></svg>
+      Simulator
+    </button>
+    <button class="nav-item" data-view="evals">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="m9 12 2 2 4-4"/></svg>
+      Evals <span class="count" data-count="eval"></span>
+    </button>
+    <button class="nav-item" data-view="voices">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M7 8v8M17 8v8M3 11v2M21 11v2" stroke-linecap="round"/></svg>
+      Voices
+    </button>
+    <button class="nav-item" data-view="schemas">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="6" rx="2"/><rect x="3" y="14" width="18" height="6" rx="2"/></svg>
+      Intel schemas <span class="count" data-count="structuredOutput"></span>
+    </button>
+
+    <div class="nav-sec">INTEGRATE</div>
+    <button class="nav-item" data-view="webhooks">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v6M12 15v6M5.6 7.6l4.2 4.2M14.2 12.2l4.2 4.2M18.4 7.6l-4.2 4.2M9.8 12.2l-4.2 4.2"/></svg>
+      Webhooks
+    </button>
+    <button class="nav-item" data-view="api">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18-6-6 6-6M15 6l6 6-6 6"/></svg>
+      API explorer
+    </button>
+
+    <div class="nav-sec">MANAGE</div>
+    <button class="nav-item" data-view="monitoring">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3 8 4-16 3 8h4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Monitoring <span class="count" data-count="issues"></span>
+    </button>
+    <button class="nav-item" data-view="access">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="12" r="4"/><path d="M12 12h9M17 12v4M20 12v3"/></svg>
+      Access &amp; keys
+    </button>
+    <button class="nav-item" data-view="providers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Providers &amp; routing
+    </button>
+
+    <div class="nav-sec">ACCOUNT</div>
+    <button class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.9 1.2 2 2 0 1 1-4 0 1.7 1.7 0 0 0-2.9-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.7 1.7 0 0 0 3 15a2 2 0 1 1 0-4 1.7 1.7 0 0 0 1.2-2.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A1.7 1.7 0 0 0 10 4.1a2 2 0 1 1 4 0 1.7 1.7 0 0 0 2.9 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A1.7 1.7 0 0 0 21 11a2 2 0 1 1 0 4Z"/></svg>
+      Settings
+    </button>
+
+    <div class="side-foot">
+      <div class="mono" style="font-size:.62rem;letter-spacing:.1em">USAGE · THIS MONTH</div>
+      <div class="usage-bar"><i id="usageBar"></i></div>
+      <div class="mono" style="font-size:.68rem" id="usageText">- / - min</div>
+      <button class="btn btn-line btn-sm" style="width:100%;margin-top:12px" id="signOut">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <div class="topbar">
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="sidebar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+      </button>
+      <span class="crumb" id="crumb"><b>Overview</b></span>
+      <div class="top-right">
+        <span class="pill" id="statusPill"><span class="dot"></span><span id="statusText">Checking…</span></span>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">
+          <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+        </button>
+        <span class="live-dot" id="liveDot" title="Connecting..."></span>
+        <button class="btn btn-line" id="refreshBtn">Refresh</button>
+        <button class="btn btn-amber" id="primaryAction">+ New agent</button>
+      </div>
+    </div>
+
+    <!-- Sub-navigation, used by Settings. -->
+    <div class="subnav hidden" id="subnav"></div>
+
+    <!-- Views are rendered into these containers by app.js. -->
+    <div class="content visible" id="view-overview"></div>
+    <div class="content" id="view-calls"></div>
+    <div class="content" id="view-inspector"></div>
+    <div class="content" id="view-analytics"></div>
+    <div class="content" id="view-audit"></div>
+    <div class="content" id="view-agents"></div>
+    <div class="content" id="view-editor"></div>
+    <div class="content" id="view-knowledge"></div>
+    <div class="content" id="view-actions"></div>
+    <div class="content" id="view-numbers"></div>
+    <div class="content" id="view-campaigns"></div>
+    <div class="content" id="view-campaignNew"></div>
+    <div class="content" id="view-webhooks"></div>
+    <div class="content" id="view-keys"></div>
+    <div class="content" id="view-api"></div>
+    <div class="content" id="view-settings"></div>
+    <div class="content" id="view-numberDetail"></div>
+    <div class="content" id="view-simulator"></div>
+    <div class="content" id="view-evals"></div>
+    <div class="content" id="view-voices"></div>
+    <div class="content" id="view-schemas"></div>
+    <div class="content" id="view-monitoring"></div>
+    <div class="content" id="view-access"></div>
+    <div class="content" id="view-providers"></div>
+  </div>
+</div>
+
+<!-- ============ DRAWER ============ -->
+<div class="drawer-veil" id="drawerVeil"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <h3 id="drawerTitle">-</h3>
+    <button class="x" id="drawerClose" aria-label="Close">✕</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</aside>
+
+<div class="side-backdrop" id="sideBackdrop"></div>
+<div class="veil" id="numberVeil"></div>
+<div class="veil" id="modalVeil"></div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="/app/talk.js"></script>
+<script src="/app/app.js"></script>
+</body>
+</html>

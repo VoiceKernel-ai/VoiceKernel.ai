@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoiceKernel - The voice infrastructure layer for regulated enterprise</title>
+<meta name="description" content="VoiceKernel is the enterprise voice AI infrastructure layer. One API call adds compliant, knowledge-grounded voice agents to any conversation. Built for banking, insurance, telco and government.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1C2E;          /* deep signal navy */
+  --ink-soft:#31445A;
+  --porcelain:#F4F7F9;    /* cool paper */
+  --panel:#0B1626;        /* call console */
+  --panel-line:#1D2F45;
+  --amber:#E8A13D;        /* line amber - carrier signal */
+  --amber-deep:#B87716;
+  --teal:#0F5D5D;         /* dial-tone teal */
+  --teal-bright:#2E9E8F;
+  --mist:#DEE7ED;
+  --white:#FFFFFF;
+  --danger:#D06A4E;
+  --radius:10px;
+  --maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  color:var(--ink);
+  background:var(--porcelain);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--amber);color:var(--ink)}
+a{color:inherit}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--teal);
+  display:flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--teal)}
+h1,h2,h3{font-family:'Archivo',sans-serif;line-height:1.06;letter-spacing:-.015em}
+h2{font-size:clamp(1.7rem,3.4vw,2.5rem);font-weight:800;font-stretch:95%}
+.sub{color:var(--ink-soft);max-width:56ch}
+
+/* ---------- nav ---------- */
+nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(244,247,249,.88);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--mist);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Archivo';font-weight:800;font-size:1.12rem;letter-spacing:-.02em;text-decoration:none}
+.logo-mark{width:26px;height:26px;display:block}
+.logo em{font-style:normal;color:var(--amber-deep)}
+.nav-links{display:flex;gap:26px;align-items:center;font-size:.9rem;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--ink-soft)}
+.nav-links a:hover{color:var(--ink)}
+.btn{
+  display:inline-block;font-weight:600;font-size:.9rem;
+  padding:11px 20px;border-radius:var(--radius);
+  text-decoration:none;border:1px solid transparent;
+  transition:transform .12s ease, background .12s ease;
+}
+.btn:focus-visible,a:focus-visible{outline:2px solid var(--amber-deep);outline-offset:2px}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:#16283E;transform:translateY(-1px)}
+.btn-ghost{border-color:var(--ink);color:var(--ink)}
+.btn-ghost:hover{background:var(--white)}
+.btn-amber{background:var(--amber);color:var(--ink)}
+.btn-amber:hover{background:#F0B055;transform:translateY(-1px)}
+
+/* ---------- hero ---------- */
+.hero{padding:84px 0 72px}
+.hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:56px;align-items:center}
+.hero h1{
+  font-size:clamp(2.5rem,5.2vw,3.9rem);
+  font-weight:900;font-stretch:100%;
+  margin:18px 0 20px;
+}
+.hero h1 .amber{color:var(--amber-deep)}
+.hero p.lede{font-size:1.12rem;color:var(--ink-soft);max-width:50ch;margin-bottom:30px}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:26px}
+.hero-note{font-family:'IBM Plex Mono',monospace;font-size:.75rem;color:var(--ink-soft)}
+.hero-note code{color:var(--teal)}
+
+/* ---------- live call console (signature) ---------- */
+.console{
+  background:var(--panel);
+  border:1px solid var(--panel-line);
+  border-radius:14px;
+  color:#D7E3EE;
+  box-shadow:0 30px 60px -30px rgba(14,28,46,.55);
+  overflow:hidden;
+  font-size:.86rem;
+}
+.console-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:13px 18px;border-bottom:1px solid var(--panel-line);
+  font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.06em;
+}
+.live-dot{display:inline-flex;align-items:center;gap:7px;color:#8FB3C9}
+.live-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--amber);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.call-id{color:#5A7690}
+.wave{display:flex;align-items:flex-end;gap:3px;height:34px;padding:14px 18px 0}
+.wave i{width:4px;background:var(--amber);border-radius:2px;animation:wv 1.1s ease-in-out infinite}
+.wave i:nth-child(2n){background:var(--teal-bright)}
+@keyframes wv{0%,100%{height:22%}50%{height:100%}}
+.transcript{padding:16px 18px 8px;min-height:296px}
+.line{display:flex;gap:12px;margin-bottom:14px;opacity:0;transform:translateY(6px);animation:reveal .45s ease forwards}
+@keyframes reveal{to{opacity:1;transform:none}}
+.tag{
+  flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:.66rem;
+  letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:5px;
+  height:fit-content;margin-top:2px;
+}
+.tag.caller{background:#1D2F45;color:#9FBBD1}
+.tag.agent{background:rgba(232,161,61,.16);color:var(--amber)}
+.tag.listen{background:rgba(46,158,143,.16);color:var(--teal-bright)}
+.line p{line-height:1.5}
+.redact{background:rgba(208,106,78,.22);color:#F0A48D;padding:1px 7px;border-radius:4px;font-family:'IBM Plex Mono',monospace;font-size:.78rem}
+.cite{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;
+  background:rgba(46,158,143,.12);color:var(--teal-bright);
+  border:1px solid rgba(46,158,143,.35);
+  padding:3px 9px;border-radius:20px;margin-top:6px;
+}
+.console-foot{
+  border-top:1px solid var(--panel-line);
+  padding:11px 18px;display:flex;gap:18px;flex-wrap:wrap;
+  font-family:'IBM Plex Mono',monospace;font-size:.68rem;color:#5A7690;
+}
+.console-foot b{color:#9FBBD1;font-weight:500}
+
+/* ---------- industries strip ---------- */
+.strip{border-top:1px solid var(--mist);border-bottom:1px solid var(--mist);background:var(--white)}
+.strip-inner{
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  padding:22px 0;
+  font-family:'IBM Plex Mono',monospace;font-size:.74rem;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--ink-soft);
+}
+.strip-inner span{display:flex;align-items:center;gap:9px}
+.strip-inner span::before{content:"";width:6px;height:6px;background:var(--amber);border-radius:1px}
+
+/* ---------- sections ---------- */
+section{padding:88px 0}
+.section-head{margin-bottom:52px;max-width:680px}
+.section-head h2{margin:14px 0 14px}
+
+/* pillars */
+.pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--mist);border:1px solid var(--mist);border-radius:14px;overflow:hidden}
+.pillar{background:var(--white);padding:30px 26px}
+.pillar h3{font-size:1.05rem;font-weight:800;margin:14px 0 10px}
+.pillar p{font-size:.9rem;color:var(--ink-soft)}
+.pillar .glyph{
+  width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--porcelain);color:var(--teal);
+}
+.pillar .glyph svg{width:19px;height:19px}
+
+/* topology */
+.dark{background:var(--panel);color:#D7E3EE}
+.dark .eyebrow{color:var(--teal-bright)}
+.dark .eyebrow::before{background:var(--teal-bright)}
+.dark .sub{color:#8FA9BF}
+.topo{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+.topo-list{display:flex;flex-direction:column;gap:0}
+.topo-item{padding:22px 0;border-bottom:1px solid var(--panel-line)}
+.topo-item:first-child{border-top:1px solid var(--panel-line)}
+.topo-item h3{font-size:1rem;font-weight:800;color:#EAF2F8;display:flex;align-items:center;gap:12px}
+.topo-item h3 .chip{font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.1em;padding:3px 8px;border-radius:4px;font-weight:500}
+.chip.a{background:rgba(232,161,61,.16);color:var(--amber)}
+.chip.b{background:rgba(46,158,143,.16);color:var(--teal-bright)}
+.chip.c{background:#1D2F45;color:#9FBBD1}
+.topo-item p{font-size:.9rem;color:#8FA9BF;margin-top:8px}
+.topo-svg{width:100%;height:auto}
+
+/* api */
+.api-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:center}
+.codeblock{
+  background:var(--panel);color:#C9D9E6;border-radius:14px;border:1px solid var(--panel-line);
+  font-family:'IBM Plex Mono',monospace;font-size:.8rem;line-height:1.7;
+  padding:24px 26px;overflow-x:auto;
+  box-shadow:0 24px 50px -30px rgba(14,28,46,.5);
+}
+.codeblock .k{color:var(--amber)}
+.codeblock .s{color:var(--teal-bright)}
+.codeblock .c{color:#5A7690}
+
+/* compliance band */
+.comply{background:var(--white);border-top:1px solid var(--mist);border-bottom:1px solid var(--mist)}
+.comply-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:34px;margin-top:48px}
+.comply-item{border-top:2px solid var(--amber);padding-top:18px}
+.comply-item h3{font-size:.98rem;font-weight:800;margin-bottom:8px}
+.comply-item p{font-size:.87rem;color:var(--ink-soft)}
+
+/* final cta */
+.final{padding:110px 0;text-align:left}
+.final h2{font-size:clamp(2rem,4.4vw,3.2rem);font-weight:900;max-width:18ch}
+.final .hero-ctas{margin-top:34px}
+
+/* footer */
+footer{background:var(--panel);color:#8FA9BF;padding:54px 0 40px;font-size:.85rem}
+.foot-grid{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;margin-bottom:38px}
+.foot-grid a{text-decoration:none;color:#8FA9BF;display:block;margin-bottom:8px}
+.foot-grid a:hover{color:#D7E3EE}
+.foot-col h4{font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:#5A7690;margin-bottom:14px}
+.foot-base{border-top:1px solid var(--panel-line);padding-top:22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:#5A7690}
+
+/* responsive */
+@media (max-width:960px){
+  .hero-grid,.topo,.api-grid{grid-template-columns:1fr;gap:40px}
+  .pillars{grid-template-columns:1fr 1fr}
+  .comply-grid{grid-template-columns:1fr 1fr}
+  .nav-links{display:none}
+}
+@media (max-width:600px){
+  .pillars,.comply-grid{grid-template-columns:1fr}
+  section{padding:64px 0}
+  .hero{padding:56px 0 48px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .line{opacity:1;transform:none}
+}
+.nav-signin{font-size:.9rem;font-weight:600;text-decoration:none;color:var(--ink-soft);margin-right:4px}
+.nav-signin:hover{color:var(--ink)}
+.nav-links a[aria-current="page"]{color:var(--ink);font-weight:600}
+</style>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0E1C2E">
+<script>
+(function () {
+  try {
+    var saved = localStorage.getItem('vk-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  } catch (e) {}
+})();
+</script>
+<style>
+:root{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;
+  --ink:#E4EDF5;
+  --ink-soft:#8FA9BF;
+  --porcelain:#0A1220;
+  --panel:#0E1A2C;
+  --panel-line:#1D2F45;
+  --mist:#1D2F45;
+  --white:#0E1A2C;
+  /* Brightened for contrast against the dark background - the light-mode
+     values are tuned for white and go muddy here. */
+  --amber:#E8A13D;
+  --amber-deep:#E8A13D;
+  --teal:#2E9E8F;
+  --teal-bright:#3FBFAE;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]){color-scheme:dark;
+  --ink:#E4EDF5;
+  --ink-soft:#8FA9BF;
+  --porcelain:#0A1220;
+  --panel:#0E1A2C;
+  --panel-line:#1D2F45;
+  --mist:#1D2F45;
+  --white:#0E1A2C;
+  /* Brightened for contrast against the dark background - the light-mode
+     values are tuned for white and go muddy here. */
+  --amber:#E8A13D;
+  --amber-deep:#E8A13D;
+  --teal:#2E9E8F;
+  --teal-bright:#3FBFAE;
+}
+}
+:root .eyebrow::before,:root .eyebrow::after,:root .kicker::before,:root .kicker::after{display:none}
+:root .eyebrow,:root .kicker{gap:0}
+:root .logo .wordmark{white-space:nowrap}
+:root .wrap{margin-left:auto;margin-right:auto}
+:root .pillar .glyph{background:rgba(46,158,143,.12);color:#0F7A6C}
+:root[data-theme="light"] .pillar .glyph{background:rgba(46,158,143,.12);color:#0F7A6C}
+:root[data-theme="dark"] nav{background:rgba(10,18,32,.88);border-bottom-color:var(--panel-line)}
+:root[data-theme="dark"] .btn-primary{background:var(--amber);color:#0A1220}
+:root[data-theme="dark"] .btn-primary:hover{background:#F0B055;color:#0A1220}
+:root[data-theme="dark"] .btn-ghost{border-color:var(--ink-soft);color:var(--ink)}
+:root[data-theme="dark"] .btn-ghost:hover{background:var(--panel)}
+:root[data-theme="dark"] .strip,:root[data-theme="dark"] .comply,:root[data-theme="dark"] .pillar,:root[data-theme="dark"] .plan,:root[data-theme="dark"] .rate-table,:root[data-theme="dark"] .card{border-color:var(--panel-line)}
+:root[data-theme="dark"] .pillars{background:var(--panel-line);border-color:var(--panel-line)}
+:root[data-theme="dark"] .term{background:var(--panel);border-color:var(--panel-line)}
+:root[data-theme="dark"] .term button.on{background:var(--amber);color:#0A1220}
+:root[data-theme="dark"] .matrix tr:hover td{background:var(--panel)}
+:root[data-theme="dark"] .rate-table th{background:var(--panel)}
+:root[data-theme="dark"] .faq-item,:root[data-theme="dark"] .comply-item,:root[data-theme="dark"] .deploy-item{border-top-color:var(--panel-line)}
+:root[data-theme="dark"] .nav-signin{color:var(--ink-soft)}
+:root[data-theme="dark"] .nav-signin:hover{color:var(--ink)}
+:root[data-theme="dark"] .pillar .glyph{background:rgba(46,158,143,.16);color:#3FBFAE}
+:root[data-theme="dark"] .pillar[style*="var(--ink)"]{background:#16283E !important;color:#EAF2F8 !important}
+:root[data-theme="dark"] .pillar[style*="var(--ink)"] h3{color:#EAF2F8 !important}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme]) nav{background:rgba(10,18,32,.88);border-bottom-color:var(--panel-line)}
+:root:not([data-theme]) .btn-primary{background:var(--amber);color:#0A1220}
+:root:not([data-theme]) .btn-primary:hover{background:#F0B055;color:#0A1220}
+:root:not([data-theme]) .btn-ghost{border-color:var(--ink-soft);color:var(--ink)}
+:root:not([data-theme]) .btn-ghost:hover{background:var(--panel)}
+:root:not([data-theme]) .strip,:root:not([data-theme]) .comply,:root:not([data-theme]) .pillar,:root:not([data-theme]) .plan,:root:not([data-theme]) .rate-table,:root:not([data-theme]) .card{border-color:var(--panel-line)}
+:root:not([data-theme]) .pillars{background:var(--panel-line);border-color:var(--panel-line)}
+:root:not([data-theme]) .term{background:var(--panel);border-color:var(--panel-line)}
+:root:not([data-theme]) .term button.on{background:var(--amber);color:#0A1220}
+:root:not([data-theme]) .matrix tr:hover td{background:var(--panel)}
+:root:not([data-theme]) .rate-table th{background:var(--panel)}
+:root:not([data-theme]) .faq-item,:root:not([data-theme]) .comply-item,:root:not([data-theme]) .deploy-item{border-top-color:var(--panel-line)}
+:root:not([data-theme]) .nav-signin{color:var(--ink-soft)}
+:root:not([data-theme]) .nav-signin:hover{color:var(--ink)}
+:root:not([data-theme]) .pillar .glyph{background:rgba(46,158,143,.16);color:#3FBFAE}
+:root:not([data-theme]) .pillar[style*="var(--ink)"]{background:#16283E !important;color:#EAF2F8 !important}
+:root:not([data-theme]) .pillar[style*="var(--ink)"] h3{color:#EAF2F8 !important}
+}
+/* The console panel is already dark in both themes; keep its text legible. */
+:root[data-theme="dark"] .console,
+:root[data-theme="dark"] .codeblock,
+:root[data-theme="dark"] footer{border-color:var(--panel-line)}
+:root[data-theme="dark"] img{opacity:.92}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:38px;
+  border:1px solid var(--mist);border-radius:10px;background:var(--white);color:var(--ink-soft);
+  padding:0;cursor:pointer;flex-shrink:0}
+.theme-toggle:hover{color:var(--ink);border-color:var(--ink-soft)}
+.theme-toggle svg{width:17px;height:17px}
+/* Show the icon for the theme the click would give you, not the current one. */
+.theme-toggle .i-sun{display:none}
+.theme-toggle .i-moon{display:block}
+:root[data-theme="dark"] .theme-toggle .i-sun{display:block}
+:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]) .theme-toggle .i-sun{display:block}
+  :root:not([data-theme]) .theme-toggle .i-moon{display:none}
+}
+</style>
+<style>
+.nav-toggle{
+  display:none;align-items:center;justify-content:center;
+  /* flex-shrink defaults to 1, and the nav row is a flex container: without
+     this the 44px target gets squeezed to ~36px on a 390px viewport, below
+     the minimum comfortable tap size. */
+  flex:0 0 auto;
+  width:44px;height:40px;border:1px solid var(--mist);border-radius:9px;
+  background:var(--white);color:var(--ink);cursor:pointer;padding:0;
+}
+.nav-toggle svg{width:19px;height:19px}
+.nav-toggle[aria-expanded="true"]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+</style>
+<style>
+/* A 1fr track has min-width:auto, so a wide child (a code block, a long mono
+   string) grows the track instead of scrolling inside it. minmax(0,1fr) is
+   what actually lets these scroll. */
+.api-grid,.hero-grid,.topo,.plans,.comply-grid,.faq,.deploy-grid,.pillars{min-width:0}
+.api-grid>*,.hero-grid>*,.topo>*,.plans>*,.comply-grid>*,.faq>*{min-width:0}
+.codeblock,pre,.code{max-width:100%;overflow-x:auto}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+@media (max-width:960px){
+  .api-grid,.hero-grid,.topo{grid-template-columns:minmax(0,1fr)}
+  .nav-inner{gap:10px}
+  /* The menu replaces the hidden link row. */
+  .nav-toggle{display:inline-flex}
+  .nav-links{
+    display:none;position:absolute;top:64px;left:0;right:0;
+    flex-direction:column;gap:0;align-items:stretch;
+    background:var(--porcelain);border-bottom:1px solid var(--mist);
+    padding:6px 20px 14px;
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 4px;border-bottom:1px solid var(--mist);font-size:1rem}
+  .nav-links a:last-child{border-bottom:none}
+  nav{position:sticky}
+}
+
+/* Touch targets. Several shipped well under the 44px minimum: the switcher at
+   28x24, footer links at 22px tall, the logo at 26px. */
+@media (pointer:coarse){
+  .theme-toggle{min-width:44px;min-height:42px}
+  .nav-signin,.nav-links a{min-height:44px;display:inline-flex;align-items:center}
+  .industries-nav a,.strip-inner a{min-height:42px;display:inline-flex;align-items:center}
+  .foot-grid a{min-height:42px;display:flex;align-items:center;margin-bottom:0}
+  .logo{min-height:40px}
+  .btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+}
+
+/* Menu-only sign-in link, so hiding the bar's does not strand the console. */
+.nav-links .menu-console{display:none}
+
+@media (max-width:600px){
+  .plans{grid-template-columns:minmax(0,1fr)}
+  /* Secondary sign-in links leave the bar; the menu carries one instead, so
+     the primary CTA stops being squeezed off the right edge. */
+  .nav-signin,.nav-cta .btn-quiet{display:none}
+  .nav-links .menu-console{display:flex}
+
+  /* Footer columns sit side by side until they cannot. At 390 the last column
+     was running past the viewport. */
+  .foot-grid{flex-direction:column;gap:22px}
+  .foot-col{max-width:100% !important}
+  .foot-base{flex-direction:column;gap:8px}
+  /* The nav CTA was overflowing the bar at full size. */
+  .nav-inner .btn-primary{padding:9px 12px;font-size:.82rem;white-space:nowrap}
+  .logo{font-size:1rem}
+  .logo-mark{width:22px;height:22px}
+  /* One compact button fits the bar now, so it stays where people expect it. */
+  .nav-links .theme-toggle{display:none}
+}
+@media (max-width:380px){
+  .nav-inner .btn-primary{padding:8px 10px;font-size:.78rem}
+  .logo{font-size:.95rem}
+}
+.nav-links .theme-toggle{display:none}
+
+/* Last-resort guard: a single stray wide element should not make the whole
+   page pan sideways. */
+@media (max-width:960px){ html,body{overflow-x:hidden} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="#">
+      <svg class="logo-mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+        <rect x="1" y="1" width="24" height="24" rx="6" fill="#0E1C2E"/>
+        <rect x="6"  y="11" width="2.4" height="4"  rx="1.2" fill="#2E9E8F"/>
+        <rect x="10" y="7"  width="2.4" height="12" rx="1.2" fill="#E8A13D"/>
+        <rect x="14" y="4"  width="2.4" height="18" rx="1.2" fill="#E8A13D"/>
+        <rect x="18" y="9"  width="2.4" height="8"  rx="1.2" fill="#2E9E8F"/>
+      </svg><span class="wordmark">Voice<em>Kernel</em><span style="font-weight:600;opacity:.55;font-size:.82em">.ai</span></span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#platform" aria-current="page">Platform</a>
+      <a href="/industries">Industries</a>
+      <a href="/pricing">Pricing</a>
+      <a href="/#api">API</a>
+      <a href="/#compliance">Compliance</a>
+      <a href="/docs">Docs</a>
+      <a class="menu-console" href="/app">Console</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+      <a class="nav-signin" href="/app">Console</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+      </button>
+      <a class="btn btn-primary" href="#contact">Talk to us</a>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Voice infrastructure for regulated enterprise</span>
+      <h1>The voice layer between your data and your <span class="amber">customers.</span></h1>
+      <p class="lede">One API call puts intelligent voice agents on any line - agents that speak, listen, and answer from your organisation's own knowledge, with every word audited. Built for banking, insurance, telco and government.</p>
+      <div class="hero-ctas">
+        <a class="btn btn-amber" href="#contact">Book a technical demo</a>
+        <a class="btn btn-ghost" href="#api">View the API</a>
+      </div>
+      <p class="hero-note">Deploys in your VPC · <code>POST /v1/calls</code> to first live call in under an hour</p>
+    </div>
+
+    <!-- signature: live call console -->
+    <div class="console" role="img" aria-label="Simulated live call: a VoiceKernel agent resolves a card dispute, citing an internal policy document while a compliance agent redacts the card number in real time.">
+      <div class="console-head">
+        <span class="live-dot">LIVE CALL</span>
+        <span class="call-id">call_9f2c · inbound · PSTN +61</span>
+      </div>
+      <div class="wave" aria-hidden="true">
+        <i style="animation-delay:0s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:.05s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.15s"></i><i style="animation-delay:.25s"></i><i style="animation-delay:.4s"></i><i style="animation-delay:.1s"></i><i style="animation-delay:.35s"></i><i style="animation-delay:.2s"></i><i style="animation-delay:0s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.12s"></i><i style="animation-delay:.22s"></i><i style="animation-delay:.42s"></i><i style="animation-delay:.08s"></i><i style="animation-delay:.28s"></i>
+      </div>
+      <div class="transcript">
+        <div class="line" style="animation-delay:.3s">
+          <span class="tag caller">Caller</span>
+          <p>Hi - there's a charge on my card I don't recognise. It's on the card ending <span class="redact">•••• 4412 - redacted</span></p>
+        </div>
+        <div class="line" style="animation-delay:1.2s">
+          <span class="tag listen">Comply</span>
+          <p style="color:#8FA9BF;font-size:.8rem">PAN detected → masked in transcript, audio scrubbed. PCI event logged.</p>
+        </div>
+        <div class="line" style="animation-delay:2.1s">
+          <span class="tag agent">Agent</span>
+          <p>I can help with that. I've flagged the transaction as disputed - you're covered while we investigate, and a temporary credit is applied within 2 business days.<br>
+          <span class="cite">⌕ grounded · Card Disputes Policy v3.2 §4.1</span></p>
+        </div>
+        <div class="line" style="animation-delay:3.2s">
+          <span class="tag caller">Caller</span>
+          <p>That's great. Will I get a new card?</p>
+        </div>
+        <div class="line" style="animation-delay:4s">
+          <span class="tag agent">Agent</span>
+          <p>Yes - I've ordered a replacement to your registered address. It arrives in 3-5 days; your digital wallet keeps working in the meantime.</p>
+        </div>
+      </div>
+      <div class="console-foot">
+        <span>latency <b>418ms</b></span>
+        <span>agents on call <b>3</b></span>
+        <span>containment <b>resolved · no escalation</b></span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ INDUSTRIES ============ -->
+<div class="strip">
+  <div class="wrap strip-inner">
+    <span>Retail banking</span>
+    <span>Insurance &amp; claims</span>
+    <span>Superannuation</span>
+    <span>Telco &amp; utilities</span>
+    <span>Government services</span>
+    <span>Health administration</span>
+  </div>
+</div>
+
+<!-- ============ PILLARS ============ -->
+<section id="platform">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The platform</span>
+      <h2>Everything a voice channel needs, delivered as infrastructure.</h2>
+      <p class="sub">VoiceKernel is not a bot builder. It's the layer your engineers call and your risk team signs off on.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5" r="2.5"/><circle cx="5" cy="18" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M12 7.5v4M10.5 13.5 6.5 16M13.5 13.5l4 2.5"/></svg></div>
+        <h3>Orchestrate</h3>
+        <p>Run multiple agents on a single call - a speaker, a compliance listener, a learner capturing intelligence. Attach them to AI-led calls or live human conversations.</p>
+      </div>
+      <div class="pillar">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2Z"/><path d="M9 7h6M9 11h6"/></svg></div>
+        <h3>Ground</h3>
+        <p>Answers come from your knowledge - policies, product docs, CRM, core systems - with per-utterance citations, so every response is explainable after the fact.</p>
+      </div>
+      <div class="pillar">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 4h4l2 5-2.5 1.5a12 12 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></div>
+        <h3>Connect</h3>
+        <p>SIP, PSTN and WebRTC. Native handoff to Genesys, NICE and Amazon Connect. Webhooks into your CRM so the voice channel writes back, not just talks.</p>
+      </div>
+      <div class="pillar">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 5 6v5c0 5 3.5 8.5 7 10 3.5-1.5 7-5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+        <h3>Comply</h3>
+        <p>PCI redaction in-stream, consent capture, retention policies, data residency, full reasoning logs. Deploy in our cloud, your VPC, or on-prem.</p>
+      </div>
+      <div class="pillar">
+        <div class="glyph"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18M6 16v-5M11 16V7M16 16v-8M21 16V11" stroke-linecap="round"/></svg></div>
+        <h3>Observe</h3>
+        <p>Live call monitoring, sentiment, containment rate, escalation triggers, and A/B testing across agent versions - from one console your CX team actually uses.</p>
+      </div>
+      <div class="pillar" style="background:var(--ink);color:var(--white)">
+        <div class="glyph" style="background:#1D2F45;color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z"/></svg></div>
+        <h3 style="color:var(--white)">Built to replace point tools</h3>
+        <p style="color:#9FBBD1">If you've outgrown developer-toy voice platforms, this is the layer you migrate to. Same API ergonomics, enterprise everything else.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MULTI-AGENT ============ -->
+<section id="agents" class="dark">
+  <div class="wrap">
+    <div class="topo">
+      <div>
+        <span class="eyebrow">Multi-agent calls</span>
+        <h2 style="color:#EAF2F8;margin:14px 0 14px">Three agents.<br>One conversation.</h2>
+        <p class="sub" style="margin-bottom:26px">Most platforms put one bot on one call. VoiceKernel treats a call as a room: agents join with distinct roles and permissions, whether the other side is a customer, an IVR, or your own human team.</p>
+        <div class="topo-list">
+          <div class="topo-item">
+            <h3><span class="chip a">SPEAK</span> The voice agent</h3>
+            <p>Talks to the customer. Grounded in your knowledge base, constrained by your guardrails, tuned per queue - disputes, claims, renewals, hardship.</p>
+          </div>
+          <div class="topo-item">
+            <h3><span class="chip b">LISTEN</span> The compliance agent</h3>
+            <p>Silent on the line. Redacts card numbers in-stream, monitors for vulnerable-customer signals, and can force escalation to a human in real time.</p>
+          </div>
+          <div class="topo-item">
+            <h3><span class="chip c">LEARN</span> The intelligence agent</h3>
+            <p>Turns every call into structured data - intents, objections, product gaps - and feeds it back to your CRM and analytics without a single manual QA review.</p>
+          </div>
+        </div>
+      </div>
+      <svg class="topo-svg" viewBox="0 0 520 420" fill="none" aria-label="Diagram: a call session at the centre connects a speaking agent, a listening compliance agent, and a learning agent to the customer line and enterprise systems.">
+        <defs>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0 0 L6 3 L0 6 Z" fill="#5A7690"/></marker>
+        </defs>
+        <!-- center call node -->
+        <rect x="185" y="165" width="150" height="90" rx="12" fill="#0E1C2E" stroke="#E8A13D" stroke-width="1.5"/>
+        <text x="260" y="202" text-anchor="middle" fill="#EAF2F8" font-family="Archivo" font-weight="800" font-size="15">CALL SESSION</text>
+        <text x="260" y="224" text-anchor="middle" fill="#5A7690" font-family="IBM Plex Mono" font-size="10">call_9f2c · 418ms</text>
+        <!-- caller -->
+        <rect x="20" y="180" width="110" height="60" rx="10" fill="#1D2F45"/>
+        <text x="75" y="206" text-anchor="middle" fill="#9FBBD1" font-family="IBM Plex Sans" font-size="12" font-weight="600">Customer</text>
+        <text x="75" y="224" text-anchor="middle" fill="#5A7690" font-family="IBM Plex Mono" font-size="9">PSTN / SIP / WebRTC</text>
+        <line x1="130" y1="210" x2="180" y2="210" stroke="#5A7690" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- speak -->
+        <rect x="380" y="60" width="120" height="58" rx="10" fill="rgba(232,161,61,.12)" stroke="#E8A13D"/>
+        <text x="440" y="85" text-anchor="middle" fill="#E8A13D" font-family="IBM Plex Mono" font-size="10" letter-spacing="1">SPEAK</text>
+        <text x="440" y="103" text-anchor="middle" fill="#D7E3EE" font-family="IBM Plex Sans" font-size="11">Voice agent</text>
+        <line x1="335" y1="180" x2="392" y2="118" stroke="#5A7690" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- listen -->
+        <rect x="380" y="181" width="120" height="58" rx="10" fill="rgba(46,158,143,.12)" stroke="#2E9E8F"/>
+        <text x="440" y="206" text-anchor="middle" fill="#2E9E8F" font-family="IBM Plex Mono" font-size="10" letter-spacing="1">LISTEN</text>
+        <text x="440" y="224" text-anchor="middle" fill="#D7E3EE" font-family="IBM Plex Sans" font-size="11">Compliance agent</text>
+        <line x1="335" y1="210" x2="375" y2="210" stroke="#5A7690" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- learn -->
+        <rect x="380" y="302" width="120" height="58" rx="10" fill="#1D2F45" stroke="#31445A"/>
+        <text x="440" y="327" text-anchor="middle" fill="#9FBBD1" font-family="IBM Plex Mono" font-size="10" letter-spacing="1">LEARN</text>
+        <text x="440" y="345" text-anchor="middle" fill="#D7E3EE" font-family="IBM Plex Sans" font-size="11">Intelligence agent</text>
+        <line x1="335" y1="240" x2="392" y2="302" stroke="#5A7690" stroke-width="1.5" marker-end="url(#arr)"/>
+        <!-- knowledge -->
+        <rect x="185" y="330" width="150" height="58" rx="10" fill="#1D2F45"/>
+        <text x="260" y="355" text-anchor="middle" fill="#9FBBD1" font-family="IBM Plex Sans" font-size="12" font-weight="600">Your knowledge</text>
+        <text x="260" y="373" text-anchor="middle" fill="#5A7690" font-family="IBM Plex Mono" font-size="9">policies · CRM · core systems</text>
+        <line x1="260" y1="325" x2="260" y2="260" stroke="#2E9E8F" stroke-width="1.5" stroke-dasharray="4 4" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ API ============ -->
+<section id="api">
+  <div class="wrap api-grid">
+    <div>
+      <span class="eyebrow">Developer-first</span>
+      <h2 style="margin:14px 0 14px">A voice channel is one request away.</h2>
+      <p class="sub" style="margin-bottom:24px">Everything is an API. Create agents, attach knowledge, place or receive calls, stream transcripts - with a TypeScript SDK, and OpenAPI to generate a client for everything else.</p>
+      <p class="sub" style="margin-bottom:28px">Prototype in minutes on our cloud, then flip the same config to your VPC for production. No re-platforming between pilot and rollout.</p>
+      <a class="btn btn-primary" href="/docs">Read the docs</a>
+    </div>
+    <pre class="codeblock"><span class="c"># place an outbound call with a grounded agent + compliance listener</span>
+curl https://api.voicekernel.ai/v1/calls \
+  -H <span class="s">"Authorization: Bearer $VK_KEY"</span> \
+  -d <span class="s">'{
+    "to": "+61400000000",
+    "agents": [
+      { "id": "agent_disputes",   "role": "speak",
+        "knowledge": "kb_cards_policies" },
+      { "id": "agent_pci_guard",  "role": "listen",
+        "actions": ["redact_pan", "escalate_vulnerable"] },
+      { "id": "agent_intel",      "role": "learn",
+        "sink": "webhook:crm_events" }
+    ],
+    "region": "au-syd",
+    "record": { "consent": "prompt_first" }
+  }'</span></pre>
+  </div>
+</section>
+
+<!-- ============ COMPLIANCE ============ -->
+<section id="compliance" class="comply">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why regulated teams choose VoiceKernel</span>
+      <h2>Pass the risk review before you book it.</h2>
+      <p class="sub">The reason voice AI stalls in enterprise isn't the demo - it's the sign-off. VoiceKernel is designed for the sign-off.</p>
+    </div>
+    <div class="comply-grid">
+      <div class="comply-item">
+        <h3>In-stream redaction</h3>
+        <p>Card numbers and identifiers are masked in audio and transcript before they ever reach storage. PCI events are logged, not hoped for.</p>
+      </div>
+      <div class="comply-item">
+        <h3>Explainable answers</h3>
+        <p>Every agent utterance carries its source citation and reasoning log. When a regulator asks why the AI said it, you have the answer.</p>
+      </div>
+      <div class="comply-item">
+        <h3>Data residency</h3>
+        <p>Region-pinned processing and storage - Australia, EU, US - with VPC and on-prem deployment for teams that can't send audio offshore.</p>
+      </div>
+      <div class="comply-item">
+        <h3>Human-in-the-loop</h3>
+        <p>Confidence thresholds, forced escalation rules and live takeover. The AI handles volume; your people handle judgement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="final" id="contact">
+  <div class="wrap">
+    <span class="eyebrow">Get started</span>
+    <h2>Put a kernel behind every conversation.</h2>
+    <p class="sub" style="margin-top:16px">A 30-minute technical demo on your own use case - bring a policy document and we'll show you a grounded agent answering from it, live.</p>
+    <div class="hero-ctas">
+      <a class="btn btn-amber" href="mailto:hello@voicekernel.ai">Book a technical demo</a>
+      <a class="btn btn-ghost" href="#api">Start with the API</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col" style="max-width:280px">
+        <a class="logo" href="#" style="color:#EAF2F8;margin-bottom:14px">
+          <svg class="logo-mark" viewBox="0 0 26 26" fill="none" aria-hidden="true">
+            <rect x="1" y="1" width="24" height="24" rx="6" fill="#1D2F45"/>
+            <rect x="6" y="11" width="2.4" height="4" rx="1.2" fill="#2E9E8F"/>
+            <rect x="10" y="7" width="2.4" height="12" rx="1.2" fill="#E8A13D"/>
+            <rect x="14" y="4" width="2.4" height="18" rx="1.2" fill="#E8A13D"/>
+            <rect x="18" y="9" width="2.4" height="8" rx="1.2" fill="#2E9E8F"/>
+          </svg><span class="wordmark">Voice<em style="color:var(--amber)">Kernel</em><span style="font-weight:600;opacity:.55;font-size:.82em">.ai</span></span></a>
+        <p style="font-size:.82rem">The voice infrastructure layer for regulated enterprise.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Platform</h4>
+        <a href="#platform">Orchestrate</a><a href="#platform">Ground</a><a href="#platform">Connect</a><a href="#compliance">Comply</a><a href="#platform">Observe</a>
+      </div>
+      <div class="foot-col">
+        <h4>Developers</h4>
+        <a href="#api">API reference</a><a href="/docs#sdks">SDKs</a><a href="/health">Status</a><a href="/docs">Changelog</a>
+      </div>
+      <div class="foot-col">
+        <h4>Company</h4>
+        <a href="/docs">Security</a><a href="/docs">Trust centre</a><a href="#">Careers</a><a href="#contact">Contact</a>
+      </div>
+    </div>
+    <div class="foot-base">
+      <span>© 2026 VoiceKernel · PayFar Global Ltd</span>
+      <span>au-syd · eu-fra · us-east</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var KEY = 'vk-theme';
+  var button = document.getElementById('themeToggle');
+
+  // Before the first click there is no stored preference, so the OS decides via
+  // prefers-color-scheme. The button reflects whatever is actually on screen,
+  // which is why it reads the media query rather than assuming a default.
+  function effective() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  }
+
+  function paint(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem(KEY, theme); } catch (e) {}
+    document.querySelectorAll('.theme-toggle').forEach(function (b) {
+      b.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      b.setAttribute('title', theme === 'dark' ? 'Light theme' : 'Dark theme');
+    });
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0A1220' : '#0E1C2E');
+  }
+
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.addEventListener('click', function () {
+      paint(effective() === 'dark' ? 'light' : 'dark');
+    });
+  });
+
+  // Label only - do not write the attribute, or the OS would stop being followed.
+  var current = effective();
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.setAttribute('aria-label', current === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  });
+})();
+</script>
+<script>
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+
+  function setOpen(open) {
+    links.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(!links.classList.contains('open'));
+  });
+  // Following a link should close the menu, including same-page anchors where
+  // no navigation happens to close it for us.
+  links.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setOpen(false);
+  });
+})();
+</script>
+</body>
+</html>

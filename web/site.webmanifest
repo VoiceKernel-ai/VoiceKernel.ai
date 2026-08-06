@@ -1,0 +1,26 @@
+{
+  "name": "VoiceKernel",
+  "short_name": "VoiceKernel",
+  "description": "The voice infrastructure layer for regulated enterprise.",
+  "start_url": "/app/",
+  "display": "standalone",
+  "background_color": "#0A1220",
+  "theme_color": "#0E1C2E",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

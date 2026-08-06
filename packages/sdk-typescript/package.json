@@ -1,0 +1,41 @@
+{
+  "name": "@voicekernel/sdk",
+  "version": "1.0.0",
+  "description": "Official TypeScript SDK for the VoiceKernel API \u2014 voice agents, calls, and signed webhooks.",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "voicekernel",
+    "voice",
+    "ai",
+    "agents",
+    "telephony",
+    "sdk"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VoiceKernel-ai/VoiceKernel.ai.git",
+    "directory": "packages/sdk-typescript"
+  }
+}

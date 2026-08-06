@@ -1,0 +1,45 @@
+# Example reverse-proxy config for the VoiceKernel API origin.
+#
+# Set VOICEKERNEL_API_UPSTREAM to wherever the API container is bound - the
+# docker bridge gateway when Caddy runs in a container, or 127.0.0.1:8120 when
+# it runs on the host. It is not hard-coded here because a published config
+# should not describe anyone's actual network.
+#
+# VoiceKernel API origin.
+#
+# api.voicekernel.ai is proxied through Cloudflare (orange cloud), so:
+#
+#   * Let's Encrypt HTTP-01 cannot validate here — Cloudflare answers :80 for
+#     this hostname, never the origin. `tls internal` presents a self-signed
+#     cert instead, which Cloudflare's "Full" SSL mode accepts. This is the
+#     same arrangement lodgewise.ai already uses on this host.
+#   * :80 is served too, so the origin still works if the zone is ever switched
+#     to "Flexible" (Cloudflare connects over plain HTTP in that mode).
+#
+# The app itself listens on the docker bridge gateway only, so these vhosts are
+# the sole route in from the internet.
+api.voicekernel.ai {
+	tls internal
+	encode gzip {
+		match {
+			header Content-Type application/json*
+			header Content-Type text/html*
+			header Content-Type text/css*
+			header Content-Type text/plain*
+			header Content-Type application/javascript*
+		}
+	}
+	reverse_proxy {$VOICEKERNEL_API_UPSTREAM}
+}
+http://api.voicekernel.ai {
+	encode gzip {
+		match {
+			header Content-Type application/json*
+			header Content-Type text/html*
+			header Content-Type text/css*
+			header Content-Type text/plain*
+			header Content-Type application/javascript*
+		}
+	}
+	reverse_proxy {$VOICEKERNEL_API_UPSTREAM}
+}

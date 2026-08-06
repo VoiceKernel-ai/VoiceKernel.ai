@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing - VoiceKernel</title>
+<meta name="description" content="VoiceKernel pricing: all-in per-minute rates, committed-use discounts, and enterprise deployments. No credits, no top-ups - infrastructure pricing.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E1C2E;--ink-soft:#31445A;
+  --porcelain:#F4F7F9;--panel:#0B1626;--panel-line:#1D2F45;
+  --amber:#E8A13D;--amber-deep:#B87716;
+  --teal:#0F5D5D;--teal-bright:#2E9E8F;
+  --mist:#DEE7ED;--white:#FFFFFF;
+  --radius:10px;--maxw:1180px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'IBM Plex Sans',system-ui,sans-serif;color:var(--ink);background:var(--porcelain);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+::selection{background:var(--amber);color:var(--ink)}
+a{color:inherit}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:10px;justify-content:center}
+.eyebrow::before,.eyebrow::after{content:"";width:22px;height:1px;background:var(--teal)}
+h1,h2,h3{font-family:'Archivo',sans-serif;line-height:1.06;letter-spacing:-.015em}
+.btn{display:inline-block;font-weight:600;font-size:.9rem;padding:11px 20px;border-radius:var(--radius);text-decoration:none;border:1px solid transparent;transition:transform .12s,background .12s}
+.btn:focus-visible,a:focus-visible{outline:2px solid var(--amber-deep);outline-offset:2px}
+.btn-primary{background:var(--ink);color:var(--white)}.btn-primary:hover{background:#16283E;transform:translateY(-1px)}
+.btn-amber{background:var(--amber);color:var(--ink)}.btn-amber:hover{background:#F0B055;transform:translateY(-1px)}
+.btn-ghost{border-color:var(--ink);color:var(--ink)}.btn-ghost:hover{background:var(--white)}
+
+nav{position:sticky;top:0;z-index:50;background:rgba(244,247,249,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--mist)}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:10px;font-family:'Archivo';font-weight:800;font-size:1.12rem;text-decoration:none}
+.logo-mark{width:26px;height:26px}
+.logo em{font-style:normal;color:var(--amber-deep)}
+.nav-links{display:flex;gap:26px;font-size:.9rem;font-weight:500}
+.nav-links a{text-decoration:none;color:var(--ink-soft)}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a.active{color:var(--ink);border-bottom:2px solid var(--amber)}
+
+.phero{padding:72px 0 40px;text-align:center}
+.phero h1{font-size:clamp(2.2rem,4.6vw,3.4rem);font-weight:900;margin:16px auto 16px;max-width:22ch}
+.phero h1 .amber{color:var(--amber-deep)}
+.phero p{color:var(--ink-soft);max-width:60ch;margin:0 auto;font-size:1.05rem}
+
+/* tiers */
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:44px 0 18px;align-items:stretch}
+.tier{background:var(--white);border:1px solid var(--mist);border-radius:14px;padding:26px 24px;display:flex;flex-direction:column}
+.tier.feature{background:var(--panel);color:#D7E3EE;border-color:var(--panel-line);box-shadow:0 30px 60px -34px rgba(14,28,46,.55);position:relative}
+.tier .tag{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.tier.feature .tag{color:var(--teal-bright)}
+.tier h3{font-size:1.35rem;font-weight:900;margin:8px 0 4px}
+.tier .for{font-size:.82rem;color:var(--ink-soft);min-height:40px}
+.tier.feature .for{color:#8FA9BF}
+.price{margin:16px 0 4px;font-family:'Archivo';font-weight:900;font-size:2.1rem;letter-spacing:-.02em}
+.price small{font-family:'IBM Plex Mono',monospace;font-size:.68rem;font-weight:400;color:var(--ink-soft);letter-spacing:0}
+.tier.feature .price small{color:#8FA9BF}
+.price-note{font-family:'IBM Plex Mono',monospace;font-size:.66rem;color:var(--ink-soft);margin-bottom:16px}
+.tier.feature .price-note{color:#8FA9BF}
+.tier ul{list-style:none;margin:6px 0 22px;flex:1}
+.tier li{font-size:.84rem;padding:7px 0 7px 24px;position:relative;color:var(--ink-soft);border-bottom:1px solid var(--mist)}
+.tier li:last-child{border:none}
+.tier li::before{content:"✓";position:absolute;left:2px;color:var(--teal-bright);font-weight:600}
+.tier.feature li{color:#B9CBDA;border-color:var(--panel-line)}
+.tier li b{color:var(--ink);font-weight:600}
+.tier.feature li b{color:#EAF2F8}
+.best{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--amber);color:var(--ink);font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.1em;padding:4px 12px;border-radius:20px;font-weight:500}
+
+.allin{background:var(--white);border-top:1px solid var(--mist);border-bottom:1px solid var(--mist);padding:22px 0;margin-top:36px}
+.allin-inner{display:flex;gap:18px;justify-content:space-between;flex-wrap:wrap;font-size:.85rem;color:var(--ink-soft)}
+.allin-inner span{display:flex;align-items:center;gap:9px}
+.allin-inner span::before{content:"";width:6px;height:6px;background:var(--amber);border-radius:1px}
+
+/* comparison */
+section{padding:74px 0}
+.section-head{text-align:center;max-width:640px;margin:0 auto 40px}
+.section-head h2{font-size:clamp(1.7rem,3.2vw,2.4rem);font-weight:800;margin:12px 0 12px}
+.section-head p{color:var(--ink-soft)}
+.cmp{width:100%;border-collapse:collapse;background:var(--white);border:1px solid var(--mist);border-radius:14px;overflow:hidden;font-size:.86rem}
+.cmp th,.cmp td{padding:13px 18px;border-bottom:1px solid var(--mist);text-align:left}
+.cmp th{font-family:'IBM Plex Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);font-weight:500;background:var(--porcelain)}
+.cmp tr:last-child td{border:none}
+.cmp td:first-child{color:var(--ink-soft);width:34%}
+.cmp .vk{font-weight:600}
+.cmp .them{color:var(--ink-soft)}
+.tick{color:var(--teal-bright);font-weight:700}
+.cross{color:#C4552F;font-weight:700}
+
+/* faq */
+.faq{max-width:760px;margin:0 auto}
+.faq details{background:var(--white);border:1px solid var(--mist);border-radius:10px;margin-bottom:10px;padding:0 18px}
+.faq summary{font-weight:600;font-size:.92rem;padding:15px 0;cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center}
+.faq summary::after{content:"+";font-family:'Archivo';font-weight:800;color:var(--amber-deep)}
+.faq details[open] summary::after{content:"-"}
+.faq p{font-size:.86rem;color:var(--ink-soft);padding-bottom:16px}
+
+.final{padding:90px 0;text-align:center}
+.final h2{font-size:clamp(1.9rem,4vw,2.8rem);font-weight:900}
+.final .ctas{display:flex;gap:14px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+footer{background:var(--panel);color:#8FA9BF;padding:40px 0;font-size:.8rem}
+.foot-base{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:#5A7690}
+
+@media (max-width:960px){.tiers{grid-template-columns:1fr}.nav-links{display:none}.cmp{font-size:.78rem}}
+.nav-signin{font-size:.9rem;font-weight:600;text-decoration:none;color:var(--ink-soft);margin-right:4px}
+.nav-signin:hover{color:var(--ink)}
+.nav-links a[aria-current="page"]{color:var(--ink);font-weight:600}
+</style>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0E1C2E">
+<script>
+(function () {
+  try {
+    var saved = localStorage.getItem('vk-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  } catch (e) {}
+})();
+</script>
+<style>
+:root{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;
+  --ink:#E4EDF5;
+  --ink-soft:#8FA9BF;
+  --porcelain:#0A1220;
+  --panel:#0E1A2C;
+  --panel-line:#1D2F45;
+  --mist:#1D2F45;
+  --white:#0E1A2C;
+  /* Brightened for contrast against the dark background - the light-mode
+     values are tuned for white and go muddy here. */
+  --amber:#E8A13D;
+  --amber-deep:#E8A13D;
+  --teal:#2E9E8F;
+  --teal-bright:#3FBFAE;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]){color-scheme:dark;
+  --ink:#E4EDF5;
+  --ink-soft:#8FA9BF;
+  --porcelain:#0A1220;
+  --panel:#0E1A2C;
+  --panel-line:#1D2F45;
+  --mist:#1D2F45;
+  --white:#0E1A2C;
+  /* Brightened for contrast against the dark background - the light-mode
+     values are tuned for white and go muddy here. */
+  --amber:#E8A13D;
+  --amber-deep:#E8A13D;
+  --teal:#2E9E8F;
+  --teal-bright:#3FBFAE;
+}
+}
+:root .eyebrow::before,:root .eyebrow::after,:root .kicker::before,:root .kicker::after{display:none}
+:root .eyebrow,:root .kicker{gap:0}
+:root .logo .wordmark{white-space:nowrap}
+:root .wrap{margin-left:auto;margin-right:auto}
+:root .pillar .glyph{background:rgba(46,158,143,.12);color:#0F7A6C}
+:root[data-theme="light"] .pillar .glyph{background:rgba(46,158,143,.12);color:#0F7A6C}
+:root[data-theme="dark"] nav{background:rgba(10,18,32,.88);border-bottom-color:var(--panel-line)}
+:root[data-theme="dark"] .btn-primary{background:var(--amber);color:#0A1220}
+:root[data-theme="dark"] .btn-primary:hover{background:#F0B055;color:#0A1220}
+:root[data-theme="dark"] .btn-ghost{border-color:var(--ink-soft);color:var(--ink)}
+:root[data-theme="dark"] .btn-ghost:hover{background:var(--panel)}
+:root[data-theme="dark"] .strip,:root[data-theme="dark"] .comply,:root[data-theme="dark"] .pillar,:root[data-theme="dark"] .plan,:root[data-theme="dark"] .rate-table,:root[data-theme="dark"] .card{border-color:var(--panel-line)}
+:root[data-theme="dark"] .pillars{background:var(--panel-line);border-color:var(--panel-line)}
+:root[data-theme="dark"] .term{background:var(--panel);border-color:var(--panel-line)}
+:root[data-theme="dark"] .term button.on{background:var(--amber);color:#0A1220}
+:root[data-theme="dark"] .matrix tr:hover td{background:var(--panel)}
+:root[data-theme="dark"] .rate-table th{background:var(--panel)}
+:root[data-theme="dark"] .faq-item,:root[data-theme="dark"] .comply-item,:root[data-theme="dark"] .deploy-item{border-top-color:var(--panel-line)}
+:root[data-theme="dark"] .nav-signin{color:var(--ink-soft)}
+:root[data-theme="dark"] .nav-signin:hover{color:var(--ink)}
+:root[data-theme="dark"] .pillar .glyph{background:rgba(46,158,143,.16);color:#3FBFAE}
+:root[data-theme="dark"] .pillar[style*="var(--ink)"]{background:#16283E !important;color:#EAF2F8 !important}
+:root[data-theme="dark"] .pillar[style*="var(--ink)"] h3{color:#EAF2F8 !important}
+@media (prefers-color-scheme: dark){
+:root:not([data-theme]) nav{background:rgba(10,18,32,.88);border-bottom-color:var(--panel-line)}
+:root:not([data-theme]) .btn-primary{background:var(--amber);color:#0A1220}
+:root:not([data-theme]) .btn-primary:hover{background:#F0B055;color:#0A1220}
+:root:not([data-theme]) .btn-ghost{border-color:var(--ink-soft);color:var(--ink)}
+:root:not([data-theme]) .btn-ghost:hover{background:var(--panel)}
+:root:not([data-theme]) .strip,:root:not([data-theme]) .comply,:root:not([data-theme]) .pillar,:root:not([data-theme]) .plan,:root:not([data-theme]) .rate-table,:root:not([data-theme]) .card{border-color:var(--panel-line)}
+:root:not([data-theme]) .pillars{background:var(--panel-line);border-color:var(--panel-line)}
+:root:not([data-theme]) .term{background:var(--panel);border-color:var(--panel-line)}
+:root:not([data-theme]) .term button.on{background:var(--amber);color:#0A1220}
+:root:not([data-theme]) .matrix tr:hover td{background:var(--panel)}
+:root:not([data-theme]) .rate-table th{background:var(--panel)}
+:root:not([data-theme]) .faq-item,:root:not([data-theme]) .comply-item,:root:not([data-theme]) .deploy-item{border-top-color:var(--panel-line)}
+:root:not([data-theme]) .nav-signin{color:var(--ink-soft)}
+:root:not([data-theme]) .nav-signin:hover{color:var(--ink)}
+:root:not([data-theme]) .pillar .glyph{background:rgba(46,158,143,.16);color:#3FBFAE}
+:root:not([data-theme]) .pillar[style*="var(--ink)"]{background:#16283E !important;color:#EAF2F8 !important}
+:root:not([data-theme]) .pillar[style*="var(--ink)"] h3{color:#EAF2F8 !important}
+}
+/* The console panel is already dark in both themes; keep its text legible. */
+:root[data-theme="dark"] .console,
+:root[data-theme="dark"] .codeblock,
+:root[data-theme="dark"] footer{border-color:var(--panel-line)}
+:root[data-theme="dark"] img{opacity:.92}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:38px;
+  border:1px solid var(--mist);border-radius:10px;background:var(--white);color:var(--ink-soft);
+  padding:0;cursor:pointer;flex-shrink:0}
+.theme-toggle:hover{color:var(--ink);border-color:var(--ink-soft)}
+.theme-toggle svg{width:17px;height:17px}
+/* Show the icon for the theme the click would give you, not the current one. */
+.theme-toggle .i-sun{display:none}
+.theme-toggle .i-moon{display:block}
+:root[data-theme="dark"] .theme-toggle .i-sun{display:block}
+:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]) .theme-toggle .i-sun{display:block}
+  :root:not([data-theme]) .theme-toggle .i-moon{display:none}
+}
+</style>
+<style>
+.nav-toggle{
+  display:none;align-items:center;justify-content:center;
+  /* flex-shrink defaults to 1, and the nav row is a flex container: without
+     this the 44px target gets squeezed to ~36px on a 390px viewport, below
+     the minimum comfortable tap size. */
+  flex:0 0 auto;
+  width:44px;height:40px;border:1px solid var(--mist);border-radius:9px;
+  background:var(--white);color:var(--ink);cursor:pointer;padding:0;
+}
+.nav-toggle svg{width:19px;height:19px}
+.nav-toggle[aria-expanded="true"]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+</style>
+<style>
+/* A 1fr track has min-width:auto, so a wide child (a code block, a long mono
+   string) grows the track instead of scrolling inside it. minmax(0,1fr) is
+   what actually lets these scroll. */
+.api-grid,.hero-grid,.topo,.plans,.comply-grid,.faq,.deploy-grid,.pillars{min-width:0}
+.api-grid>*,.hero-grid>*,.topo>*,.plans>*,.comply-grid>*,.faq>*{min-width:0}
+.codeblock,pre,.code{max-width:100%;overflow-x:auto}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+@media (max-width:960px){
+  .api-grid,.hero-grid,.topo{grid-template-columns:minmax(0,1fr)}
+  .nav-inner{gap:10px}
+  /* The menu replaces the hidden link row. */
+  .nav-toggle{display:inline-flex}
+  .nav-links{
+    display:none;position:absolute;top:64px;left:0;right:0;
+    flex-direction:column;gap:0;align-items:stretch;
+    background:var(--porcelain);border-bottom:1px solid var(--mist);
+    padding:6px 20px 14px;
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 4px;border-bottom:1px solid var(--mist);font-size:1rem}
+  .nav-links a:last-child{border-bottom:none}
+  nav{position:sticky}
+}
+
+/* Touch targets. Several shipped well under the 44px minimum: the switcher at
+   28x24, footer links at 22px tall, the logo at 26px. */
+@media (pointer:coarse){
+  .theme-toggle{min-width:44px;min-height:42px}
+  .nav-signin,.nav-links a{min-height:44px;display:inline-flex;align-items:center}
+  .industries-nav a,.strip-inner a{min-height:42px;display:inline-flex;align-items:center}
+  .foot-grid a{min-height:42px;display:flex;align-items:center;margin-bottom:0}
+  .logo{min-height:40px}
+  .btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+}
+
+/* Menu-only sign-in link, so hiding the bar's does not strand the console. */
+.nav-links .menu-console{display:none}
+
+@media (max-width:600px){
+  .plans{grid-template-columns:minmax(0,1fr)}
+  /* Secondary sign-in links leave the bar; the menu carries one instead, so
+     the primary CTA stops being squeezed off the right edge. */
+  .nav-signin,.nav-cta .btn-quiet{display:none}
+  .nav-links .menu-console{display:flex}
+
+  /* Footer columns sit side by side until they cannot. At 390 the last column
+     was running past the viewport. */
+  .foot-grid{flex-direction:column;gap:22px}
+  .foot-col{max-width:100% !important}
+  .foot-base{flex-direction:column;gap:8px}
+  /* The nav CTA was overflowing the bar at full size. */
+  .nav-inner .btn-primary{padding:9px 12px;font-size:.82rem;white-space:nowrap}
+  .logo{font-size:1rem}
+  .logo-mark{width:22px;height:22px}
+  /* One compact button fits the bar now, so it stays where people expect it. */
+  .nav-links .theme-toggle{display:none}
+}
+@media (max-width:380px){
+  .nav-inner .btn-primary{padding:8px 10px;font-size:.78rem}
+  .logo{font-size:.95rem}
+}
+.nav-links .theme-toggle{display:none}
+
+/* Last-resort guard: a single stray wide element should not make the whole
+   page pan sideways. */
+@media (max-width:960px){ html,body{overflow-x:hidden} }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-inner">
+    <a class="logo" href="/">
+      <svg class="logo-mark" viewBox="0 0 26 26" fill="none" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="6" fill="#0E1C2E"/><rect x="6" y="11" width="2.4" height="4" rx="1.2" fill="#2E9E8F"/><rect x="10" y="7" width="2.4" height="12" rx="1.2" fill="#E8A13D"/><rect x="14" y="4" width="2.4" height="18" rx="1.2" fill="#E8A13D"/><rect x="18" y="9" width="2.4" height="8" rx="1.2" fill="#2E9E8F"/></svg><span class="wordmark">Voice<em>Kernel</em><span style="font-weight:600;opacity:.55;font-size:.82em">.ai</span></span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="/#platform">Platform</a>
+      <a href="/industries">Industries</a>
+      <a href="#" aria-current="page">Pricing</a>
+      <a href="/#api">API</a>
+      <a href="/#compliance">Compliance</a>
+      <a href="/docs">Docs</a>
+      <a class="menu-console" href="/app">Console</a>
+    </div>
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+      <a class="nav-signin" href="/app">Console</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+      </button>
+      <a class="btn btn-primary" href="#contact">Talk to us</a>
+  </div>
+</nav>
+
+<header class="phero">
+  <div class="wrap">
+    <span class="eyebrow">Pricing</span>
+    <h1>Infrastructure pricing. <span class="amber">Not credits.</span></h1>
+    <p>One all-in per-minute rate that includes transcription, reasoning, voice, telephony and compliance - plus a platform tier that matches how your organisation deploys. No top-ups, no coupons, no surprise provider passthroughs.</p>
+  </div>
+
+  <div class="wrap tiers">
+    <div class="tier">
+      <span class="tag">Pilot</span>
+      <h3>Launch</h3>
+      <p class="for">Prove it on one queue. Production-grade from day one - same guardrails, same console.</p>
+      <div class="price">$0.09<small> / min all-in</small></div>
+      <div class="price-note">usage-based · no platform fee · cancel anytime</div>
+      <ul>
+        <li>Up to <b>10k minutes / month</b></li>
+        <li>All pipeline stages included - STT, reasoning, TTS, telephony</li>
+        <li>Multi-agent calls (speak + listen + learn)</li>
+        <li>Knowledge grounding with citations</li>
+        <li>PCI redaction &amp; consent capture</li>
+        <li>Email support · 99.9% SLA</li>
+      </ul>
+      <a class="btn btn-ghost" href="#contact" style="text-align:center">Start a pilot</a>
+    </div>
+
+    <div class="tier feature">
+      <span class="best">MOST DEPLOYED</span>
+      <span class="tag">Committed use</span>
+      <h3>Scale</h3>
+      <p class="for">For live queues in production. Committed minutes buy the rate down; overage at the same unit price - never punitive.</p>
+      <div class="price">from $0.055<small> / min all-in</small></div>
+      <div class="price-note">+ platform from $2k/mo · annual · invoiced</div>
+      <ul>
+        <li><b>100k+ minutes / month</b> committed</li>
+        <li>Everything in Launch, plus:</li>
+        <li>Eval gates, A/B deploys &amp; rollback</li>
+        <li>Campaigns with DNC wash &amp; pre-flight</li>
+        <li>Live supervision - whisper &amp; takeover</li>
+        <li>SSO/SCIM, scoped keys, audit export</li>
+        <li>99.95% SLA · named support engineer</li>
+      </ul>
+      <a class="btn btn-amber" href="#contact" style="text-align:center">Model your pricing</a>
+    </div>
+
+    <div class="tier">
+      <span class="tag">Regulated / sovereign</span>
+      <h3>Enterprise</h3>
+      <p class="for">Banks, insurers, government. Deployed in your VPC or on-prem, with your keys and your models where policy requires.</p>
+      <div class="price">Custom<small> · committed + platform</small></div>
+      <div class="price-note">multi-year · security review included</div>
+      <ul>
+        <li>VPC / on-prem deployment</li>
+        <li>BYOK models (Azure, Bedrock) &amp; in-VPC voice</li>
+        <li>Region-locked residency · IRAP-aligned</li>
+        <li>Dedicated capacity &amp; failover drills</li>
+        <li>Custom DPAs, audit rights, exit plan</li>
+        <li>99.99% SLA · 24/7 with on-call bridge</li>
+      </ul>
+      <a class="btn btn-ghost" href="#contact" style="text-align:center">Talk to sales</a>
+    </div>
+  </div>
+
+  <div class="allin">
+    <div class="wrap allin-inner">
+      <span>All-in rate - no provider passthroughs</span>
+      <span>Listener &amp; learner agents included on every call</span>
+      <span>Per-queue budgets &amp; spend caps</span>
+      <span>Volume tiers auto-apply as you grow</span>
+    </div>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Why teams switch</span>
+      <h2>The bill you can put in a board pack.</h2>
+      <p>Developer-toy platforms price like prepaid phones. Infrastructure prices like infrastructure.</p>
+    </div>
+    <table class="cmp">
+      <thead><tr><th>What it costs you</th><th>VoiceKernel</th><th>Credit-based platforms</th></tr></thead>
+      <tbody>
+        <tr><td>Pricing unit</td><td class="vk">One all-in $/min - STT, LLM, TTS, telephony, compliance included</td><td class="them">Platform fee + separate passthrough for each provider, per call</td></tr>
+        <tr><td>How you pay</td><td class="vk">Monthly invoice, PO, cost-allocation tags to your FinOps warehouse</td><td class="them">Credit card top-ups; service stops when credits hit zero</td></tr>
+        <tr><td>What happens at the cap</td><td class="vk"><span class="tick">✓</span> Budget alert at 80% - calls never drop; overage at the same unit rate</td><td class="them"><span class="cross">✗</span> Balance exhausted mid-campaign = dead line</td></tr>
+        <tr><td>Multi-agent calls</td><td class="vk"><span class="tick">✓</span> Compliance listener and intel agent included in the minute</td><td class="them">Each additional model call billed separately, if supported at all</td></tr>
+        <tr><td>Forecastability</td><td class="vk">Committed rate locked for the term; per-queue forecasts in console</td><td class="them">Rates move with each upstream provider's pricing</td></tr>
+        <tr><td>Cost per resolved call</td><td class="vk">Tracked natively - typical <b>$0.35-0.60</b> vs $5-8 human blended</td><td class="them">Assemble it yourself from logs</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Questions</span>
+      <h2>Pricing FAQ</h2>
+    </div>
+    <div class="faq">
+      <details open>
+        <summary>What does "all-in" actually include?</summary>
+        <p>Everything a production call consumes: transcription, reasoning-model inference, voice synthesis, telephony carriage (standard AU inbound/outbound), the listener and learner agents, redaction, recording, storage within your retention policy, and the console. The only extras are premium telephony routes (international, toll-free at carrier cost) and BYOK models you bill directly.</p>
+      </details>
+      <details>
+        <summary>How does committed use work?</summary>
+        <p>You commit to a monthly minute floor for the contract term; the rate steps down with volume. Unused minutes roll forward one month. Overage is charged at your committed unit rate - growth is never penalised.</p>
+      </details>
+      <details>
+        <summary>Do you charge for failed or abandoned calls?</summary>
+        <p>Connected time only, metered per second after the first 10 seconds. Unanswered outbound dials, voicemail detections under 5 seconds, and platform-fault calls are free.</p>
+      </details>
+      <details>
+        <summary>What does a typical bank pilot cost?</summary>
+        <p>Most pilots run one queue at 3-8k minutes for 4-6 weeks: roughly $300-700 in usage on Launch, no platform fee. You'll have containment, CSAT and cost-per-resolved-call numbers before you sign anything annual.</p>
+      </details>
+      <details>
+        <summary>Is the VPC deployment priced differently?</summary>
+        <p>Enterprise adds a platform fee for the dedicated control plane plus your committed usage; model inference you bring (BYOK) is billed by your provider directly. We'll model it against your call volumes in the first sales call.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="final" id="contact">
+  <div class="wrap">
+    <span class="eyebrow">Next step</span>
+    <h2>Price it on your real call volumes.</h2>
+    <p style="color:var(--ink-soft);margin-top:14px">Send us last quarter's call counts and handle times - we'll return a modelled bill and a cost-per-resolved-call forecast within two business days.</p>
+    <div class="ctas">
+      <a class="btn btn-amber" href="mailto:hello@voicekernel.ai">Get a modelled quote</a>
+      <a class="btn btn-ghost" href="/#api">Start with the API</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-base">
+    <span>© 2026 VoiceKernel · PayFar Global Ltd</span>
+    <span>au-syd · eu-fra · us-east</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var KEY = 'vk-theme';
+  var button = document.getElementById('themeToggle');
+
+  // Before the first click there is no stored preference, so the OS decides via
+  // prefers-color-scheme. The button reflects whatever is actually on screen,
+  // which is why it reads the media query rather than assuming a default.
+  function effective() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  }
+
+  function paint(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem(KEY, theme); } catch (e) {}
+    document.querySelectorAll('.theme-toggle').forEach(function (b) {
+      b.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      b.setAttribute('title', theme === 'dark' ? 'Light theme' : 'Dark theme');
+    });
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0A1220' : '#0E1C2E');
+  }
+
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.addEventListener('click', function () {
+      paint(effective() === 'dark' ? 'light' : 'dark');
+    });
+  });
+
+  // Label only - do not write the attribute, or the OS would stop being followed.
+  var current = effective();
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.setAttribute('aria-label', current === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  });
+})();
+</script>
+<script>
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+
+  function setOpen(open) {
+    links.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(!links.classList.contains('open'));
+  });
+  // Following a link should close the menu, including same-page anchors where
+  // no navigation happens to close it for us.
+  links.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setOpen(false);
+  });
+})();
+</script>
+</body>
+</html>

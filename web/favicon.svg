@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="VoiceKernel">
+  <!--
+    Favicon build of the VoiceKernel mark.
+
+    Redrawn rather than reusing the nav SVG: that one is a 26px artboard with a
+    1px inset and 2.4px bars, which at 16px renders as a grey smudge inside a
+    wasted border. Here the tile is full-bleed and the bars are widened to 3.5
+    with 2.5 gaps, so the four-bar waveform still reads at 16px.
+
+    The navy tile carries its own contrast, so one file works on light and dark
+    browser chrome without a prefers-color-scheme variant.
+  -->
+  <rect width="32" height="32" rx="7" fill="#0E1C2E"/>
+  <g fill="#E8A13D">
+    <rect x="11.25" y="8" width="3.5" height="16" rx="1.75"/>
+    <rect x="17.25" y="5" width="3.5" height="22" rx="1.75"/>
+  </g>
+  <g fill="#2E9E8F">
+    <rect x="5.25" y="12" width="3.5" height="8" rx="1.75"/>
+    <rect x="23.25" y="10" width="3.5" height="12" rx="1.75"/>
+  </g>
+</svg>

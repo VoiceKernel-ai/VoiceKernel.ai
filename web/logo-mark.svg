@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" role="img" aria-label="VoiceKernel">
+  <title>VoiceKernel</title>
+  <!-- The mark on its own, for square placements: app icons, avatars, favicons. -->
+  <rect width="44" height="44" rx="9.6" fill="#0E1C2E"/>
+  <g fill="#E8A13D">
+    <rect x="15.47" y="11" width="4.81" height="22" rx="2.4"/>
+    <rect x="23.72" y="6.88" width="4.81" height="30.25" rx="2.4"/>
+  </g>
+  <g fill="#2E9E8F">
+    <rect x="7.22" y="16.5" width="4.81" height="11" rx="2.4"/>
+    <rect x="31.97" y="13.75" width="4.81" height="16.5" rx="2.4"/>
+  </g>
+</svg>

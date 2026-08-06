@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # The suite runs against a real database rather than mocks: the properties
+    # worth testing - tenant isolation, scope enforcement, idempotency - belong
+    # to the whole stack, and a mocked proxy passes isolation tests that
+    # production fails.
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: voicekernel
+          POSTGRES_PASSWORD: voicekernel
+          POSTGRES_DB: voicekernel_test
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U voicekernel"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+
+    env:
+      DATABASE_URL: postgres://voicekernel:voicekernel@localhost:5432/voicekernel_test
+      JWT_SECRET: ci-only-not-a-real-secret-000000000000
+      ENCRYPTION_KEY: ci-only-not-a-real-key-0000000000000000000=
+      PORT: '8080'
+      ALLOW_SIGNUP: 'true'
+      LOG_LEVEL: silent
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+      - run: npm run typecheck
+
+      - run: npm run migrate
+
+      - name: Start the API
+        run: |
+          npx tsx src/index.ts &
+          for i in $(seq 1 40); do
+            curl -sf http://127.0.0.1:8080/health >/dev/null && exit 0
+            sleep 1
+          done
+          echo "API did not become healthy" >&2
+          exit 1
+
+      # No PROVIDER_API_KEY in CI, so the live-provider suite skips itself and
+      # says so. It is not silently counted as a pass.
+      - run: npm test
+      - run: npm run test:sdk
+
+  generated:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+
+      # Generated files are the guarantee that "we cover the whole provider
+      # surface" is checkable. If regenerating changes them, the committed copy
+      # drifted from its source and the claim is stale.
+      - name: Generated files are up to date
+        run: |
+          npm run gen:provider
+          if ! git diff --quiet; then
+            echo "Generated files are out of date. Run: npm run gen:provider" >&2
+            git diff --stat >&2
+            exit 1
+          fi

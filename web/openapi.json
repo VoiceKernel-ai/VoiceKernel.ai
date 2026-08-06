@@ -1,0 +1,1474 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "VoiceKernel API",
+    "version": "1.0.0",
+    "description": "The voice infrastructure layer for regulated enterprise. Create agents, place calls, ground answers in your knowledge, and stream every event into your own systems."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Agents"
+    },
+    {
+      "name": "Calls"
+    },
+    {
+      "name": "Analytics"
+    },
+    {
+      "name": "Catalog"
+    },
+    {
+      "name": "Webhooks"
+    },
+    {
+      "name": "Provider passthrough"
+    }
+  ],
+  "paths": {
+    "/v1/agents": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "List agents",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 50
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 0
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "refresh",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "description": "Bypass the local snapshot and read through to the voice provider."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of agents."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Create an agent",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgentInput"
+              },
+              "example": {
+                "name": "Card disputes",
+                "systemPrompt": "You are a card disputes specialist for a retail bank. Answer only from the supplied policy documents. If unsure, escalate to a human.",
+                "firstMessage": "Thanks for calling - how can I help with your card today?",
+                "model": {
+                  "provider": "anthropic",
+                  "model": "claude-sonnet-5",
+                  "temperature": 0.3
+                },
+                "voice": {
+                  "provider": "11labs",
+                  "voiceId": "matilda"
+                },
+                "transcriber": {
+                  "provider": "deepgram",
+                  "model": "nova-3"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created agent."
+          }
+        }
+      }
+    },
+    "/v1/agents/{id}": {
+      "get": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Retrieve an agent",
+        "responses": {
+          "200": {
+            "description": "The agent."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Update an agent",
+        "responses": {
+          "200": {
+            "description": "The updated agent."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Delete an agent",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/agents/{id}/model": {
+      "put": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Swap the agent model, preserving its prompt",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "provider": "anthropic",
+                "model": "claude-sonnet-5",
+                "temperature": 0.3
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated agent."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/agents/{id}/prompt": {
+      "put": {
+        "tags": [
+          "Agents"
+        ],
+        "summary": "Update the agent prompt only",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "systemPrompt": "You are…"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The updated agent."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/calls": {
+      "get": {
+        "tags": [
+          "Calls"
+        ],
+        "summary": "List calls",
+        "responses": {
+          "200": {
+            "description": "A list of calls."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Calls"
+        ],
+        "summary": "Place a call",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "to": "+61400000000",
+                "agentId": "asst_123",
+                "phoneNumberId": "pn_456",
+                "metadata": {
+                  "crmTicket": "INC-9912"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The created call."
+          }
+        }
+      }
+    },
+    "/v1/calls/{id}": {
+      "get": {
+        "tags": [
+          "Calls"
+        ],
+        "summary": "Retrieve a call",
+        "responses": {
+          "200": {
+            "description": "The call."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Calls"
+        ],
+        "summary": "End a call or delete its data",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/calls/{id}/transcript": {
+      "get": {
+        "tags": [
+          "Calls"
+        ],
+        "summary": "Transcript, summary and analysis",
+        "responses": {
+          "200": {
+            "description": "The transcript."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/calls/{id}/artifacts/{artifact}": {
+      "get": {
+        "tags": [
+          "Calls"
+        ],
+        "summary": "Presigned URL for a recording, pcap or call log",
+        "responses": {
+          "200": {
+            "description": "{ url, expiresIn, artifact }"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "artifact",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "enum": [
+              "recording",
+              "mono-recording",
+              "stereo-recording",
+              "video-recording",
+              "customer-recording",
+              "assistant-recording",
+              "pcap",
+              "logs"
+            ]
+          }
+        }
+      ]
+    },
+    "/v1/analytics/overview": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "summary": "Volume, containment, cost and latency",
+        "responses": {
+          "200": {
+            "description": "Metrics."
+          }
+        }
+      }
+    },
+    "/v1/catalog": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "summary": "Supported model, voice and transcriber providers",
+        "responses": {
+          "200": {
+            "description": "The catalog."
+          }
+        }
+      }
+    },
+    "/v1/webhook-endpoints": {
+      "get": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "List webhook endpoints",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Webhooks"
+        ],
+        "summary": "Register a webhook endpoint",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "example": {
+                "url": "https://crm.example.com/hooks/voicekernel",
+                "events": [
+                  "call.ended",
+                  "tool.called"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "The endpoint, including its signing secret."
+          }
+        }
+      }
+    },
+    "/v1/provider/{path}": {
+      "get": {
+        "tags": [
+          "Provider passthrough"
+        ],
+        "summary": "Mediated access to any of the 97 provider operations",
+        "description": "Same auth, tenant isolation, rate limiting and audit as native routes. GET /v1/provider/_operations lists everything reachable.",
+        "responses": {
+          "200": {
+            "description": "The upstream response."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "path",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          },
+          "description": "Provider path, e.g. \"assistant\" or \"call/abc123\"."
+        }
+      ]
+    },
+    "/v1/phone-numbers": {
+      "get": {
+        "tags": [
+          "phone number"
+        ],
+        "summary": "List phone numbers",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "phone number"
+        ],
+        "summary": "Create a phone number",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/phone-numbers/{id}": {
+      "get": {
+        "tags": [
+          "phone number"
+        ],
+        "summary": "Retrieve a phone number",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "phone number"
+        ],
+        "summary": "Update a phone number",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "phone number"
+        ],
+        "summary": "Delete a phone number",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/squads": {
+      "get": {
+        "tags": [
+          "squad"
+        ],
+        "summary": "List squads",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "squad"
+        ],
+        "summary": "Create a squad",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/squads/{id}": {
+      "get": {
+        "tags": [
+          "squad"
+        ],
+        "summary": "Retrieve a squad",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "squad"
+        ],
+        "summary": "Update a squad",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "squad"
+        ],
+        "summary": "Delete a squad",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/tools": {
+      "get": {
+        "tags": [
+          "tool"
+        ],
+        "summary": "List tools",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "tool"
+        ],
+        "summary": "Create a tool",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/tools/{id}": {
+      "get": {
+        "tags": [
+          "tool"
+        ],
+        "summary": "Retrieve a tool",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "tool"
+        ],
+        "summary": "Update a tool",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "tool"
+        ],
+        "summary": "Delete a tool",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/files": {
+      "get": {
+        "tags": [
+          "file"
+        ],
+        "summary": "List files",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "file"
+        ],
+        "summary": "Create a file",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/files/{id}": {
+      "get": {
+        "tags": [
+          "file"
+        ],
+        "summary": "Retrieve a file",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "file"
+        ],
+        "summary": "Update a file",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "file"
+        ],
+        "summary": "Delete a file",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/campaigns": {
+      "get": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "List campaigns",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Create a campaign",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/campaigns/{id}": {
+      "get": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Retrieve a campaign",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Update a campaign",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Delete a campaign",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/chats": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "List chats",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Create a chat",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/chats/{id}": {
+      "get": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Retrieve a chat",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Update a chat",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "chat"
+        ],
+        "summary": "Delete a chat",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/sessions": {
+      "get": {
+        "tags": [
+          "session"
+        ],
+        "summary": "List sessions",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Create a session",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/sessions/{id}": {
+      "get": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Retrieve a session",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Update a session",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "session"
+        ],
+        "summary": "Delete a session",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/evals": {
+      "get": {
+        "tags": [
+          "eval"
+        ],
+        "summary": "List evals",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "eval"
+        ],
+        "summary": "Create a eval",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/evals/{id}": {
+      "get": {
+        "tags": [
+          "eval"
+        ],
+        "summary": "Retrieve a eval",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "eval"
+        ],
+        "summary": "Update a eval",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "eval"
+        ],
+        "summary": "Delete a eval",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/structured-outputs": {
+      "get": {
+        "tags": [
+          "structured output"
+        ],
+        "summary": "List structured outputs",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "structured output"
+        ],
+        "summary": "Create a structured output",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/structured-outputs/{id}": {
+      "get": {
+        "tags": [
+          "structured output"
+        ],
+        "summary": "Retrieve a structured output",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "structured output"
+        ],
+        "summary": "Update a structured output",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "structured output"
+        ],
+        "summary": "Delete a structured output",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/scorecards": {
+      "get": {
+        "tags": [
+          "scorecard"
+        ],
+        "summary": "List scorecards",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "scorecard"
+        ],
+        "summary": "Create a scorecard",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/scorecards/{id}": {
+      "get": {
+        "tags": [
+          "scorecard"
+        ],
+        "summary": "Retrieve a scorecard",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "scorecard"
+        ],
+        "summary": "Update a scorecard",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "scorecard"
+        ],
+        "summary": "Delete a scorecard",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/boards": {
+      "get": {
+        "tags": [
+          "board"
+        ],
+        "summary": "List boards",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "board"
+        ],
+        "summary": "Create a board",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/boards/{id}": {
+      "get": {
+        "tags": [
+          "board"
+        ],
+        "summary": "Retrieve a board",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "board"
+        ],
+        "summary": "Update a board",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "board"
+        ],
+        "summary": "Delete a board",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/v1/insights": {
+      "get": {
+        "tags": [
+          "insight"
+        ],
+        "summary": "List insights",
+        "responses": {
+          "200": {
+            "description": "A list."
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "insight"
+        ],
+        "summary": "Create a insight",
+        "responses": {
+          "201": {
+            "description": "Created."
+          }
+        }
+      }
+    },
+    "/v1/insights/{id}": {
+      "get": {
+        "tags": [
+          "insight"
+        ],
+        "summary": "Retrieve a insight",
+        "responses": {
+          "200": {
+            "description": "The object."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "insight"
+        ],
+        "summary": "Update a insight",
+        "responses": {
+          "200": {
+            "description": "Updated."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "insight"
+        ],
+        "summary": "Delete a insight",
+        "responses": {
+          "200": {
+            "description": "Deleted."
+          }
+        }
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "vk_live_…"
+      }
+    },
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "requestId": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "AgentInput": {
+        "type": "object",
+        "required": [
+          "name",
+          "systemPrompt"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "systemPrompt": {
+            "type": "string",
+            "description": "The agent's instructions."
+          },
+          "firstMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "model": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "anthropic",
+                  "anthropic-bedrock",
+                  "anyscale",
+                  "cerebras",
+                  "custom-llm",
+                  "deep-seek",
+                  "deepinfra",
+                  "google",
+                  "groq",
+                  "inflection-ai",
+                  "minimax",
+                  "openai",
+                  "openrouter",
+                  "perplexity-ai",
+                  "together-ai",
+                  "voicekernel",
+                  "xai"
+                ]
+              },
+              "model": {
+                "type": "string"
+              },
+              "temperature": {
+                "type": "number"
+              },
+              "maxTokens": {
+                "type": "integer"
+              },
+              "toolIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "knowledgeBaseId": {
+                "type": "string"
+              }
+            }
+          },
+          "voice": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "11labs",
+                  "azure",
+                  "cartesia",
+                  "custom-voice",
+                  "deepgram",
+                  "hume",
+                  "inworld",
+                  "lmnt",
+                  "microsoft",
+                  "minimax",
+                  "neuphonic",
+                  "openai",
+                  "playht",
+                  "rime-ai",
+                  "sesame",
+                  "smallest-ai",
+                  "tavus",
+                  "voicekernel",
+                  "wellsaid",
+                  "xai"
+                ]
+              },
+              "voiceId": {
+                "type": "string"
+              }
+            }
+          },
+          "transcriber": {
+            "type": "object",
+            "properties": {
+              "provider": {
+                "type": "string",
+                "enum": [
+                  "11labs",
+                  "assembly-ai",
+                  "azure",
+                  "cartesia",
+                  "custom-transcriber",
+                  "deepgram",
+                  "gladia",
+                  "google",
+                  "openai",
+                  "soniox",
+                  "speechmatics",
+                  "talkscriber",
+                  "voicekernel",
+                  "xai"
+                ]
+              },
+              "model": {
+                "type": "string"
+              },
+              "language": {
+                "type": "string"
+              }
+            }
+          },
+          "server": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string",
+                "format": "uri"
+              },
+              "secret": {
+                "type": "string"
+              }
+            }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "provider": {
+            "type": "object",
+            "additionalProperties": true,
+            "description": "Escape hatch merged over the generated provider assistants."
+          }
+        }
+      }
+    }
+  }
+}

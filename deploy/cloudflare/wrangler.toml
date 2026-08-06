@@ -1,0 +1,40 @@
+#  VoiceKernel — Cloudflare edge deployment
+#
+#  Serves web/ from Cloudflare's edge and proxies /v1, /auth, /webhooks and
+#  /docs to the origin running the Node control plane.
+#
+#    npx wrangler deploy --config deploy/cloudflare/wrangler.toml
+#
+#  Point it at your API origin once that is running:
+#    npx wrangler secret put BACKEND_ORIGIN --config deploy/cloudflare/wrangler.toml
+#
+#  Custom domain (needs a token with Zone:DNS:Edit — the default OAuth token
+#  has zone:read only, so this step is done from the dashboard or with an
+#  API token):
+#    Workers & Pages -> voicekernel -> Settings -> Domains -> Add voicekernel.ai
+
+name = "voicekernel"
+main = "worker.js"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+# The built marketing site and console. `npm run build:web` regenerates it.
+[assets]
+directory = "../../web"
+binding = "ASSETS"
+# The Worker decides what is an asset and what is API, so every request runs
+# the script first. Without this, /v1/* would 404 against static assets before
+# reaching the proxy.
+run_worker_first = true
+
+[observability]
+enabled = true
+
+# Uncomment once the domain is attached, so the Worker owns the apex and www.
+# [[routes]]
+# pattern = "voicekernel.ai/*"
+# zone_name = "voicekernel.ai"
+#
+# [[routes]]
+# pattern = "www.voicekernel.ai/*"
+# zone_name = "voicekernel.ai"

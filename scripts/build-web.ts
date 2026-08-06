@@ -1,0 +1,653 @@
+/**
+ * Imports the marketing pages from their design-export form into web/ and
+ * rewrites them for real routing.
+ *
+ * The exports cross-link by filename ("voicekernel-home.html") and stub every
+ * other link as "#". Served from a real origin those become dead ends, so this
+ * script rewrites them to clean paths and wires the nav to the console, docs
+ * and pricing. Kept as a script rather than hand-edited copies so re-exporting
+ * a page from the design tool is a one-command re-import.
+ *
+ *   npm run build:web
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+
+const SOURCE_DIR =
+  process.env.WEB_SOURCE_DIR ??
+  path.resolve(process.env.HOME ?? '', 'Downloads/files (33)');
+const WEB_DIR = path.resolve(__dirname, '../web');
+
+interface PageSpec {
+  source: string;
+  target: string;
+  /** Which nav link should render as current. */
+  active?: 'platform' | 'industries' | 'pricing' | 'api';
+  /**
+   * Where this page's nav should send section anchors. Defaults to "/", which
+   * is correct for the console-led page that owns those sections. The photo
+   * landing has none of them, so it points at /home instead.
+   */
+  sectionBase?: string;
+  /** Additional filename to emit with identical content. */
+  alsoWrite?: string;
+}
+
+const PAGES: PageSpec[] = [
+  { source: 'voicekernel-home.html', target: 'index.html', active: 'platform', alsoWrite: 'home.html' },
+  { source: 'voicekernel-industries.html', target: 'industries.html', active: 'industries' },
+  { source: 'voicekernel-pricing.html', target: 'pricing.html', active: 'pricing' },
+  // Photography-led alternative landing. Served at /landing so it can be A/B
+  // tested against the console-led home page without replacing it.
+  { source: 'voicekernel-landing-photo.html', target: 'landing.html', sectionBase: '/home' },
+];
+
+/** Filename cross-links -> routed paths. Order matters: longest first. */
+const LINK_REWRITES: Array<[RegExp, string]> = [
+  [/voicekernel-home\.html/g, '/'],
+  [/voicekernel-industries\.html/g, '/industries'],
+  [/voicekernel-pricing\.html/g, '/pricing'],
+  [/voicekernel-console\.html/g, '/app'],
+  [/voicekernel-console-build\.html/g, '/app#build'],
+  [/voicekernel-console-settings\.html/g, '/app#settings'],
+];
+
+/**
+ * The design exports leave secondary links as "#". Resolve the ones we can
+ * identify from their label so the shipped site has no dead nav items.
+ */
+const LABEL_TARGETS: Record<string, string> = {
+  Docs: '/docs',
+  'API reference': '/docs',
+  'Read the docs': '/docs',
+  SDKs: '/docs#sdks',
+  Status: '/health',
+  Changelog: '/docs',
+  Industries: '/industries',
+  Pricing: '/pricing',
+  Console: '/app',
+  'Sign in': '/app',
+  'Log in': '/app',
+  Customers: '/industries',
+  'Book a demo': '#contact',
+  Security: '/docs',
+  'Trust centre': '/docs',
+};
+
+/**
+ * Icon declarations injected into every page.
+ *
+ * SVG first for browsers that support it, .ico for the ones that still ask for
+ * /favicon.ico unprompted, and apple-touch-icon so an iOS home-screen shortcut
+ * is not a blurry screenshot. `theme-color` tints mobile browser chrome to the
+ * brand navy rather than leaving it white against a dark page.
+ */
+const FAVICON_TAGS = `<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="shortcut icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0E1C2E">
+`;
+
+/**
+ * Theme support for the marketing pages.
+ *
+ * The exports are light-only, with the palette hard-coded in `:root`. Rather
+ * than editing each export (which a re-import would undo), a dark palette is
+ * layered on top here, keyed off the same `data-theme` attribute the console
+ * uses - so a preference set in one place holds across the whole site.
+ *
+ * Applied before first paint; deferring it would flash the wrong theme.
+ */
+const THEME_BOOT = `<script>
+(function () {
+  try {
+    var saved = localStorage.getItem('vk-theme');
+    if (saved === 'light' || saved === 'dark') {
+      document.documentElement.setAttribute('data-theme', saved);
+    }
+  } catch (e) {}
+})();
+</script>
+`;
+
+const DARK_TOKENS = `
+  --ink:#E4EDF5;
+  --ink-soft:#8FA9BF;
+  --porcelain:#0A1220;
+  --panel:#0E1A2C;
+  --panel-line:#1D2F45;
+  --mist:#1D2F45;
+  --white:#0E1A2C;
+  /* Brightened for contrast against the dark background - the light-mode
+     values are tuned for white and go muddy here. */
+  --amber:#E8A13D;
+  --amber-deep:#E8A13D;
+  --teal:#2E9E8F;
+  --teal-bright:#3FBFAE;
+`;
+
+/**
+ * Rules the exports hard-code to a light value, so they do not follow the
+ * tokens. Each entry is `selector` -> `declarations`; both dark selectors get
+ * a copy, written as plain descendant rules rather than CSS nesting so the
+ * output does not depend on nesting support.
+ */
+const DARK_FIXES: Array<[string, string]> = [
+  // The visible one: the sticky nav's background is a literal
+  // rgba(244,247,249,.88), so in dark mode it stayed pale while the text
+  // switched to pale - unreadable.
+  ['nav', 'background:rgba(10,18,32,.88);border-bottom-color:var(--panel-line)'],
+  // btn-primary is ink-on-white in light mode. In dark, `--ink` is nearly white
+  // and its hover darkens to navy, so the label disappears into the fill.
+  ['.btn-primary', 'background:var(--amber);color:#0A1220'],
+  ['.btn-primary:hover', 'background:#F0B055;color:#0A1220'],
+  ['.btn-ghost', 'border-color:var(--ink-soft);color:var(--ink)'],
+  ['.btn-ghost:hover', 'background:var(--panel)'],
+  // Surfaces that are white cards on porcelain: without their border back they
+  // dissolve into the page once both are dark.
+  ['.strip,.comply,.pillar,.plan,.rate-table,.card', 'border-color:var(--panel-line)'],
+  ['.pillars', 'background:var(--panel-line);border-color:var(--panel-line)'],
+  ['.term', 'background:var(--panel);border-color:var(--panel-line)'],
+  ['.term button.on', 'background:var(--amber);color:#0A1220'],
+  ['.matrix tr:hover td', 'background:var(--panel)'],
+  ['.rate-table th', 'background:var(--panel)'],
+  ['.faq-item,.comply-item,.deploy-item', 'border-top-color:var(--panel-line)'],
+  ['.nav-signin', 'color:var(--ink-soft)'],
+  ['.nav-signin:hover', 'color:var(--ink)'],
+  ['.pillar .glyph', 'background:rgba(46,158,143,.16);color:#3FBFAE'],
+  // The featured pillar carries inline `background:var(--ink);color:var(--white)`.
+  // Those two tokens swap between themes, so in dark it rendered as a pale card
+  // among dark ones - with its paragraph, a fixed light grey, unreadable on it.
+  // Inline styles outrank stylesheet rules, so correcting them needs !important;
+  // the alternative is editing an export that a re-import would overwrite.
+  ['.pillar[style*="var(--ink)"]', 'background:#16283E !important;color:#EAF2F8 !important'],
+  ['.pillar[style*="var(--ink)"] h3', 'color:#EAF2F8 !important'],
+];
+
+/**
+ * Rules applied in every theme.
+ *
+ * The eyebrow labels ("THE PLATFORM", "PRICING") carry a decorative 22px rule.
+ * Removing the element's content is not enough because it is a flex child with
+ * a gap, so the width and the gap both go.
+ *
+ * Both pseudo-elements are suppressed, and the kicker variant with them: the
+ * pages do not agree on which side the rule sits. Home, industries and landing
+ * draw it with ::before, pricing with ::after - so an earlier pass that only
+ * handled ::before left pricing with a trailing line, which is exactly the
+ * decoration this is meant to remove.
+ */
+const COMMON_FIXES: Array<[string, string]> = [
+  ['.eyebrow::before,.eyebrow::after,.kicker::before,.kicker::after', 'display:none'],
+  ['.eyebrow,.kicker', 'gap:0'],
+  // See wrapWordmark: the wordmark is one flex item, so its parts sit flush.
+  ['.logo .wordmark', 'white-space:nowrap'],
+  /*
+   * `.wrap` centres a section with `margin:0 auto`. Several element rules then
+   * set their own vertical spacing with a shorthand - `.tiers` uses
+   * `margin:44px 0 18px` - and the `0` in that shorthand silently resets the
+   * horizontal auto, so the section renders flush left while every other
+   * section on the page stays centred.
+   *
+   * Restoring the auto margins here rather than editing each rule keeps the
+   * fix in one place and applies to any future section that repeats the
+   * pattern.
+   */
+  ['.wrap', 'margin-left:auto;margin-right:auto'],
+];
+
+/**
+ * Joins the logo wordmark into a single flex item.
+ *
+ * `.logo` is a flex row with a gap, and "Voice", `<em>Kernel</em>` and the
+ * `.ai` span are three separate children - so the gap opened between each of
+ * them and the wordmark rendered as "Voice Kernel .ai". Wrapping the text run
+ * in one element leaves the container with two children, icon and wordmark, so
+ * the gap applies once where it is wanted and the letters sit flush.
+ */
+function wrapWordmark(html: string): string {
+  return html.replace(
+    /(<a class="logo"[^>]*>[\s\S]*?<\/svg>)([\s\S]*?)(<\/a>)/g,
+    (match, head: string, text: string, tail: string) =>
+      text.includes('wordmark')
+        ? match
+        : `${head}<span class="wordmark">${text.trim()}</span>${tail}`,
+  );
+}
+
+/**
+ * Light-mode corrections.
+ *
+ * The pillar glyphs shipped as `--teal` (#0F5D5D) on a `--porcelain` tile. On a
+ * white card that tile is a 1.06:1 difference - effectively invisible - and the
+ * teal is dark and desaturated enough to read as near-black rather than as the
+ * brand accent. Both are re-pitched: a tinted tile that is actually visible, and
+ * a teal that still passes AA but looks like teal.
+ */
+const LIGHT_FIXES: Array<[string, string]> = [
+  ['.pillar .glyph', 'background:rgba(46,158,143,.12);color:#0F7A6C'],
+];
+
+function fixRules(rules: Array<[string, string]>, prefix: string): string {
+  return rules.map(([selector, declarations]) =>
+    selector
+      .split(',')
+      .map((part) => `${prefix} ${part.trim()}`)
+      .join(',') + `{${declarations}}`,
+  ).join('\n');
+}
+
+const THEME_CSS = `<style>
+:root{color-scheme:light}
+:root[data-theme="dark"]{color-scheme:dark;${DARK_TOKENS}}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]){color-scheme:dark;${DARK_TOKENS}}
+}
+${fixRules(COMMON_FIXES, ':root')}
+${fixRules(LIGHT_FIXES, ':root')}
+${fixRules(LIGHT_FIXES, ':root[data-theme="light"]')}
+${fixRules(DARK_FIXES, ':root[data-theme="dark"]')}
+@media (prefers-color-scheme: dark){
+${fixRules(DARK_FIXES, ':root:not([data-theme])')}
+}
+/* The console panel is already dark in both themes; keep its text legible. */
+:root[data-theme="dark"] .console,
+:root[data-theme="dark"] .codeblock,
+:root[data-theme="dark"] footer{border-color:var(--panel-line)}
+:root[data-theme="dark"] img{opacity:.92}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:40px;height:38px;
+  border:1px solid var(--mist);border-radius:10px;background:var(--white);color:var(--ink-soft);
+  padding:0;cursor:pointer;flex-shrink:0}
+.theme-toggle:hover{color:var(--ink);border-color:var(--ink-soft)}
+.theme-toggle svg{width:17px;height:17px}
+/* Show the icon for the theme the click would give you, not the current one. */
+.theme-toggle .i-sun{display:none}
+.theme-toggle .i-moon{display:block}
+:root[data-theme="dark"] .theme-toggle .i-sun{display:block}
+:root[data-theme="dark"] .theme-toggle .i-moon{display:none}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme]) .theme-toggle .i-sun{display:block}
+  :root:not([data-theme]) .theme-toggle .i-moon{display:none}
+}
+</style>
+`;
+
+const THEME_TOGGLE = `<button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme" title="Switch theme">
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" stroke-linecap="round"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>`;
+
+const THEME_SCRIPT = `<script>
+(function () {
+  var KEY = 'vk-theme';
+  var button = document.getElementById('themeToggle');
+
+  // Before the first click there is no stored preference, so the OS decides via
+  // prefers-color-scheme. The button reflects whatever is actually on screen,
+  // which is why it reads the media query rather than assuming a default.
+  function effective() {
+    var attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'light' || attr === 'dark') return attr;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  }
+
+  function paint(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try { localStorage.setItem(KEY, theme); } catch (e) {}
+    document.querySelectorAll('.theme-toggle').forEach(function (b) {
+      b.setAttribute('aria-label', theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      b.setAttribute('title', theme === 'dark' ? 'Light theme' : 'Dark theme');
+    });
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#0A1220' : '#0E1C2E');
+  }
+
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.addEventListener('click', function () {
+      paint(effective() === 'dark' ? 'light' : 'dark');
+    });
+  });
+
+  // Label only - do not write the attribute, or the OS would stop being followed.
+  var current = effective();
+  document.querySelectorAll('.theme-toggle').forEach(function (b) {
+    b.setAttribute('aria-label', current === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+  });
+})();
+</script>
+`;
+
+
+/**
+ * Mobile corrections.
+ *
+ * The exports hide `.nav-links` below 960px and offer nothing in its place, so
+ * a phone visitor had no way to reach Industries, Pricing or Docs at all. They
+ * also let grid tracks size to their content, which pushed code blocks past the
+ * viewport and gave four of the five pages a horizontal scrollbar.
+ */
+const MOBILE_CSS = `<style>
+/* A 1fr track has min-width:auto, so a wide child (a code block, a long mono
+   string) grows the track instead of scrolling inside it. minmax(0,1fr) is
+   what actually lets these scroll. */
+.api-grid,.hero-grid,.topo,.plans,.comply-grid,.faq,.deploy-grid,.pillars{min-width:0}
+.api-grid>*,.hero-grid>*,.topo>*,.plans>*,.comply-grid>*,.faq>*{min-width:0}
+.codeblock,pre,.code{max-width:100%;overflow-x:auto}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+
+@media (max-width:960px){
+  .api-grid,.hero-grid,.topo{grid-template-columns:minmax(0,1fr)}
+  .nav-inner{gap:10px}
+  /* The menu replaces the hidden link row. */
+  .nav-toggle{display:inline-flex}
+  .nav-links{
+    display:none;position:absolute;top:64px;left:0;right:0;
+    flex-direction:column;gap:0;align-items:stretch;
+    background:var(--porcelain);border-bottom:1px solid var(--mist);
+    padding:6px 20px 14px;
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:13px 4px;border-bottom:1px solid var(--mist);font-size:1rem}
+  .nav-links a:last-child{border-bottom:none}
+  nav{position:sticky}
+}
+
+/* Touch targets. Several shipped well under the 44px minimum: the switcher at
+   28x24, footer links at 22px tall, the logo at 26px. */
+@media (pointer:coarse){
+  .theme-toggle{min-width:44px;min-height:42px}
+  .nav-signin,.nav-links a{min-height:44px;display:inline-flex;align-items:center}
+  .industries-nav a,.strip-inner a{min-height:42px;display:inline-flex;align-items:center}
+  .foot-grid a{min-height:42px;display:flex;align-items:center;margin-bottom:0}
+  .logo{min-height:40px}
+  .btn{min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+}
+
+/* Menu-only sign-in link, so hiding the bar's does not strand the console. */
+.nav-links .menu-console{display:none}
+
+@media (max-width:600px){
+  .plans{grid-template-columns:minmax(0,1fr)}
+  /* Secondary sign-in links leave the bar; the menu carries one instead, so
+     the primary CTA stops being squeezed off the right edge. */
+  .nav-signin,.nav-cta .btn-quiet{display:none}
+  .nav-links .menu-console{display:flex}
+
+  /* Footer columns sit side by side until they cannot. At 390 the last column
+     was running past the viewport. */
+  .foot-grid{flex-direction:column;gap:22px}
+  .foot-col{max-width:100% !important}
+  .foot-base{flex-direction:column;gap:8px}
+  /* The nav CTA was overflowing the bar at full size. */
+  .nav-inner .btn-primary{padding:9px 12px;font-size:.82rem;white-space:nowrap}
+  .logo{font-size:1rem}
+  .logo-mark{width:22px;height:22px}
+  /* One compact button fits the bar now, so it stays where people expect it. */
+  .nav-links .theme-toggle{display:none}
+}
+@media (max-width:380px){
+  .nav-inner .btn-primary{padding:8px 10px;font-size:.78rem}
+  .logo{font-size:.95rem}
+}
+.nav-links .theme-toggle{display:none}
+
+/* Last-resort guard: a single stray wide element should not make the whole
+   page pan sideways. */
+@media (max-width:960px){ html,body{overflow-x:hidden} }
+</style>
+`;
+
+const NAV_TOGGLE = `<button class="nav-toggle" id="navToggle" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"/></svg>
+      </button>`;
+
+const NAV_TOGGLE_CSS = `<style>
+.nav-toggle{
+  display:none;align-items:center;justify-content:center;
+  /* flex-shrink defaults to 1, and the nav row is a flex container: without
+     this the 44px target gets squeezed to ~36px on a 390px viewport, below
+     the minimum comfortable tap size. */
+  flex:0 0 auto;
+  width:44px;height:40px;border:1px solid var(--mist);border-radius:9px;
+  background:var(--white);color:var(--ink);cursor:pointer;padding:0;
+}
+.nav-toggle svg{width:19px;height:19px}
+.nav-toggle[aria-expanded="true"]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+</style>
+`;
+
+const NAV_SCRIPT = `<script>
+(function () {
+  var toggle = document.getElementById('navToggle');
+  var links = document.getElementById('navLinks');
+  if (!toggle || !links) return;
+
+  function setOpen(open) {
+    links.classList.toggle('open', open);
+    toggle.setAttribute('aria-expanded', String(open));
+  }
+
+  toggle.addEventListener('click', function () {
+    setOpen(!links.classList.contains('open'));
+  });
+  // Following a link should close the menu, including same-page anchors where
+  // no navigation happens to close it for us.
+  links.addEventListener('click', function (e) {
+    if (e.target.tagName === 'A') setOpen(false);
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') setOpen(false);
+  });
+})();
+</script>
+`;
+
+/** The canonical top nav, shared by every marketing page. */
+const NAV: Array<{ href: string; label: string; active?: PageSpec['active'] }> = [
+  { href: '/#platform', label: 'Platform', active: 'platform' },
+  { href: '/industries', label: 'Industries', active: 'industries' },
+  { href: '/pricing', label: 'Pricing', active: 'pricing' },
+  { href: '/#api', label: 'API', active: 'api' },
+  { href: '/#compliance', label: 'Compliance' },
+  { href: '/docs', label: 'Docs' },
+];
+
+function navLinks(active?: PageSpec['active'], sectionBase = '/'): string[] {
+  return NAV.map((item) => {
+    // On its own page, link to the in-page anchor rather than reloading it.
+    const isSelf = Boolean(active) && item.active === active;
+    const hash = item.href.indexOf('#');
+    // Section anchors live on the console-led page. A variant that lacks them
+    // points at /home rather than at an anchor that is not there.
+    const resolved = hash === -1 ? item.href : item.href.replace(/^\//, sectionBase);
+    const href = isSelf && sectionBase === '/' ? (hash === -1 ? '#' : item.href.slice(hash)) : resolved;
+    const current = active && item.active === active ? ' aria-current="page"' : '';
+    return `      <a href="${href}"${current}>${item.label}</a>`;
+  });
+}
+
+/**
+ * Normalises typographic dashes to plain hyphens.
+ *
+ * Applied at import so a re-exported page cannot reintroduce them. Spaced em
+ * dashes become a spaced hyphen (` - `) because that is what the sentence is
+ * doing grammatically; unspaced ones and en dashes in ranges collapse to a bare
+ * hyphen, which is the conventional form for "09:00-19:30".
+ *
+ * Only text is touched. Dashes do not appear in the exports' attributes, URLs
+ * or class names, and the entity forms are checked separately.
+ */
+function normaliseDashes(text: string): string {
+  // Written as escapes, not literal characters. A previous sweep that replaced
+  // dashes across the repo edited this function's own patterns into `/-/g`,
+  // quietly turning it into a no-op that still looked correct. Escapes cannot
+  // be rewritten by a text pass over this file.
+  const EM = '—';
+  const EN = '–';
+
+  return text
+    .replace(new RegExp(`\\s+${EM}\\s+`, 'g'), ' - ')
+    .replace(new RegExp(EM, 'g'), '-')
+    .replace(new RegExp(`(\\d)\\s*${EN}\\s*(\\d)`, 'g'), '$1-$2')
+    .replace(new RegExp(`\\s+${EN}\\s+`, 'g'), ' - ')
+    .replace(new RegExp(EN, 'g'), '-')
+    .replace(/&mdash;/g, '-')
+    .replace(/&ndash;/g, '-');
+}
+
+function rewrite(html: string, spec: PageSpec): string {
+  let out = wrapWordmark(normaliseDashes(html));
+
+  for (const [pattern, replacement] of LINK_REWRITES) {
+    out = out.replace(pattern, replacement);
+  }
+
+  // Resolve placeholder hrefs by their link text.
+  out = out.replace(
+    /<a([^>]*?)href="#"([^>]*)>([^<]+)<\/a>/g,
+    (match, before: string, after: string, label: string) => {
+      const target = LABEL_TARGETS[label.trim()];
+      return target ? `<a${before}href="${target}"${after}>${label}</a>` : match;
+    },
+  );
+
+  // The home page ships "Talk to us" as the only CTA; enterprise visitors who
+  // already have an account need a way into the console.
+  out = out.replace(
+    /<a class="btn btn-primary" href="([^"]*)">Talk to us<\/a>/,
+    '<a class="nav-signin" href="/app">Console</a>\n      <a class="btn btn-primary" href="$1">Talk to us</a>',
+  );
+
+  // Replace the nav wholesale with the canonical link set.
+  //
+  // Each page was exported at a different time, so they disagree about which
+  // pages exist - the home export predates Industries and Pricing entirely.
+  // Patching them individually would leave the site's navigation dependent on
+  // export order; regenerating it makes every page agree by construction.
+  out = out.replace(
+    /<div class="nav-links">[\s\S]*?<\/div>/,
+    () =>
+      `<div class="nav-links" id="navLinks">\n${navLinks(spec.active, spec.sectionBase).join('\n')}` +
+      `\n      <a class="menu-console" href="/app">Console</a>\n    </div>`,
+  );
+
+  // Favicons. The design exports declare none, so every page was falling
+  // through to a 404 on /favicon.ico.
+  out = out.replace('</head>', `${FAVICON_TAGS}${THEME_BOOT}${THEME_CSS}${NAV_TOGGLE_CSS}${MOBILE_CSS}</head>`);
+
+  // Theme switcher in the nav, alongside the console link.
+  out = out.replace(
+    '<a class="nav-signin" href="/app">Console</a>',
+    `${THEME_TOGGLE}\n      <a class="nav-signin" href="/app">Console</a>`,
+  );
+  out = out.replace(
+    /(<a class="btn btn-primary"[^>]*>)/,
+    `${NAV_TOGGLE}\n      $1`,
+  );
+  if (!out.includes('id="navToggle"')) {
+    out = out.replace(/(<div class="nav-cta">)/, `$1\n      ${NAV_TOGGLE}`);
+  }
+  // Pages whose export has its own CTA block rather than the "Talk to us" one.
+  if (!out.includes('id="themeToggle"')) {
+    out = out.replace(/(<div class="nav-cta">)/, `$1\n      ${THEME_TOGGLE}`);
+  }
+  out = out.replace('</body>', `${THEME_SCRIPT}${NAV_SCRIPT}</body>`);
+
+  // Correct claims the product does not yet back.
+  //
+  // The export promises SDKs in three languages; only the TypeScript one is
+  // built. Shipping the original sentence on a live site would be a false
+  // claim to a developer evaluating us, so it is narrowed to what exists - // widen it again when the other clients land.
+  out = out.replace(
+    /with SDKs in TypeScript, Python and Go, and OpenAPI for everything else\./g,
+    'with a TypeScript SDK, and OpenAPI to generate a client for everything else.',
+  );
+  out = out.replace(
+    /SDKs in TypeScript, Python and Go/g,
+    'a TypeScript SDK, plus OpenAPI for every other language',
+  );
+
+  // Shared styling for the console link the exports do not define.
+  out = out.replace(
+    '</style>',
+    `.nav-signin{font-size:.9rem;font-weight:600;text-decoration:none;color:var(--ink-soft);margin-right:4px}
+.nav-signin:hover{color:var(--ink)}
+.nav-links a[aria-current="page"]{color:var(--ink);font-weight:600}
+</style>`,
+  );
+
+  return out;
+}
+
+function main(): void {
+  fs.mkdirSync(WEB_DIR, { recursive: true });
+
+  let imported = 0;
+  const missing: string[] = [];
+
+  for (const spec of PAGES) {
+    const sourcePath = path.join(SOURCE_DIR, spec.source);
+    if (!fs.existsSync(sourcePath)) {
+      missing.push(spec.source);
+      continue;
+    }
+    const html = fs.readFileSync(sourcePath, 'utf8');
+    const rendered = rewrite(html, spec);
+    fs.writeFileSync(path.join(WEB_DIR, spec.target), rendered);
+    console.log(`  ${spec.source}  ->  web/${spec.target}`);
+
+    // "/" is an A/B coin flip between this page and the photo landing, so the
+    // console-led page also needs a stable path of its own - both for the
+    // variant fetch and for nav links that mean "the Platform section".
+    if (spec.alsoWrite) {
+      fs.writeFileSync(path.join(WEB_DIR, spec.alsoWrite), rendered);
+      console.log(`  ${spec.source}  ->  web/${spec.alsoWrite}`);
+    }
+    imported++;
+  }
+
+  console.log(`\nImported ${imported} page(s) into ${WEB_DIR}`);
+  if (missing.length) {
+    console.log(`Not found in ${SOURCE_DIR}: ${missing.join(', ')}`);
+  }
+
+  vendorWebrtcClient();
+}
+
+/**
+ * Copies the WebRTC client into web/assets so the console can load it.
+ *
+ * It is copied at build time rather than committed, so it cannot drift from
+ * the version in package.json, and served from our own origin rather than the
+ * vendor's CDN - the site's CSP allows scripts from 'self' only, and widening
+ * that to a third-party script host to save a copy step would be a poor trade.
+ */
+function vendorWebrtcClient(): void {
+  const source = path.resolve(__dirname, '../node_modules/@daily-co/daily-js/dist/daily.js');
+  const targetDir = path.join(WEB_DIR, 'assets');
+  const target = path.join(targetDir, 'webrtc.js');
+
+  if (!fs.existsSync(source)) {
+    // A missing bundle would otherwise surface as a silent "Talk does nothing"
+    // in the browser, long after the build that caused it.
+    console.log(`\nWARNING: ${path.relative(process.cwd(), source)} is missing.`);
+    console.log('In-browser test calls will not work. Run `npm install` and rebuild.');
+    return;
+  }
+
+  fs.mkdirSync(targetDir, { recursive: true });
+  fs.copyFileSync(source, target);
+
+  const version = JSON.parse(
+    fs.readFileSync(path.resolve(__dirname, '../node_modules/@daily-co/daily-js/package.json'), 'utf8'),
+  ).version;
+  const kb = Math.round(fs.statSync(target).size / 1024);
+  console.log(`Vendored WebRTC client v${version} (${kb} KB) to web/assets/webrtc.js`);
+}
+
+main();

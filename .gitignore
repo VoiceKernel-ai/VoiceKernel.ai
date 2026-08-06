@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.env
+.env.local
+*.log
+.DS_Store
+coverage/
+.tmp/
+
+# Vendored at build time by scripts/build-web.ts from the version pinned in
+# package.json. Committing it would let the served copy drift from the pinned
+# one, which is the failure this arrangement exists to prevent.
+web/assets/webrtc.js

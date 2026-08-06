@@ -1,0 +1,72 @@
+# VoiceKernel production stack.
+#
+# This host already runs several unrelated applications behind a shared Caddy
+# on :80/:443, so this stack deliberately keeps to itself:
+#
+#   * its own Postgres, on a private network - the host's other databases are
+#     not touched and no port is published for them;
+#   * the API bound to the docker bridge gateway rather than 0.0.0.0, so it is
+#     reachable from Caddy but not from the internet directly;
+#   * a project name prefix, so container names cannot collide with the
+#     existing lodgewise/firstpanel/innovationnet stacks.
+
+name: voicekernel
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: voicekernel-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: voicekernel
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: voicekernel
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # No published port. Only the API, on the same network, needs to reach it.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U voicekernel -d voicekernel']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    networks: [internal]
+
+  api:
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    image: voicekernel-api:latest
+    container_name: voicekernel-api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: '8080'
+      DATABASE_URL: postgres://voicekernel:${POSTGRES_PASSWORD}@postgres:5432/voicekernel
+      JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:?set ENCRYPTION_KEY}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://voicekernel.ai}
+      PROVIDER_API_KEY: ${PROVIDER_API_KEY:-}
+      PROVIDER_PUBLIC_KEY: ${PROVIDER_PUBLIC_KEY:-}
+      PROVIDER_BASE_URL: ${PROVIDER_BASE_URL:-https://api.vapi.ai}
+      PROVIDER_WEBHOOK_SECRET: ${PROVIDER_WEBHOOK_SECRET:-}
+      CORS_ORIGINS: ${CORS_ORIGINS:-https://voicekernel.ai,https://www.voicekernel.ai}
+      ALLOW_SIGNUP: ${ALLOW_SIGNUP:-true}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    # Bound to a specific interface rather than 0.0.0.0, so a reverse proxy on
+    # the host can reach the API and the internet cannot. Set API_BIND to the
+    # docker bridge gateway when the proxy itself runs in a container (find it
+    # with `docker network inspect bridge`), or to 127.0.0.1 when the proxy runs
+    # on the host. Never leave it unset in production.
+    ports:
+      - '${API_BIND:-127.0.0.1}:${API_PORT:-8120}:8080'
+    networks: [internal, default]
+
+volumes:
+  pgdata:
+
+networks:
+  internal:
+    driver: bridge
