@@ -327,6 +327,13 @@ footer a:hover{color:#D7E3EE}
 :root[data-theme="dark"] .layer.l-org .layer-h b,:root[data-theme="dark"] .layer.l-org .layer-h span{color:#C6D5E2}
 :root[data-theme="dark"] .layer.l-org .chip{background:#16283E;color:#E4EDF5}
 
+.bens{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:6px}
+.ben{border:1px solid var(--mist);border-left:3px solid var(--amber);border-radius:0 11px 11px 0;
+  padding:15px 17px;background:var(--white)}
+.ben b{display:block;font-size:.95rem;margin-bottom:5px;font-family:'Archivo'}
+.ben p{font-size:.87rem;color:var(--ink-soft);line-height:1.55}
+:root[data-theme="dark"] .ben{background:rgba(232,161,61,.06)}
+
 .sector-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:30px 0}
 .sector-card{border:1px solid var(--mist);border-radius:12px;padding:20px;background:var(--white);
   text-decoration:none;color:inherit;display:block}
@@ -342,7 +349,7 @@ footer a:hover{color:#D7E3EE}
 .jrn b{display:block;font-size:.96rem;margin-bottom:5px}
 .jrn p{font-size:.89rem;color:var(--ink-soft);line-height:1.6}
 
-@media (max-width:860px){ .sector-grid{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:860px){ .sector-grid,.bens{grid-template-columns:minmax(0,1fr)} }
 
 @media (max-width:860px){
   .editions,.steps,.frow{grid-template-columns:minmax(0,1fr)}
@@ -448,7 +455,18 @@ footer a:hover{color:#D7E3EE}
     voice layer does not need to know what industry it is in, only which systems
     it is allowed to reach and what it may say.</p>
 
-  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What the agent actually does</h2>
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 4px">What it changes</h2>
+  <p style="font-size:.86rem;color:var(--ink-soft);margin-bottom:14px">
+    Mechanisms, not projections. Each of these follows from something structural
+    about the work, so you can check whether it holds for your own queues.</p>
+  <div class="bens">
+    <div class="ben"><b>FNOL is captured completely, first time</b><p>A fixed question set asked identically means fewer callbacks to fill gaps that stall the claim.</p></div>
+    <div class="ben"><b>Claims start moving immediately</b><p>The claim exists in the system before the call ends, rather than after a queue of voicemails is worked.</p></div>
+    <div class="ben"><b>Advice risk is bounded by design</b><p>The agent cannot recommend, because the tools to do so are not available to it.</p></div>
+    <div class="ben"><b>Renewal conversations happen at scale</b><p>Retention outreach becomes a volume exercise rather than a staffing decision.</p></div>
+  </div>
+
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:34px 0 2px">What the agent actually does</h2>
   <div style="margin-bottom:34px">
     <div class="jrn"><b>First notice of loss</b><p>Capture what happened, when, where and who else was involved; create the claim; send the upload link before the call ends.</p></div>
     <div class="jrn"><b>Claims status</b><p>Answer from the claims system rather than a queue, including what is blocking and what the customer must do next.</p></div>

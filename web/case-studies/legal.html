@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Superannuation - VoiceKernel</title>
-<meta name="description" content="An illustrative layered architecture for a superannuation organisation: channels, the agentic voice layer, integration and systems of record.">
+<title>Legal Services - VoiceKernel</title>
+<meta name="description" content="An illustrative layered architecture for a legal services organisation: channels, the agentic voice layer, integration and systems of record.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -390,19 +390,19 @@ footer a:hover{color:#D7E3EE}
 </nav>
 
 <div class="wrap mhero">
-  <div class="eyebrow">Funds &amp; member services</div>
-  <h1>Member service that scales without scaling headcount.</h1>
-  <p>Member enquiries spike hard around statements, market moves and legislative change - the times when hiring is least practical and being unreachable is most damaging.</p>
+  <div class="eyebrow">Firms &amp; legal operations</div>
+  <h1>Intake that never misses a matter.</h1>
+  <p>A missed first call is a missed client. Intake is highly structured - conflict check, matter type, urgency - and it is conducted by whoever happens to be at the desk.</p>
 </div>
 
 <div class="wrap">
   <div class="note"><b>An illustrative reference architecture</b>, not a customer
   case study. No organisation is named and no deployment is described - this is
-  what the layers look like for a superannuation organisation,
+  what the layers look like for a legal services organisation,
   so you can map it onto your own estate.</div>
 
   
-<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Superannuation systems of record">
+<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Legal Services systems of record">
   <div class="layer l-ch">
     <div class="layer-h"><b>Channels</b><span>where the conversation starts</span></div>
     <div class="chips">
@@ -438,19 +438,19 @@ footer a:hover{color:#D7E3EE}
   <div class="arrow">&#9660;</div>
 
   <div class="layer l-org">
-    <div class="layer-h"><b>Superannuation</b><span>your systems of record</span></div>
+    <div class="layer-h"><b>Legal Services</b><span>your systems of record</span></div>
     <div class="chips">
-      <div class="chip ">Registry<i>balances, contributions, units</i></div>
-      <div class="chip ">Member portal<i>SSO and secure messaging</i></div>
-      <div class="chip ">Insurance-in-super<i>cover and claims</i></div>
-      <div class="chip ">CRM<i>member interactions</i></div>
-      <div class="chip ">Advice desk<i>licensed escalation</i></div>
+      <div class="chip ">Practice management<i>matters, clients, deadlines</i></div>
+      <div class="chip ">Conflict system<i>conflict checks</i></div>
+      <div class="chip ">Document management<i>engagement and evidence</i></div>
+      <div class="chip ">Billing / trust<i>rates and disbursements</i></div>
+      <div class="chip ">CRM<i>enquiry pipeline</i></div>
     </div>
   </div>
 </div>
 
   <p style="font-size:.86rem;color:var(--ink-soft);margin:6px 0 34px">
-    Only the bottom layer is specific to superannuation. The
+    Only the bottom layer is specific to legal services. The
     three above it are identical in every deployment, which is the point: the
     voice layer does not need to know what industry it is in, only which systems
     it is allowed to reach and what it may say.</p>
@@ -460,27 +460,27 @@ footer a:hover{color:#D7E3EE}
     Mechanisms, not projections. Each of these follows from something structural
     about the work, so you can check whether it holds for your own queues.</p>
   <div class="bens">
-    <div class="ben"><b>Statement season stops being a crisis</b><p>The spike is absorbed instead of producing weeks of unanswered calls.</p></div>
-    <div class="ben"><b>The advice boundary is enforced, not trusted</b><p>Where advice begins the call transfers, and the transfer point is auditable.</p></div>
-    <div class="ben"><b>Lost-member campaigns become practical</b><p>Outbound at scale with do-not-call washing and budget control built in.</p></div>
-    <div class="ben"><b>Members get the same answer every time</b><p>Consistency is the thing a fund is judged on when balances move.</p></div>
+    <div class="ben"><b>First contact stops depending on availability</b><p>Enquiries arrive when someone has just had a problem, which is rarely during a free moment at the firm.</p></div>
+    <div class="ben"><b>Conflict checks happen at intake</b><p>Before any advice is given and before a relationship forms, which is when they are actually useful.</p></div>
+    <div class="ben"><b>Fee earners stop taking status calls</b><p>Billable time stops being consumed by questions the practice management system can answer.</p></div>
+    <div class="ben"><b>Intake is uniform and evidenced</b><p>Every enquiry captured the same way, with a transcript, which matters if the engagement is ever disputed.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:34px 0 2px">What the agent actually does</h2>
   <div style="margin-bottom:34px">
-    <div class="jrn"><b>Balance and contributions</b><p>Verify the member, read the balance and the last contributions, and explain a gap without speculating.</p></div>
-    <div class="jrn"><b>Investment switches</b><p>Explain options factually, record intent, and hand to a licensed person where advice begins.</p></div>
-    <div class="jrn"><b>Outbound member campaigns</b><p>Proactive contact for lost members or insufficient contributions, with DNC wash and a hard stop on dead lines.</p></div>
+    <div class="jrn"><b>New enquiry intake</b><p>Capture the matter type, the parties and the urgency, run the conflict check, and book the consultation.</p></div>
+    <div class="jrn"><b>Matter status</b><p>Tell an existing client where their matter sits and what is outstanding, without interrupting the fee earner.</p></div>
+    <div class="jrn"><b>Deadline and appointment reminders</b><p>Outbound for court dates and document deadlines, with rescheduling in the same call.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What keeps it deployable</h2>
   <div style="margin-bottom:30px">
-    <div class="jrn"><b>Advice boundary</b><p>Factual information only; anything resembling personal advice transfers, and the transfer point is auditable.</p></div>
-    <div class="jrn"><b>Member privacy</b><p>Verification before any balance is spoken, and erasure on request.</p></div>
-    <div class="jrn"><b>Campaign governance</b><p>Budget and no-dead-line policy enforced before a campaign can start.</p></div>
+    <div class="jrn"><b>No legal advice</b><p>A hard boundary in the prompt and in tool availability; anything advisory transfers to a practitioner.</p></div>
+    <div class="jrn"><b>Privilege and confidentiality</b><p>Transcripts held in your systems under your retention policy.</p></div>
+    <div class="jrn"><b>Conflict before disclosure</b><p>The agent takes the minimum needed to run the check and no more until it clears.</p></div>
   </div>
 
-  <div class="note">Statement season concentrates a year of enquiries into a few weeks.</div>
+  <div class="note">Intake is the highest-value conversation a firm has and the one most often answered by whoever is closest to the phone.</div>
 
   <div class="steps" style="margin-top:34px">
     <div class="step"><span class="n">Next</span><b>Read the source</b>

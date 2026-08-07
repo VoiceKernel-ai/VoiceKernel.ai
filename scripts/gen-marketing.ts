@@ -158,6 +158,13 @@ const PAGE_CSS = `
 :root[data-theme="dark"] .layer.l-org .layer-h b,:root[data-theme="dark"] .layer.l-org .layer-h span{color:#C6D5E2}
 :root[data-theme="dark"] .layer.l-org .chip{background:#16283E;color:#E4EDF5}
 
+.bens{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:6px}
+.ben{border:1px solid var(--mist);border-left:3px solid var(--amber);border-radius:0 11px 11px 0;
+  padding:15px 17px;background:var(--white)}
+.ben b{display:block;font-size:.95rem;margin-bottom:5px;font-family:'Archivo'}
+.ben p{font-size:.87rem;color:var(--ink-soft);line-height:1.55}
+:root[data-theme="dark"] .ben{background:rgba(232,161,61,.06)}
+
 .sector-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:30px 0}
 .sector-card{border:1px solid var(--mist);border-radius:12px;padding:20px;background:var(--white);
   text-decoration:none;color:inherit;display:block}
@@ -173,7 +180,7 @@ const PAGE_CSS = `
 .jrn b{display:block;font-size:.96rem;margin-bottom:5px}
 .jrn p{font-size:.89rem;color:var(--ink-soft);line-height:1.6}
 
-@media (max-width:860px){ .sector-grid{grid-template-columns:minmax(0,1fr)} }
+@media (max-width:860px){ .sector-grid,.bens{grid-template-columns:minmax(0,1fr)} }
 
 @media (max-width:860px){
   .editions,.steps,.frow{grid-template-columns:minmax(0,1fr)}
@@ -571,7 +578,15 @@ function caseStudyBody(sector: Sector): string {
     voice layer does not need to know what industry it is in, only which systems
     it is allowed to reach and what it may say.</p>
 
-  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What the agent actually does</h2>
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 4px">What it changes</h2>
+  <p style="font-size:.86rem;color:var(--ink-soft);margin-bottom:14px">
+    Mechanisms, not projections. Each of these follows from something structural
+    about the work, so you can check whether it holds for your own queues.</p>
+  <div class="bens">
+    ${sector.benefits.map((b) => `<div class="ben"><b>${esc(b.title)}</b><p>${esc(b.detail)}</p></div>`).join('\n    ')}
+  </div>
+
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:34px 0 2px">What the agent actually does</h2>
   <div style="margin-bottom:34px">
     ${sector.journeys.map((j) => `<div class="jrn"><b>${esc(j.title)}</b><p>${esc(j.detail)}</p></div>`).join('\n    ')}
   </div>
@@ -597,6 +612,12 @@ function caseStudyBody(sector: Sector): string {
 </div>`;
 }
 
+/** Sectors whose hard problem is permission rather than throughput. */
+const REGULATED = [
+  'banking', 'insurance', 'superannuation', 'government',
+  'health-administration', 'legal', 'care',
+];
+
 function caseIndexBody(): string {
   return `
 <div class="wrap mhero">
@@ -608,8 +629,20 @@ function caseIndexBody(): string {
 </div>
 
 <div class="wrap">
+  <h2 style="font-family:'Archivo';font-size:1.15rem;margin:26px 0 2px">Regulated industries</h2>
+  <p style="font-size:.86rem;color:var(--ink-soft)">Where the constraint is what the agent is allowed to say.</p>
   <div class="sector-grid">
-    ${SECTORS.map((s) => `<a class="sector-card" href="/case-studies/${s.slug}">
+    ${SECTORS.filter((s) => REGULATED.includes(s.slug)).map((s) => `<a class="sector-card" href="/case-studies/${s.slug}">
+      <em>${esc(s.eyebrow)}</em>
+      <b>${esc(s.name)}</b>
+      <span>${esc(s.headline)}</span>
+    </a>`).join('\n    ')}
+  </div>
+
+  <h2 style="font-family:'Archivo';font-size:1.15rem;margin:34px 0 2px">Operational industries</h2>
+  <p style="font-size:.86rem;color:var(--ink-soft)">Where the constraint is how many calls can be made and answered at once.</p>
+  <div class="sector-grid">
+    ${SECTORS.filter((s) => !REGULATED.includes(s.slug)).map((s) => `<a class="sector-card" href="/case-studies/${s.slug}">
       <em>${esc(s.eyebrow)}</em>
       <b>${esc(s.name)}</b>
       <span>${esc(s.headline)}</span>

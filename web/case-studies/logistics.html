@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Superannuation - VoiceKernel</title>
-<meta name="description" content="An illustrative layered architecture for a superannuation organisation: channels, the agentic voice layer, integration and systems of record.">
+<title>Logistics &amp; Freight - VoiceKernel</title>
+<meta name="description" content="An illustrative layered architecture for a logistics &amp; freight organisation: channels, the agentic voice layer, integration and systems of record.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -390,19 +390,19 @@ footer a:hover{color:#D7E3EE}
 </nav>
 
 <div class="wrap mhero">
-  <div class="eyebrow">Funds &amp; member services</div>
-  <h1>Member service that scales without scaling headcount.</h1>
-  <p>Member enquiries spike hard around statements, market moves and legislative change - the times when hiring is least practical and being unreachable is most damaging.</p>
+  <div class="eyebrow">Carriers, 3PL &amp; last mile</div>
+  <h1>The delivery window, confirmed by phone, at scale.</h1>
+  <p>Freight runs on confirmations - is someone at the dock, is the address right, can the driver get in. Each one is a thirty-second call that nobody has time to make, so exceptions are discovered on arrival instead.</p>
 </div>
 
 <div class="wrap">
   <div class="note"><b>An illustrative reference architecture</b>, not a customer
   case study. No organisation is named and no deployment is described - this is
-  what the layers look like for a superannuation organisation,
+  what the layers look like for a logistics &amp; freight organisation,
   so you can map it onto your own estate.</div>
 
   
-<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Superannuation systems of record">
+<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Logistics &amp; Freight systems of record">
   <div class="layer l-ch">
     <div class="layer-h"><b>Channels</b><span>where the conversation starts</span></div>
     <div class="chips">
@@ -438,19 +438,19 @@ footer a:hover{color:#D7E3EE}
   <div class="arrow">&#9660;</div>
 
   <div class="layer l-org">
-    <div class="layer-h"><b>Superannuation</b><span>your systems of record</span></div>
+    <div class="layer-h"><b>Logistics &amp; Freight</b><span>your systems of record</span></div>
     <div class="chips">
-      <div class="chip ">Registry<i>balances, contributions, units</i></div>
-      <div class="chip ">Member portal<i>SSO and secure messaging</i></div>
-      <div class="chip ">Insurance-in-super<i>cover and claims</i></div>
-      <div class="chip ">CRM<i>member interactions</i></div>
-      <div class="chip ">Advice desk<i>licensed escalation</i></div>
+      <div class="chip ">TMS<i>loads, routes, ETAs</i></div>
+      <div class="chip ">WMS<i>dock and slot booking</i></div>
+      <div class="chip ">Track &amp; trace<i>carrier events</i></div>
+      <div class="chip ">Driver app<i>check-in and PoD</i></div>
+      <div class="chip ">CRM<i>shipper accounts</i></div>
     </div>
   </div>
 </div>
 
   <p style="font-size:.86rem;color:var(--ink-soft);margin:6px 0 34px">
-    Only the bottom layer is specific to superannuation. The
+    Only the bottom layer is specific to logistics &amp; freight. The
     three above it are identical in every deployment, which is the point: the
     voice layer does not need to know what industry it is in, only which systems
     it is allowed to reach and what it may say.</p>
@@ -460,27 +460,27 @@ footer a:hover{color:#D7E3EE}
     Mechanisms, not projections. Each of these follows from something structural
     about the work, so you can check whether it holds for your own queues.</p>
   <div class="bens">
-    <div class="ben"><b>Statement season stops being a crisis</b><p>The spike is absorbed instead of producing weeks of unanswered calls.</p></div>
-    <div class="ben"><b>The advice boundary is enforced, not trusted</b><p>Where advice begins the call transfers, and the transfer point is auditable.</p></div>
-    <div class="ben"><b>Lost-member campaigns become practical</b><p>Outbound at scale with do-not-call washing and budget control built in.</p></div>
-    <div class="ben"><b>Members get the same answer every time</b><p>Consistency is the thing a fund is judged on when balances move.</p></div>
+    <div class="ben"><b>Exceptions surface before the truck moves</b><p>A wrong address found the night before costs a phone call; found on arrival it costs a failed delivery and a redelivery.</p></div>
+    <div class="ben"><b>Redelivery rates fall for a structural reason</b><p>Most failures are absence, and absence is knowable in advance by asking.</p></div>
+    <div class="ben"><b>Drivers stop waiting on hold</b><p>Slot booking and check-in are answered immediately rather than queued behind shipper enquiries.</p></div>
+    <div class="ben"><b>Coverage extends past office hours</b><p>Freight moves overnight; the confirmation call no longer has to wait for a day shift.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:34px 0 2px">What the agent actually does</h2>
   <div style="margin-bottom:34px">
-    <div class="jrn"><b>Balance and contributions</b><p>Verify the member, read the balance and the last contributions, and explain a gap without speculating.</p></div>
-    <div class="jrn"><b>Investment switches</b><p>Explain options factually, record intent, and hand to a licensed person where advice begins.</p></div>
-    <div class="jrn"><b>Outbound member campaigns</b><p>Proactive contact for lost members or insufficient contributions, with DNC wash and a hard stop on dead lines.</p></div>
+    <div class="jrn"><b>Delivery window confirmation</b><p>Outbound the day before to confirm someone will be there, reschedule in the same call, and write it back to the route.</p></div>
+    <div class="jrn"><b>Failed delivery recovery</b><p>Call at the point of failure, find out what went wrong, and rebook before the parcel goes back to the depot.</p></div>
+    <div class="jrn"><b>Dock and slot booking</b><p>Take carrier calls for slot times and book them against the warehouse schedule without a person in the loop.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What keeps it deployable</h2>
   <div style="margin-bottom:30px">
-    <div class="jrn"><b>Advice boundary</b><p>Factual information only; anything resembling personal advice transfers, and the transfer point is auditable.</p></div>
-    <div class="jrn"><b>Member privacy</b><p>Verification before any balance is spoken, and erasure on request.</p></div>
-    <div class="jrn"><b>Campaign governance</b><p>Budget and no-dead-line policy enforced before a campaign can start.</p></div>
+    <div class="jrn"><b>Address data minimised</b><p>The agent confirms and corrects; it does not export the address book.</p></div>
+    <div class="jrn"><b>Driver identity verified</b><p>Check-in requires the load reference, not a name.</p></div>
+    <div class="jrn"><b>Contact rules respected</b><p>Consumer recipients are washed against do-not-call before any outbound run.</p></div>
   </div>
 
-  <div class="note">Statement season concentrates a year of enquiries into a few weeks.</div>
+  <div class="note">A failed delivery costs the second attempt, the depot handling and the customer contact that follows - all of which start with nobody being home.</div>
 
   <div class="steps" style="margin-top:34px">
     <div class="step"><span class="n">Next</span><b>Read the source</b>

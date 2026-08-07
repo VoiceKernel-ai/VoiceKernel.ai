@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Superannuation - VoiceKernel</title>
-<meta name="description" content="An illustrative layered architecture for a superannuation organisation: channels, the agentic voice layer, integration and systems of record.">
+<title>Education - VoiceKernel</title>
+<meta name="description" content="An illustrative layered architecture for a education organisation: channels, the agentic voice layer, integration and systems of record.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -390,19 +390,19 @@ footer a:hover{color:#D7E3EE}
 </nav>
 
 <div class="wrap mhero">
-  <div class="eyebrow">Funds &amp; member services</div>
-  <h1>Member service that scales without scaling headcount.</h1>
-  <p>Member enquiries spike hard around statements, market moves and legislative change - the times when hiring is least practical and being unreachable is most damaging.</p>
+  <div class="eyebrow">Universities, schools &amp; training</div>
+  <h1>Enrolment season, answered.</h1>
+  <p>Student services face the same concentration problem every year: a term of enquiries compressed into three weeks, on topics that are almost entirely procedural, from people making a decision under a deadline.</p>
 </div>
 
 <div class="wrap">
   <div class="note"><b>An illustrative reference architecture</b>, not a customer
   case study. No organisation is named and no deployment is described - this is
-  what the layers look like for a superannuation organisation,
+  what the layers look like for a education organisation,
   so you can map it onto your own estate.</div>
 
   
-<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Superannuation systems of record">
+<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Education systems of record">
   <div class="layer l-ch">
     <div class="layer-h"><b>Channels</b><span>where the conversation starts</span></div>
     <div class="chips">
@@ -438,19 +438,19 @@ footer a:hover{color:#D7E3EE}
   <div class="arrow">&#9660;</div>
 
   <div class="layer l-org">
-    <div class="layer-h"><b>Superannuation</b><span>your systems of record</span></div>
+    <div class="layer-h"><b>Education</b><span>your systems of record</span></div>
     <div class="chips">
-      <div class="chip ">Registry<i>balances, contributions, units</i></div>
-      <div class="chip ">Member portal<i>SSO and secure messaging</i></div>
-      <div class="chip ">Insurance-in-super<i>cover and claims</i></div>
-      <div class="chip ">CRM<i>member interactions</i></div>
-      <div class="chip ">Advice desk<i>licensed escalation</i></div>
+      <div class="chip ">Student management<i>enrolment, results, fees</i></div>
+      <div class="chip ">LMS<i>course and timetable data</i></div>
+      <div class="chip ">Admissions<i>applications and offers</i></div>
+      <div class="chip ">Finance<i>fee schedules and plans</i></div>
+      <div class="chip ">CRM<i>prospect and student contact</i></div>
     </div>
   </div>
 </div>
 
   <p style="font-size:.86rem;color:var(--ink-soft);margin:6px 0 34px">
-    Only the bottom layer is specific to superannuation. The
+    Only the bottom layer is specific to education. The
     three above it are identical in every deployment, which is the point: the
     voice layer does not need to know what industry it is in, only which systems
     it is allowed to reach and what it may say.</p>
@@ -460,27 +460,27 @@ footer a:hover{color:#D7E3EE}
     Mechanisms, not projections. Each of these follows from something structural
     about the work, so you can check whether it holds for your own queues.</p>
   <div class="bens">
-    <div class="ben"><b>Statement season stops being a crisis</b><p>The spike is absorbed instead of producing weeks of unanswered calls.</p></div>
-    <div class="ben"><b>The advice boundary is enforced, not trusted</b><p>Where advice begins the call transfers, and the transfer point is auditable.</p></div>
-    <div class="ben"><b>Lost-member campaigns become practical</b><p>Outbound at scale with do-not-call washing and budget control built in.</p></div>
-    <div class="ben"><b>Members get the same answer every time</b><p>Consistency is the thing a fund is judged on when balances move.</p></div>
+    <div class="ben"><b>Peak season stops degrading service</b><p>The enquiry spike is absorbed rather than queued, at the exact moment a prospective student is comparing institutions.</p></div>
+    <div class="ben"><b>International students get their own hours</b><p>Enquiries arrive across every timezone; coverage no longer depends on local working hours.</p></div>
+    <div class="ben"><b>Staff move to the conversations that need judgement</b><p>Advisors stop quoting fee deadlines and start handling welfare and course advice.</p></div>
+    <div class="ben"><b>Retention outreach becomes feasible</b><p>Contacting every disengaged student is a volume problem, not a difficulty problem.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:34px 0 2px">What the agent actually does</h2>
   <div style="margin-bottom:34px">
-    <div class="jrn"><b>Balance and contributions</b><p>Verify the member, read the balance and the last contributions, and explain a gap without speculating.</p></div>
-    <div class="jrn"><b>Investment switches</b><p>Explain options factually, record intent, and hand to a licensed person where advice begins.</p></div>
-    <div class="jrn"><b>Outbound member campaigns</b><p>Proactive contact for lost members or insufficient contributions, with DNC wash and a hard stop on dead lines.</p></div>
+    <div class="jrn"><b>Enrolment and admissions status</b><p>Answer where an application sits, what is outstanding, and what the deadline actually is.</p></div>
+    <div class="jrn"><b>Timetable, results and fees</b><p>Verify the student, answer from the system of record, and set up a payment plan where one applies.</p></div>
+    <div class="jrn"><b>Attendance and retention outreach</b><p>Proactive contact for students who have stopped attending, with a human transfer the moment support is needed.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What keeps it deployable</h2>
   <div style="margin-bottom:30px">
-    <div class="jrn"><b>Advice boundary</b><p>Factual information only; anything resembling personal advice transfers, and the transfer point is auditable.</p></div>
-    <div class="jrn"><b>Member privacy</b><p>Verification before any balance is spoken, and erasure on request.</p></div>
-    <div class="jrn"><b>Campaign governance</b><p>Budget and no-dead-line policy enforced before a campaign can start.</p></div>
+    <div class="jrn"><b>Student privacy</b><p>Verification before any result or fee balance is spoken.</p></div>
+    <div class="jrn"><b>Welfare escalation</b><p>Distress detected in retention calls transfers immediately, and the boundary is enforced by tool availability.</p></div>
+    <div class="jrn"><b>Records retention</b><p>Transcripts held to your policy, in your systems.</p></div>
   </div>
 
-  <div class="note">Statement season concentrates a year of enquiries into a few weeks.</div>
+  <div class="note">Enrolment enquiries concentrate a year of contact into a few weeks, against a staffing level set for the average.</div>
 
   <div class="steps" style="margin-top:34px">
     <div class="step"><span class="n">Next</span><b>Read the source</b>

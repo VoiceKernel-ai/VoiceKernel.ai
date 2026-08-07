@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Superannuation - VoiceKernel</title>
-<meta name="description" content="An illustrative layered architecture for a superannuation organisation: channels, the agentic voice layer, integration and systems of record.">
+<title>Travel &amp; Hospitality - VoiceKernel</title>
+<meta name="description" content="An illustrative layered architecture for a travel &amp; hospitality organisation: channels, the agentic voice layer, integration and systems of record.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -390,19 +390,19 @@ footer a:hover{color:#D7E3EE}
 </nav>
 
 <div class="wrap mhero">
-  <div class="eyebrow">Funds &amp; member services</div>
-  <h1>Member service that scales without scaling headcount.</h1>
-  <p>Member enquiries spike hard around statements, market moves and legislative change - the times when hiring is least practical and being unreachable is most damaging.</p>
+  <div class="eyebrow">Airlines, hotels &amp; operators</div>
+  <h1>Disruption is a communications problem with a deadline.</h1>
+  <p>When a flight cancels or a property oversells, hundreds of people need the same three facts and one decision, simultaneously, and the phone system is the first thing to fail.</p>
 </div>
 
 <div class="wrap">
   <div class="note"><b>An illustrative reference architecture</b>, not a customer
   case study. No organisation is named and no deployment is described - this is
-  what the layers look like for a superannuation organisation,
+  what the layers look like for a travel &amp; hospitality organisation,
   so you can map it onto your own estate.</div>
 
   
-<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Superannuation systems of record">
+<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Travel &amp; Hospitality systems of record">
   <div class="layer l-ch">
     <div class="layer-h"><b>Channels</b><span>where the conversation starts</span></div>
     <div class="chips">
@@ -438,19 +438,19 @@ footer a:hover{color:#D7E3EE}
   <div class="arrow">&#9660;</div>
 
   <div class="layer l-org">
-    <div class="layer-h"><b>Superannuation</b><span>your systems of record</span></div>
+    <div class="layer-h"><b>Travel &amp; Hospitality</b><span>your systems of record</span></div>
     <div class="chips">
-      <div class="chip ">Registry<i>balances, contributions, units</i></div>
-      <div class="chip ">Member portal<i>SSO and secure messaging</i></div>
-      <div class="chip ">Insurance-in-super<i>cover and claims</i></div>
-      <div class="chip ">CRM<i>member interactions</i></div>
-      <div class="chip ">Advice desk<i>licensed escalation</i></div>
+      <div class="chip ">Reservation system<i>bookings, inventory, fares</i></div>
+      <div class="chip ">PMS / CRS<i>property and rate availability</i></div>
+      <div class="chip ">Loyalty<i>tier, points, entitlements</i></div>
+      <div class="chip ">Payments<i>refunds and re-fares</i></div>
+      <div class="chip ">Ops / disruption<i>schedule changes</i></div>
     </div>
   </div>
 </div>
 
   <p style="font-size:.86rem;color:var(--ink-soft);margin:6px 0 34px">
-    Only the bottom layer is specific to superannuation. The
+    Only the bottom layer is specific to travel &amp; hospitality. The
     three above it are identical in every deployment, which is the point: the
     voice layer does not need to know what industry it is in, only which systems
     it is allowed to reach and what it may say.</p>
@@ -460,27 +460,27 @@ footer a:hover{color:#D7E3EE}
     Mechanisms, not projections. Each of these follows from something structural
     about the work, so you can check whether it holds for your own queues.</p>
   <div class="bens">
-    <div class="ben"><b>Statement season stops being a crisis</b><p>The spike is absorbed instead of producing weeks of unanswered calls.</p></div>
-    <div class="ben"><b>The advice boundary is enforced, not trusted</b><p>Where advice begins the call transfers, and the transfer point is auditable.</p></div>
-    <div class="ben"><b>Lost-member campaigns become practical</b><p>Outbound at scale with do-not-call washing and budget control built in.</p></div>
-    <div class="ben"><b>Members get the same answer every time</b><p>Consistency is the thing a fund is judged on when balances move.</p></div>
+    <div class="ben"><b>The disruption spike stops being unanswerable</b><p>Outbound at the scale of the disruption itself, so the airline calls the passenger rather than the other way round.</p></div>
+    <div class="ben"><b>Rebooking happens while inventory still exists</b><p>Speed is the whole game; the seats go to whoever is contacted first, and contact is the constraint.</p></div>
+    <div class="ben"><b>Every language on every shift</b><p>Multilingual coverage without recruiting for it, which matters most at 2am in a foreign airport.</p></div>
+    <div class="ben"><b>Fare rules applied consistently</b><p>No discretionary variation under pressure, and every quote is recorded.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:34px 0 2px">What the agent actually does</h2>
   <div style="margin-bottom:34px">
-    <div class="jrn"><b>Balance and contributions</b><p>Verify the member, read the balance and the last contributions, and explain a gap without speculating.</p></div>
-    <div class="jrn"><b>Investment switches</b><p>Explain options factually, record intent, and hand to a licensed person where advice begins.</p></div>
-    <div class="jrn"><b>Outbound member campaigns</b><p>Proactive contact for lost members or insufficient contributions, with DNC wash and a hard stop on dead lines.</p></div>
+    <div class="jrn"><b>Disruption rebooking</b><p>Call every affected passenger with the options that actually exist, take the choice, and rebook in the same conversation.</p></div>
+    <div class="jrn"><b>Booking changes and cancellations</b><p>Apply the fare rules honestly, quote the fee before changing anything, and confirm by message.</p></div>
+    <div class="jrn"><b>Pre-arrival and concierge</b><p>Confirm arrival time, capture requests, and route the ones that need a person to a person.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What keeps it deployable</h2>
   <div style="margin-bottom:30px">
-    <div class="jrn"><b>Advice boundary</b><p>Factual information only; anything resembling personal advice transfers, and the transfer point is auditable.</p></div>
-    <div class="jrn"><b>Member privacy</b><p>Verification before any balance is spoken, and erasure on request.</p></div>
-    <div class="jrn"><b>Campaign governance</b><p>Budget and no-dead-line policy enforced before a campaign can start.</p></div>
+    <div class="jrn"><b>Fare and fee transparency</b><p>The agent states the cost before it commits the change, and the utterance is retained.</p></div>
+    <div class="jrn"><b>Payment separation</b><p>Re-fares route to your existing payment flow; the agent never handles the card.</p></div>
+    <div class="jrn"><b>Consent for recording</b><p>Captured per call and stored before anything else.</p></div>
   </div>
 
-  <div class="note">Statement season concentrates a year of enquiries into a few weeks.</div>
+  <div class="note">Disruption volume arrives in minutes and decays in hours, which is precisely the shape no staffing model can meet.</div>
 
   <div class="steps" style="margin-top:34px">
     <div class="step"><span class="n">Next</span><b>Read the source</b>

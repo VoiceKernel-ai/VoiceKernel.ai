@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Superannuation - VoiceKernel</title>
-<meta name="description" content="An illustrative layered architecture for a superannuation organisation: channels, the agentic voice layer, integration and systems of record.">
+<title>Automotive - VoiceKernel</title>
+<meta name="description" content="An illustrative layered architecture for a automotive organisation: channels, the agentic voice layer, integration and systems of record.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -390,19 +390,19 @@ footer a:hover{color:#D7E3EE}
 </nav>
 
 <div class="wrap mhero">
-  <div class="eyebrow">Funds &amp; member services</div>
-  <h1>Member service that scales without scaling headcount.</h1>
-  <p>Member enquiries spike hard around statements, market moves and legislative change - the times when hiring is least practical and being unreachable is most damaging.</p>
+  <div class="eyebrow">Dealerships, service &amp; mobility</div>
+  <h1>Fill the service bays. Answer the roadside call.</h1>
+  <p>A service department loses bookings to unanswered phones while the advisors are with customers at the desk. The call is simple: what is wrong, when can you come, which car is it.</p>
 </div>
 
 <div class="wrap">
   <div class="note"><b>An illustrative reference architecture</b>, not a customer
   case study. No organisation is named and no deployment is described - this is
-  what the layers look like for a superannuation organisation,
+  what the layers look like for a automotive organisation,
   so you can map it onto your own estate.</div>
 
   
-<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Superannuation systems of record">
+<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Automotive systems of record">
   <div class="layer l-ch">
     <div class="layer-h"><b>Channels</b><span>where the conversation starts</span></div>
     <div class="chips">
@@ -438,19 +438,19 @@ footer a:hover{color:#D7E3EE}
   <div class="arrow">&#9660;</div>
 
   <div class="layer l-org">
-    <div class="layer-h"><b>Superannuation</b><span>your systems of record</span></div>
+    <div class="layer-h"><b>Automotive</b><span>your systems of record</span></div>
     <div class="chips">
-      <div class="chip ">Registry<i>balances, contributions, units</i></div>
-      <div class="chip ">Member portal<i>SSO and secure messaging</i></div>
-      <div class="chip ">Insurance-in-super<i>cover and claims</i></div>
-      <div class="chip ">CRM<i>member interactions</i></div>
-      <div class="chip ">Advice desk<i>licensed escalation</i></div>
+      <div class="chip ">DMS<i>vehicles, owners, history</i></div>
+      <div class="chip ">Service scheduling<i>bay capacity and slots</i></div>
+      <div class="chip ">Parts<i>availability for the job</i></div>
+      <div class="chip ">Roadside / telematics<i>incidents and location</i></div>
+      <div class="chip ">CRM<i>sales and retention</i></div>
     </div>
   </div>
 </div>
 
   <p style="font-size:.86rem;color:var(--ink-soft);margin:6px 0 34px">
-    Only the bottom layer is specific to superannuation. The
+    Only the bottom layer is specific to automotive. The
     three above it are identical in every deployment, which is the point: the
     voice layer does not need to know what industry it is in, only which systems
     it is allowed to reach and what it may say.</p>
@@ -460,27 +460,27 @@ footer a:hover{color:#D7E3EE}
     Mechanisms, not projections. Each of these follows from something structural
     about the work, so you can check whether it holds for your own queues.</p>
   <div class="bens">
-    <div class="ben"><b>Statement season stops being a crisis</b><p>The spike is absorbed instead of producing weeks of unanswered calls.</p></div>
-    <div class="ben"><b>The advice boundary is enforced, not trusted</b><p>Where advice begins the call transfers, and the transfer point is auditable.</p></div>
-    <div class="ben"><b>Lost-member campaigns become practical</b><p>Outbound at scale with do-not-call washing and budget control built in.</p></div>
-    <div class="ben"><b>Members get the same answer every time</b><p>Consistency is the thing a fund is judged on when balances move.</p></div>
+    <div class="ben"><b>Bookings stop depending on who is free at the desk</b><p>The phone is answered while advisors are with customers, which is exactly when it currently is not.</p></div>
+    <div class="ben"><b>Recall and maintenance campaigns actually complete</b><p>Outbound at volume with rescheduling built in, rather than a letter that is ignored.</p></div>
+    <div class="ben"><b>Bay utilisation improves for a boring reason</b><p>Empty slots are offered to callers instead of being lost to voicemail.</p></div>
+    <div class="ben"><b>After-hours enquiries convert</b><p>Most service calls happen when the customer is not at work, which is when the department is closed.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:34px 0 2px">What the agent actually does</h2>
   <div style="margin-bottom:34px">
-    <div class="jrn"><b>Balance and contributions</b><p>Verify the member, read the balance and the last contributions, and explain a gap without speculating.</p></div>
-    <div class="jrn"><b>Investment switches</b><p>Explain options factually, record intent, and hand to a licensed person where advice begins.</p></div>
-    <div class="jrn"><b>Outbound member campaigns</b><p>Proactive contact for lost members or insufficient contributions, with DNC wash and a hard stop on dead lines.</p></div>
+    <div class="jrn"><b>Service booking</b><p>Identify the vehicle by rego, offer real bay availability, book it, and confirm what to bring.</p></div>
+    <div class="jrn"><b>Service reminders</b><p>Outbound recalls and scheduled maintenance, rescheduling in the same conversation.</p></div>
+    <div class="jrn"><b>Roadside triage</b><p>Capture location and symptoms, dispatch, and stay factual about arrival time.</p></div>
   </div>
 
   <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What keeps it deployable</h2>
   <div style="margin-bottom:30px">
-    <div class="jrn"><b>Advice boundary</b><p>Factual information only; anything resembling personal advice transfers, and the transfer point is auditable.</p></div>
-    <div class="jrn"><b>Member privacy</b><p>Verification before any balance is spoken, and erasure on request.</p></div>
-    <div class="jrn"><b>Campaign governance</b><p>Budget and no-dead-line policy enforced before a campaign can start.</p></div>
+    <div class="jrn"><b>Vehicle identity before history</b><p>Rego or VIN verified before any service record is spoken.</p></div>
+    <div class="jrn"><b>Safety-critical escalation</b><p>Symptoms that suggest a safety fault transfer to a person immediately.</p></div>
+    <div class="jrn"><b>Marketing consent respected</b><p>Retention campaigns wash against consent and do-not-call.</p></div>
   </div>
 
-  <div class="note">Statement season concentrates a year of enquiries into a few weeks.</div>
+  <div class="note">Service departments are busiest at the desk and on the phone at the same hour, and only one of those has a person assigned.</div>
 
   <div class="steps" style="margin-top:34px">
     <div class="step"><span class="n">Next</span><b>Read the source</b>
