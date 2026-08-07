@@ -683,11 +683,20 @@ function reportUnappliedCopy(): void {
 }
 
 function addPartnersLink(html: string): string {
-  if (html.includes('href="/partners"')) return html;
-  return html.replace(
-    /(<a href="\/pricing"[^>]*>Pricing<\/a>)/,
-    '$1\n      <a href="/partners">Partners</a>',
-  );
+  let out = html;
+  if (!out.includes('href="/case-studies"')) {
+    out = out.replace(
+      /(<a href="\/pricing"[^>]*>Pricing<\/a>)/,
+      '<a href="/case-studies">Architectures</a>\n      $1',
+    );
+  }
+  if (!out.includes('href="/partners"')) {
+    out = out.replace(
+      /(<a href="\/pricing"[^>]*>Pricing<\/a>)/,
+      '$1\n      <a href="/partners">Partners</a>',
+    );
+  }
+  return out;
 }
 
 

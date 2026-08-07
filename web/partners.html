@@ -279,6 +279,71 @@ footer a:hover{color:#D7E3EE}
 .faq b{display:block;font-size:.96rem;margin-bottom:6px}
 .faq p{font-size:.9rem;color:var(--ink-soft);line-height:1.6}
 
+
+/* ---------------------------------------------------------------------------
+   Layered architecture diagram
+   ---------------------------------------------------------------------------
+   Built from HTML and CSS rather than a diagramming library. The site's CSP
+   allows scripts from 'self' only, so a renderer would have to be vendored and
+   shipped to every visitor to draw five boxes; and a real DOM stays readable
+   to a screen reader, reflows on a phone, and follows the theme without a
+   second palette.
+   --------------------------------------------------------------------------- */
+.arch{margin:28px 0 12px;display:flex;flex-direction:column;gap:10px}
+.layer{border-radius:12px;padding:14px 16px;border:1px solid transparent}
+.layer-h{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.layer-h b{font-family:'Archivo';font-size:.94rem;letter-spacing:.01em}
+.layer-h span{font-family:'IBM Plex Mono';font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border-radius:8px;padding:8px 11px;font-size:.82rem;line-height:1.35;border:1px solid transparent}
+.chip i{display:block;font-style:normal;font-size:.7rem;opacity:.75;margin-top:2px}
+
+.layer.l-ch{background:#EAF6FA;border-color:#9CD0E0}
+.layer.l-ch .layer-h b,.layer.l-ch .layer-h span{color:#0B5A72}
+.layer.l-ch .chip{background:#1E88A8;color:#fff}
+
+.layer.l-vk{background:#FFF6E8;border-color:#E8A13D;border-width:2px}
+.layer.l-vk .layer-h b,.layer.l-vk .layer-h span{color:#8A5A12}
+.layer.l-vk .chip{background:#E8A13D;color:#231400}
+.layer.l-vk .chip.gov{background:#2E9E8F;color:#04110F}
+
+.layer.l-int{background:#F1EEFB;border-color:#B7ADE8}
+.layer.l-int .layer-h b,.layer.l-int .layer-h span{color:#4B3E96}
+.layer.l-int .chip{background:#7C6BD4;color:#fff}
+
+.layer.l-org{background:#EEF2F6;border-color:#B9C9D6}
+.layer.l-org .layer-h b,.layer.l-org .layer-h span{color:#0E1C2E}
+.layer.l-org .chip{background:#0E1C2E;color:#E4EDF5}
+
+.arrow{text-align:center;font-size:1.05rem;line-height:1;color:var(--ink-soft);opacity:.5}
+
+:root[data-theme="dark"] .layer.l-ch{background:rgba(30,136,168,.12);border-color:#1E88A8}
+:root[data-theme="dark"] .layer.l-ch .layer-h b,:root[data-theme="dark"] .layer.l-ch .layer-h span{color:#7FC8DE}
+:root[data-theme="dark"] .layer.l-vk{background:rgba(232,161,61,.1)}
+:root[data-theme="dark"] .layer.l-vk .layer-h b,:root[data-theme="dark"] .layer.l-vk .layer-h span{color:#F0B055}
+:root[data-theme="dark"] .layer.l-int{background:rgba(124,107,212,.14);border-color:#7C6BD4}
+:root[data-theme="dark"] .layer.l-int .layer-h b,:root[data-theme="dark"] .layer.l-int .layer-h span{color:#B7ADE8}
+:root[data-theme="dark"] .layer.l-org{background:rgba(120,140,160,.1);border-color:#31445A}
+:root[data-theme="dark"] .layer.l-org .layer-h b,:root[data-theme="dark"] .layer.l-org .layer-h span{color:#C6D5E2}
+:root[data-theme="dark"] .layer.l-org .chip{background:#16283E;color:#E4EDF5}
+
+.sector-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:30px 0}
+.sector-card{border:1px solid var(--mist);border-radius:12px;padding:20px;background:var(--white);
+  text-decoration:none;color:inherit;display:block}
+.sector-card:hover{border-color:var(--teal-bright)}
+.sector-card b{display:block;font-family:'Archivo';font-size:1.05rem;margin:6px 0 6px}
+.sector-card span{font-size:.86rem;color:var(--ink-soft);line-height:1.5}
+.sector-card em{font-style:normal;font-family:'IBM Plex Mono';font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--teal-bright)}
+
+.note{border-left:3px solid var(--teal-bright);padding:10px 14px;background:rgba(46,158,143,.08);
+  border-radius:0 9px 9px 0;font-size:.86rem;line-height:1.55;margin:18px 0}
+.jrn{border-top:1px solid var(--mist);padding:16px 0}
+.jrn b{display:block;font-size:.96rem;margin-bottom:5px}
+.jrn p{font-size:.89rem;color:var(--ink-soft);line-height:1.6}
+
+@media (max-width:860px){ .sector-grid{grid-template-columns:minmax(0,1fr)} }
+
 @media (max-width:860px){
   .editions,.steps,.frow{grid-template-columns:minmax(0,1fr)}
   .mhero h1{font-size:2rem}
@@ -299,6 +364,7 @@ footer a:hover{color:#D7E3EE}
     <div class="nav-links" id="navLinks">
       <a href="/#platform">Platform</a>
       <a href="/industries">Industries</a>
+      <a href="/case-studies">Architectures</a>
       <a href="/pricing">Pricing</a>
       <a href="/partners" aria-current="page">Partners</a>
       <a href="/docs" aria-current="page">Docs</a>

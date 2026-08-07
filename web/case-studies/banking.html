@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pricing - VoiceKernel</title>
-<meta name="description" content="VoiceKernel Community is open source and free to run in production. Enterprise adds a support contract, an SLA and contractual protection.">
+<title>Banking - VoiceKernel</title>
+<meta name="description" content="An illustrative layered architecture for a banking organisation: channels, the agentic voice layer, integration and systems of record.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -365,7 +365,7 @@ footer a:hover{color:#D7E3EE}
       <a href="/#platform">Platform</a>
       <a href="/industries">Industries</a>
       <a href="/case-studies">Architectures</a>
-      <a href="/pricing" aria-current="page">Pricing</a>
+      <a href="/pricing">Pricing</a>
       <a href="/partners">Partners</a>
       <a href="/docs" aria-current="page">Docs</a>
     </div>
@@ -383,112 +383,99 @@ footer a:hover{color:#D7E3EE}
 </nav>
 
 <div class="wrap mhero">
-  <div class="eyebrow">Editions</div>
-  <h1>Start with the source. Buy the guarantees.</h1>
-  <p>VoiceKernel Community is the whole control plane, open source and free to
-  run in production, forever. Enterprise adds the things a company needs once
-  the pilot works: a support contract, an SLA, and someone accountable.</p>
+  <div class="eyebrow">Retail &amp; business banking</div>
+  <h1>Answer like the branch. Prove it like the regulator.</h1>
+  <p>A retail bank runs several high-volume queues that are almost entirely verification followed by a lookup and a status change. The conversation is the bottleneck, not the decision.</p>
 </div>
 
 <div class="wrap">
-  <div class="editions">
-    <div class="ed">
-      <div class="ed-tag">Community</div>
-      <h3>Open source</h3>
-      <div class="ed-sub">The complete control plane. Self-hosted, on your
-      infrastructure, against your own provider account and keys.</div>
-      <div class="price">Free <small>MIT licensed</small></div>
-      <ul>
-        <li>Every feature in this repository, no gated modules</li>
-        <li>Multi-tenant isolation and the ownership registry</li>
-        <li>Full provider surface, providers swappable per agent</li>
-        <li>Browser test calls, live console, audit log</li>
-        <li>Right-to-erasure, signed webhooks, scoped API keys</li>
-        <li>Community support through GitHub issues</li>
-        <li>Production use with no seat, call or minute limit</li>
-      </ul>
-      <a class="btn btn-line" href="https://github.com/VoiceKernel-ai/VoiceKernel.ai">Get the source</a>
-    </div>
+  <div class="note"><b>An illustrative reference architecture</b>, not a customer
+  case study. No organisation is named and no deployment is described - this is
+  what the layers look like for a banking organisation,
+  so you can map it onto your own estate.</div>
 
-    <div class="ed featured">
-      <div class="ed-tag">Enterprise</div>
-      <h3>Licensed &amp; supported</h3>
-      <div class="ed-sub">Everything in Community, plus the contract, response
-      times and accountability that a procurement review asks for.</div>
-      <div class="price">Talk to us <small>annual, invoiced</small></div>
-      <ul>
-        <li>Written SLA on uptime and support response</li>
-        <li>Named engineer, 24/7 on-call bridge for severity one</li>
-        <li>Security review support, DPAs, audit rights</li>
-        <li>Deployment help: VPC, on-prem, region-locked residency</li>
-        <li>Private builds and long-term support branches</li>
-        <li>Upgrade and migration assistance</li>
-        <li>Indemnity and contractual commitments</li>
-      </ul>
-      <a class="btn" href="#contact">Talk to us</a>
+  
+<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and Banking systems of record">
+  <div class="layer l-ch">
+    <div class="layer-h"><b>Channels</b><span>where the conversation starts</span></div>
+    <div class="chips">
+      <div class="chip ">Inbound numbers<i>published lines</i></div>
+      <div class="chip ">SIP / contact centre<i>existing estate</i></div>
+      <div class="chip ">Outbound<i>campaigns and callbacks</i></div>
+      <div class="chip ">In-app<i>browser WebRTC</i></div>
     </div>
   </div>
+  <div class="arrow">&#9660;</div>
 
-  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:36px 0 4px">What differs</h2>
-  <p style="font-size:.9rem;color:var(--ink-soft);margin-bottom:8px">
-    The software is the same. What you buy is the commitment around it.</p>
-
-  <div class="table-scroll">
-  <table class="compare">
-    <thead><tr><th>&nbsp;</th><th>Community</th><th>Enterprise</th></tr></thead>
-    <tbody>
-      <tr><td>Source code</td><td class="yes">Complete</td><td class="yes">Complete</td></tr>
-      <tr><td>Features</td><td class="yes">All of them</td><td class="yes">All of them</td></tr>
-      <tr><td>Production use</td><td class="yes">Unlimited</td><td class="yes">Unlimited</td></tr>
-      <tr><td>Support</td><td>GitHub issues, best effort</td><td class="yes">Contracted, with response times</td></tr>
-      <tr><td>Uptime SLA</td><td class="no">None</td><td class="yes">Written and measured</td></tr>
-      <tr><td>Security review</td><td>Self-serve, docs and source</td><td class="yes">We answer your questionnaire</td></tr>
-      <tr><td>Deployment</td><td>Docs and compose files</td><td class="yes">Assisted, VPC and on-prem</td></tr>
-      <tr><td>Upgrades</td><td>Self-managed</td><td class="yes">Assisted, LTS branches</td></tr>
-      <tr><td>Contractual protection</td><td class="no">None, as-is</td><td class="yes">DPA, indemnity, audit rights</td></tr>
-    </tbody>
-  </table>
+  <div class="layer l-vk">
+    <div class="layer-h"><b>VoiceKernel</b><span>the agentic voice layer</span></div>
+    <div class="chips">
+      <div class="chip ">Conversation<i>agent, voice, turn taking</i></div>
+      <div class="chip ">Knowledge grounding<i>answers with citations</i></div>
+      <div class="chip ">Tool calls<i>reads and writes back</i></div>
+      <div class="chip ">Transfer<i>to a human, with context</i></div>
+      <div class="chip gov">Tenant isolation<i>ownership registry</i></div>
+      <div class="chip gov">Audit and erasure<i>per call, per mutation</i></div>
+    </div>
   </div>
+  <div class="arrow">&#9660;</div>
 
-  <p style="font-size:.86rem;color:var(--ink-soft);margin-bottom:34px">
-    Provider costs are separate and go directly to whoever carries your calls.
-    VoiceKernel never resells minutes, so there is no margin for us in your
-    call volume and no reason for us to make switching providers difficult.</p>
-
-  <div class="eyebrow" id="contact">Getting started</div>
-  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 12px">How this usually goes</h2>
-  <div class="steps">
-    <div class="step"><span class="n">01</span><b>Run Community</b>
-      <span>Clone it, point it at your provider account, put a real queue
-      through it. No conversation with us required.</span></div>
-    <div class="step"><span class="n">02</span><b>Prove it internally</b>
-      <span>Show your security and compliance teams the source, the audit log
-      and the isolation model. They will have questions; the answers are in
-      the repository.</span></div>
-    <div class="step"><span class="n">03</span><b>Buy the guarantees</b>
-      <span>When it is carrying real volume and needs an SLA behind it, talk to
-      us. Nothing about your deployment has to change.</span></div>
+  <div class="layer l-int">
+    <div class="layer-h"><b>Integration</b><span>your boundary, your rules</span></div>
+    <div class="chips">
+      <div class="chip ">REST + typed SDK<i>scoped API keys</i></div>
+      <div class="chip ">Signed webhooks<i>retried, replayable</i></div>
+      <div class="chip ">Live event stream<i>SSE</i></div>
+    </div>
   </div>
+  <div class="arrow">&#9660;</div>
 
-  <div class="faqs" style="margin-top:44px">
-    <div class="faq"><b>Is Community a trial?</b>
-      <p>No. It is the same software, MIT licensed, with no expiry, no usage
-      ceiling and no feature gates. If you never contact us, nothing stops
-      working.</p></div>
-    <div class="faq"><b>What exactly is licensed in Enterprise?</b>
-      <p>The support relationship and the contractual commitments, not access to
-      the code. You are buying response times, accountability and the paperwork
-      procurement needs.</p></div>
-    <div class="faq"><b>Can we start on Community and move later?</b>
-      <p>That is the intended path, and the reason it is not crippled. Moving is
-      a contract, not a migration.</p></div>
-    <div class="faq"><b>Do you take a cut of our call spend?</b>
-      <p>No. You hold the provider account and pay your provider directly.</p></div>
-    <div class="faq"><b>We are a systems integrator, not an end user.</b>
-      <p>See the <a href="/partners">partner programme</a>.</p></div>
+  <div class="layer l-org">
+    <div class="layer-h"><b>Banking</b><span>your systems of record</span></div>
+    <div class="chips">
+      <div class="chip ">Core banking<i>accounts, balances, holds</i></div>
+      <div class="chip ">Card management<i>block, reissue, disputes</i></div>
+      <div class="chip ">Fraud &amp; AML<i>case creation, risk signals</i></div>
+      <div class="chip ">CRM<i>interaction history</i></div>
+      <div class="chip ">IAM / KYC<i>step-up verification</i></div>
+    </div>
   </div>
 </div>
 
+  <p style="font-size:.86rem;color:var(--ink-soft);margin:6px 0 34px">
+    Only the bottom layer is specific to banking. The
+    three above it are identical in every deployment, which is the point: the
+    voice layer does not need to know what industry it is in, only which systems
+    it is allowed to reach and what it may say.</p>
+
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What the agent actually does</h2>
+  <div style="margin-bottom:34px">
+    <div class="jrn"><b>Card disputes</b><p>Identify the transaction, capture the dispute reason, raise the case in the fraud system, block and reissue the card, and read back a reference number.</p></div>
+    <div class="jrn"><b>Balance and transactions</b><p>Verify, answer from the core, and offer a statement without a human ever joining.</p></div>
+    <div class="jrn"><b>Collections and hardship</b><p>Explain options, capture a commitment, and hand a warm transfer to a person the moment distress is detected.</p></div>
+  </div>
+
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What keeps it deployable</h2>
+  <div style="margin-bottom:30px">
+    <div class="jrn"><b>Every word audited</b><p>Full transcript and an audit row per mutation, with the actor and request id.</p></div>
+    <div class="jrn"><b>Verification before disclosure</b><p>No account data spoken until step-up succeeds; the tool call simply is not available before then.</p></div>
+    <div class="jrn"><b>Right to erasure</b><p>Redaction in place, so the call stays auditable while personal data goes.</p></div>
+  </div>
+
+  <div class="note">Card disputes, balance enquiries and payment status routinely make up the top three queues by volume in retail banking.</div>
+
+  <div class="steps" style="margin-top:34px">
+    <div class="step"><span class="n">Next</span><b>Read the source</b>
+      <span>Everything above is in the open-source Community edition. Nothing on
+      this page needs a licence.</span></div>
+    <div class="step"><span class="n">Next</span><b>Run it yourself</b>
+      <span>Point it at your provider account and put one queue through it before
+      you talk to anybody.</span></div>
+    <div class="step"><span class="n">Next</span><b>Then buy the guarantees</b>
+      <span>An <a href="/pricing">Enterprise</a> agreement adds the SLA and the
+      support contract when it carries real volume.</span></div>
+  </div>
+</div>
 <footer>
   <div class="foot-inner">
     <span>© 2026 VoiceKernel · PayFar Global Ltd</span>

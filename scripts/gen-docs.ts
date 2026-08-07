@@ -517,6 +517,7 @@ footer a:hover{color:#D7E3EE}
     <div class="nav-links" id="navLinks">
       <a href="/#platform">Platform</a>
       <a href="/industries">Industries</a>
+      <a href="/case-studies">Architectures</a>
       <a href="/pricing">Pricing</a>
       <a href="/partners">Partners</a>
       <a href="/docs" aria-current="page">Docs</a>

@@ -43,6 +43,10 @@ function isApiPath(pathname) {
 // 307 instead of a page.
 const STATIC_ALIASES = new Map([
   ['/docs/openapi.json', '/openapi.json'],
+  // The nav links /case-studies. Without this the asset server answers a
+  // directory with a 307 to its trailing-slash form, so every visit from the
+  // nav costs an extra round trip before the page starts loading.
+  ['/case-studies', '/case-studies/'],
   // The operation map now lives inside the docs page and the OpenAPI document;
   // send anyone following the old API path somewhere that exists.
   ['/docs/operations', '/docs'],

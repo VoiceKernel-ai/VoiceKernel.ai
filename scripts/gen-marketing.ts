@@ -12,6 +12,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { SHELL_STYLE, SHELL_FOOTER, THEME_SCRIPT, navFor } from './lib/shell';
+import { SECTORS } from './lib/sectors';
 
 const WEB_DIR = path.resolve(__dirname, '../web');
 
@@ -108,6 +109,71 @@ const PAGE_CSS = `
 .faq{border-top:1px solid var(--mist);padding:18px 0}
 .faq b{display:block;font-size:.96rem;margin-bottom:6px}
 .faq p{font-size:.9rem;color:var(--ink-soft);line-height:1.6}
+
+
+/* ---------------------------------------------------------------------------
+   Layered architecture diagram
+   ---------------------------------------------------------------------------
+   Built from HTML and CSS rather than a diagramming library. The site's CSP
+   allows scripts from 'self' only, so a renderer would have to be vendored and
+   shipped to every visitor to draw five boxes; and a real DOM stays readable
+   to a screen reader, reflows on a phone, and follows the theme without a
+   second palette.
+   --------------------------------------------------------------------------- */
+.arch{margin:28px 0 12px;display:flex;flex-direction:column;gap:10px}
+.layer{border-radius:12px;padding:14px 16px;border:1px solid transparent}
+.layer-h{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.layer-h b{font-family:'Archivo';font-size:.94rem;letter-spacing:.01em}
+.layer-h span{font-family:'IBM Plex Mono';font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border-radius:8px;padding:8px 11px;font-size:.82rem;line-height:1.35;border:1px solid transparent}
+.chip i{display:block;font-style:normal;font-size:.7rem;opacity:.75;margin-top:2px}
+
+.layer.l-ch{background:#EAF6FA;border-color:#9CD0E0}
+.layer.l-ch .layer-h b,.layer.l-ch .layer-h span{color:#0B5A72}
+.layer.l-ch .chip{background:#1E88A8;color:#fff}
+
+.layer.l-vk{background:#FFF6E8;border-color:#E8A13D;border-width:2px}
+.layer.l-vk .layer-h b,.layer.l-vk .layer-h span{color:#8A5A12}
+.layer.l-vk .chip{background:#E8A13D;color:#231400}
+.layer.l-vk .chip.gov{background:#2E9E8F;color:#04110F}
+
+.layer.l-int{background:#F1EEFB;border-color:#B7ADE8}
+.layer.l-int .layer-h b,.layer.l-int .layer-h span{color:#4B3E96}
+.layer.l-int .chip{background:#7C6BD4;color:#fff}
+
+.layer.l-org{background:#EEF2F6;border-color:#B9C9D6}
+.layer.l-org .layer-h b,.layer.l-org .layer-h span{color:#0E1C2E}
+.layer.l-org .chip{background:#0E1C2E;color:#E4EDF5}
+
+.arrow{text-align:center;font-size:1.05rem;line-height:1;color:var(--ink-soft);opacity:.5}
+
+:root[data-theme="dark"] .layer.l-ch{background:rgba(30,136,168,.12);border-color:#1E88A8}
+:root[data-theme="dark"] .layer.l-ch .layer-h b,:root[data-theme="dark"] .layer.l-ch .layer-h span{color:#7FC8DE}
+:root[data-theme="dark"] .layer.l-vk{background:rgba(232,161,61,.1)}
+:root[data-theme="dark"] .layer.l-vk .layer-h b,:root[data-theme="dark"] .layer.l-vk .layer-h span{color:#F0B055}
+:root[data-theme="dark"] .layer.l-int{background:rgba(124,107,212,.14);border-color:#7C6BD4}
+:root[data-theme="dark"] .layer.l-int .layer-h b,:root[data-theme="dark"] .layer.l-int .layer-h span{color:#B7ADE8}
+:root[data-theme="dark"] .layer.l-org{background:rgba(120,140,160,.1);border-color:#31445A}
+:root[data-theme="dark"] .layer.l-org .layer-h b,:root[data-theme="dark"] .layer.l-org .layer-h span{color:#C6D5E2}
+:root[data-theme="dark"] .layer.l-org .chip{background:#16283E;color:#E4EDF5}
+
+.sector-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:30px 0}
+.sector-card{border:1px solid var(--mist);border-radius:12px;padding:20px;background:var(--white);
+  text-decoration:none;color:inherit;display:block}
+.sector-card:hover{border-color:var(--teal-bright)}
+.sector-card b{display:block;font-family:'Archivo';font-size:1.05rem;margin:6px 0 6px}
+.sector-card span{font-size:.86rem;color:var(--ink-soft);line-height:1.5}
+.sector-card em{font-style:normal;font-family:'IBM Plex Mono';font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--teal-bright)}
+
+.note{border-left:3px solid var(--teal-bright);padding:10px 14px;background:rgba(46,158,143,.08);
+  border-radius:0 9px 9px 0;font-size:.86rem;line-height:1.55;margin:18px 0}
+.jrn{border-top:1px solid var(--mist);padding:16px 0}
+.jrn b{display:block;font-size:.96rem;margin-bottom:5px}
+.jrn p{font-size:.89rem;color:var(--ink-soft);line-height:1.6}
+
+@media (max-width:860px){ .sector-grid{grid-template-columns:minmax(0,1fr)} }
 
 @media (max-width:860px){
   .editions,.steps,.frow{grid-template-columns:minmax(0,1fr)}
@@ -419,6 +485,143 @@ const PARTNER_SCRIPT = `<script>
 })();
 </script>`;
 
+
+// ---------------------------------------------------------------------------
+// Case studies - one reference architecture per organisation type
+// ---------------------------------------------------------------------------
+
+type Sector = (typeof SECTORS)[number];
+
+/**
+ * The layered diagram.
+ *
+ * Only the bottom layer changes between sectors. That is the argument the page
+ * is making - the voice layer is the same everywhere, and what differs is which
+ * systems of record it reaches into - so the top three layers are shared
+ * markup rather than six near-copies.
+ */
+function archDiagram(sector: Sector): string {
+  const chip = (name: string, detail?: string, cls = '') =>
+    `<div class="chip ${cls}">${esc(name)}${detail ? `<i>${esc(detail)}</i>` : ''}</div>`;
+
+  return `
+<div class="arch" role="img" aria-label="Layered architecture: channels, VoiceKernel, integration, and ${esc(sector.name)} systems of record">
+  <div class="layer l-ch">
+    <div class="layer-h"><b>Channels</b><span>where the conversation starts</span></div>
+    <div class="chips">
+      ${chip('Inbound numbers', 'published lines')}
+      ${chip('SIP / contact centre', 'existing estate')}
+      ${chip('Outbound', 'campaigns and callbacks')}
+      ${chip('In-app', 'browser WebRTC')}
+    </div>
+  </div>
+  <div class="arrow">&#9660;</div>
+
+  <div class="layer l-vk">
+    <div class="layer-h"><b>VoiceKernel</b><span>the agentic voice layer</span></div>
+    <div class="chips">
+      ${chip('Conversation', 'agent, voice, turn taking')}
+      ${chip('Knowledge grounding', 'answers with citations')}
+      ${chip('Tool calls', 'reads and writes back')}
+      ${chip('Transfer', 'to a human, with context')}
+      ${chip('Tenant isolation', 'ownership registry', 'gov')}
+      ${chip('Audit and erasure', 'per call, per mutation', 'gov')}
+    </div>
+  </div>
+  <div class="arrow">&#9660;</div>
+
+  <div class="layer l-int">
+    <div class="layer-h"><b>Integration</b><span>your boundary, your rules</span></div>
+    <div class="chips">
+      ${chip('REST + typed SDK', 'scoped API keys')}
+      ${chip('Signed webhooks', 'retried, replayable')}
+      ${chip('Live event stream', 'SSE')}
+    </div>
+  </div>
+  <div class="arrow">&#9660;</div>
+
+  <div class="layer l-org">
+    <div class="layer-h"><b>${esc(sector.name)}</b><span>your systems of record</span></div>
+    <div class="chips">
+      ${sector.systems.map((sys) => chip(sys.name, sys.detail)).join('\n      ')}
+    </div>
+  </div>
+</div>`;
+}
+
+function caseStudyBody(sector: Sector): string {
+  return `
+<div class="wrap mhero">
+  <div class="eyebrow">${esc(sector.eyebrow)}</div>
+  <h1>${esc(sector.headline)}</h1>
+  <p>${esc(sector.intro)}</p>
+</div>
+
+<div class="wrap">
+  <div class="note"><b>An illustrative reference architecture</b>, not a customer
+  case study. No organisation is named and no deployment is described - this is
+  what the layers look like for a ${esc(sector.name.toLowerCase())} organisation,
+  so you can map it onto your own estate.</div>
+
+  ${archDiagram(sector)}
+
+  <p style="font-size:.86rem;color:var(--ink-soft);margin:6px 0 34px">
+    Only the bottom layer is specific to ${esc(sector.name.toLowerCase())}. The
+    three above it are identical in every deployment, which is the point: the
+    voice layer does not need to know what industry it is in, only which systems
+    it is allowed to reach and what it may say.</p>
+
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What the agent actually does</h2>
+  <div style="margin-bottom:34px">
+    ${sector.journeys.map((j) => `<div class="jrn"><b>${esc(j.title)}</b><p>${esc(j.detail)}</p></div>`).join('\n    ')}
+  </div>
+
+  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 2px">What keeps it deployable</h2>
+  <div style="margin-bottom:30px">
+    ${sector.compliance.map((c) => `<div class="jrn"><b>${esc(c.title)}</b><p>${esc(c.detail)}</p></div>`).join('\n    ')}
+  </div>
+
+  <div class="note">${esc(sector.metric)}</div>
+
+  <div class="steps" style="margin-top:34px">
+    <div class="step"><span class="n">Next</span><b>Read the source</b>
+      <span>Everything above is in the open-source Community edition. Nothing on
+      this page needs a licence.</span></div>
+    <div class="step"><span class="n">Next</span><b>Run it yourself</b>
+      <span>Point it at your provider account and put one queue through it before
+      you talk to anybody.</span></div>
+    <div class="step"><span class="n">Next</span><b>Then buy the guarantees</b>
+      <span>An <a href="/pricing">Enterprise</a> agreement adds the SLA and the
+      support contract when it carries real volume.</span></div>
+  </div>
+</div>`;
+}
+
+function caseIndexBody(): string {
+  return `
+<div class="wrap mhero">
+  <div class="eyebrow">Reference architectures</div>
+  <h1>What this looks like in your organisation</h1>
+  <p>An agentic voice layer means very little until you can see which of your own
+  systems it would touch. These are illustrative architectures by organisation
+  type - same voice layer, different systems of record.</p>
+</div>
+
+<div class="wrap">
+  <div class="sector-grid">
+    ${SECTORS.map((s) => `<a class="sector-card" href="/case-studies/${s.slug}">
+      <em>${esc(s.eyebrow)}</em>
+      <b>${esc(s.name)}</b>
+      <span>${esc(s.headline)}</span>
+    </a>`).join('\n    ')}
+  </div>
+
+  <div class="note">These describe how the layers fit together for a given kind of
+  organisation. They are not customer testimonials, and none of them names or
+  implies a real deployment.</div>
+</div>`;
+}
+
 function main(): void {
   fs.mkdirSync(WEB_DIR, { recursive: true });
 
@@ -446,6 +649,38 @@ function main(): void {
     }),
   );
   console.log('  wrote web/partners.html');
+
+  // Written as case-studies/index.html, not case-studies.html. With a
+  // case-studies/ directory also present, the asset server resolves the
+  // extensionless /case-studies to the directory and looks for an index -
+  // the sibling .html file is never consulted, and the index 404s.
+  const caseDir = path.join(WEB_DIR, 'case-studies');
+  fs.mkdirSync(caseDir, { recursive: true });
+
+  fs.writeFileSync(
+    path.join(caseDir, 'index.html'),
+    page({
+      title: 'Reference architectures - VoiceKernel',
+      description:
+        'Illustrative layered architectures by organisation type: banking, insurance, superannuation, telco, government and health administration.',
+      active: 'Case studies',
+      body: caseIndexBody(),
+    }),
+  );
+  console.log('  wrote web/case-studies/index.html');
+
+  for (const sector of SECTORS) {
+    fs.writeFileSync(
+      path.join(caseDir, `${sector.slug}.html`),
+      page({
+        title: `${sector.name.replace(/&amp;/g, '&')} - VoiceKernel`,
+        description: `An illustrative layered architecture for a ${sector.name.toLowerCase()} organisation: channels, the agentic voice layer, integration and systems of record.`,
+        active: 'Case studies',
+        body: caseStudyBody(sector),
+      }),
+    );
+  }
+  console.log(`  wrote web/case-studies/ (${SECTORS.length} pages)`);
 }
 
 main();

@@ -38,59 +38,43 @@ things that decide whether a voice agent survives contact with an enterprise:
 
 ```mermaid
 flowchart TB
-    subgraph clients["Your systems"]
-        APP["Your application<br/><i>TypeScript SDK or REST</i>"]
-        OPS["Operators<br/><i>web console</i>"]
-        HOOK["Your webhook endpoint<br/><i>signed, retried</i>"]
+    CH["📞 &nbsp;<b>CHANNELS</b><br/>inbound numbers &nbsp;·&nbsp; SIP / contact centre &nbsp;·&nbsp; outbound campaigns &nbsp;·&nbsp; in-app WebRTC"]:::ch
+
+    subgraph VK["⚡ &nbsp; V O I C E K E R N E L &nbsp;—&nbsp; the agentic voice layer"]
+        VK1["<b>Conversation</b> &nbsp;·&nbsp; agents, prompts and voices &nbsp;·&nbsp; turn taking and barge-in &nbsp;·&nbsp; knowledge grounding with citations"]:::vk
+        VK2["<b>Agency</b> &nbsp;·&nbsp; tool calls that read <i>and write back</i> &nbsp;·&nbsp; transfer and escalation &nbsp;·&nbsp; campaign orchestration"]:::vk
+        VK3["<b>Control</b> &nbsp;·&nbsp; tenant isolation &nbsp;·&nbsp; audit and erasure &nbsp;·&nbsp; evals, monitors and live events"]:::gov
     end
 
-    subgraph edge["Edge"]
-        CDN["Static site + console<br/><i>Cloudflare Worker or any host</i>"]
-    end
+    INT["🔌 &nbsp;<b>INTEGRATION</b> &nbsp;—&nbsp; your boundary, your rules<br/>REST + typed SDK with scoped keys &nbsp;·&nbsp; signed webhooks &nbsp;·&nbsp; SSE stream"]:::int
 
-    subgraph core["VoiceKernel control plane"]
-        AUTH["Auth<br/><i>sessions, API keys, scopes</i>"]
-        IDEM["Idempotency + rate limit"]
-        AUDIT["Audit log"]
+    ORG["🏢 &nbsp;<b>YOUR ORGANISATION</b> &nbsp;—&nbsp; systems of record<br/>CRM &nbsp;·&nbsp; core platform (banking, policy, billing) &nbsp;·&nbsp; case &amp; ticketing<br/>identity, KYC and consent &nbsp;·&nbsp; warehouse and BI"]:::org
 
-        subgraph facade["Facade API"]
-            AGENTS["Agents"]
-            CALLS["Calls<br/><i>phone + browser</i>"]
-            NUMBERS["Numbers"]
-            CAMPAIGNS["Campaigns"]
-            OBSERVE["Evals + monitors"]
-            GOV["Governance<br/><i>erasure, DNC, consent</i>"]
-        end
+    MODELS["🧠 &nbsp;<b>SWAPPABLE PROVIDERS</b> &nbsp;·&nbsp; 17 LLM &nbsp;·&nbsp; 20 voice &nbsp;·&nbsp; 14 transcriber<br/><i>chosen per agent, changed without touching anything else</i>"]:::prov
 
-        PROXY{{"Proxy choke point<br/><b>every</b> upstream call<br/>passes through here"}}
-        REG[("Ownership registry<br/><i>tenant trust boundary</i>")]
-        RT["Realtime fan-out<br/><i>SSE</i>"]
-        DISP["Webhook dispatcher<br/><i>backoff, replay</i>"]
-    end
+    CH ==> VK1
+    VK3 ==> INT
+    INT <==> ORG
+    VK1 -.-> MODELS
 
-    DB[("PostgreSQL<br/><i>orgs, calls, events,<br/>audit, registry</i>")]
-    PROV["Voice provider<br/><i>realtime media + models</i>"]
-    MEDIA["WebRTC media<br/><i>browser test calls</i>"]
-
-    APP -->|"HTTPS + API key"| AUTH
-    OPS --> CDN --> AUTH
-    AUTH --> IDEM --> AUDIT --> facade
-    facade --> PROXY
-    PROXY <-->|"authorise before calling"| REG
-    PROXY -->|"scoped credential"| PROV
-    PROV -->|"webhooks"| DISP
-    DISP --> RT
-    RT -->|"live events"| OPS
-    DISP -->|"signed delivery"| HOOK
-    OPS <-.->|"audio, never via VoiceKernel"| MEDIA
-    MEDIA <--> PROV
-    core --- DB
-
-    classDef boundary fill:#0E1C2E,stroke:#E8A13D,stroke-width:2px,color:#fff
-    classDef store fill:#123,stroke:#2E9E8F,color:#fff
-    class PROXY boundary
-    class REG,DB store
+    classDef ch fill:#1E88A8,stroke:#0B5A72,color:#fff
+    classDef vk fill:#E8A13D,stroke:#B87716,color:#231400
+    classDef gov fill:#2E9E8F,stroke:#0F5D5D,color:#04110F
+    classDef int fill:#7C6BD4,stroke:#4B3E96,color:#fff
+    classDef org fill:#0E1C2E,stroke:#31445A,color:#E4EDF5
+    classDef prov fill:#C2536B,stroke:#8A2F44,color:#fff
+    style VK fill:#FFF6E8,stroke:#E8A13D,stroke-width:3px
 ```
+
+**Read it top to bottom.** A call arrives on any channel. VoiceKernel holds the
+conversation, decides what to do, and reaches into your systems through an
+interface you control - never the other way round. Your systems of record stay
+where they are; the voice layer is the only new thing, and it is one you can
+read the source of.
+
+The model providers hang off the side deliberately: they are swappable per
+agent, so the reasoning, the voice and the transcription are three independent
+choices you can change without touching anything else.
 
 ### The two ideas worth understanding
 

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pricing - VoiceKernel</title>
-<meta name="description" content="VoiceKernel Community is open source and free to run in production. Enterprise adds a support contract, an SLA and contractual protection.">
+<title>Reference architectures - VoiceKernel</title>
+<meta name="description" content="Illustrative layered architectures by organisation type: banking, insurance, superannuation, telco, government and health administration.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -365,7 +365,7 @@ footer a:hover{color:#D7E3EE}
       <a href="/#platform">Platform</a>
       <a href="/industries">Industries</a>
       <a href="/case-studies">Architectures</a>
-      <a href="/pricing" aria-current="page">Pricing</a>
+      <a href="/pricing">Pricing</a>
       <a href="/partners">Partners</a>
       <a href="/docs" aria-current="page">Docs</a>
     </div>
@@ -383,112 +383,51 @@ footer a:hover{color:#D7E3EE}
 </nav>
 
 <div class="wrap mhero">
-  <div class="eyebrow">Editions</div>
-  <h1>Start with the source. Buy the guarantees.</h1>
-  <p>VoiceKernel Community is the whole control plane, open source and free to
-  run in production, forever. Enterprise adds the things a company needs once
-  the pilot works: a support contract, an SLA, and someone accountable.</p>
+  <div class="eyebrow">Reference architectures</div>
+  <h1>What this looks like in your organisation</h1>
+  <p>An agentic voice layer means very little until you can see which of your own
+  systems it would touch. These are illustrative architectures by organisation
+  type - same voice layer, different systems of record.</p>
 </div>
 
 <div class="wrap">
-  <div class="editions">
-    <div class="ed">
-      <div class="ed-tag">Community</div>
-      <h3>Open source</h3>
-      <div class="ed-sub">The complete control plane. Self-hosted, on your
-      infrastructure, against your own provider account and keys.</div>
-      <div class="price">Free <small>MIT licensed</small></div>
-      <ul>
-        <li>Every feature in this repository, no gated modules</li>
-        <li>Multi-tenant isolation and the ownership registry</li>
-        <li>Full provider surface, providers swappable per agent</li>
-        <li>Browser test calls, live console, audit log</li>
-        <li>Right-to-erasure, signed webhooks, scoped API keys</li>
-        <li>Community support through GitHub issues</li>
-        <li>Production use with no seat, call or minute limit</li>
-      </ul>
-      <a class="btn btn-line" href="https://github.com/VoiceKernel-ai/VoiceKernel.ai">Get the source</a>
-    </div>
-
-    <div class="ed featured">
-      <div class="ed-tag">Enterprise</div>
-      <h3>Licensed &amp; supported</h3>
-      <div class="ed-sub">Everything in Community, plus the contract, response
-      times and accountability that a procurement review asks for.</div>
-      <div class="price">Talk to us <small>annual, invoiced</small></div>
-      <ul>
-        <li>Written SLA on uptime and support response</li>
-        <li>Named engineer, 24/7 on-call bridge for severity one</li>
-        <li>Security review support, DPAs, audit rights</li>
-        <li>Deployment help: VPC, on-prem, region-locked residency</li>
-        <li>Private builds and long-term support branches</li>
-        <li>Upgrade and migration assistance</li>
-        <li>Indemnity and contractual commitments</li>
-      </ul>
-      <a class="btn" href="#contact">Talk to us</a>
-    </div>
+  <div class="sector-grid">
+    <a class="sector-card" href="/case-studies/banking">
+      <em>Retail &amp; business banking</em>
+      <b>Banking</b>
+      <span>Answer like the branch. Prove it like the regulator.</span>
+    </a>
+    <a class="sector-card" href="/case-studies/insurance">
+      <em>General &amp; life insurance</em>
+      <b>Insurance</b>
+      <span>From first notice of loss to renewal, without the hold music.</span>
+    </a>
+    <a class="sector-card" href="/case-studies/superannuation">
+      <em>Funds &amp; member services</em>
+      <b>Superannuation</b>
+      <span>Member service that scales without scaling headcount.</span>
+    </a>
+    <a class="sector-card" href="/case-studies/telco">
+      <em>Carriers, energy and water</em>
+      <b>Telco &amp; Utilities</b>
+      <span>Outages are a communication problem before they are an engineering one.</span>
+    </a>
+    <a class="sector-card" href="/case-studies/government">
+      <em>Agencies &amp; public services</em>
+      <b>Government</b>
+      <span>Every citizen answered. Every language. Every time.</span>
+    </a>
+    <a class="sector-card" href="/case-studies/health-administration">
+      <em>Providers &amp; health funds</em>
+      <b>Health Administration</b>
+      <span>Fill the schedule. Free the front desk.</span>
+    </a>
   </div>
 
-  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:36px 0 4px">What differs</h2>
-  <p style="font-size:.9rem;color:var(--ink-soft);margin-bottom:8px">
-    The software is the same. What you buy is the commitment around it.</p>
-
-  <div class="table-scroll">
-  <table class="compare">
-    <thead><tr><th>&nbsp;</th><th>Community</th><th>Enterprise</th></tr></thead>
-    <tbody>
-      <tr><td>Source code</td><td class="yes">Complete</td><td class="yes">Complete</td></tr>
-      <tr><td>Features</td><td class="yes">All of them</td><td class="yes">All of them</td></tr>
-      <tr><td>Production use</td><td class="yes">Unlimited</td><td class="yes">Unlimited</td></tr>
-      <tr><td>Support</td><td>GitHub issues, best effort</td><td class="yes">Contracted, with response times</td></tr>
-      <tr><td>Uptime SLA</td><td class="no">None</td><td class="yes">Written and measured</td></tr>
-      <tr><td>Security review</td><td>Self-serve, docs and source</td><td class="yes">We answer your questionnaire</td></tr>
-      <tr><td>Deployment</td><td>Docs and compose files</td><td class="yes">Assisted, VPC and on-prem</td></tr>
-      <tr><td>Upgrades</td><td>Self-managed</td><td class="yes">Assisted, LTS branches</td></tr>
-      <tr><td>Contractual protection</td><td class="no">None, as-is</td><td class="yes">DPA, indemnity, audit rights</td></tr>
-    </tbody>
-  </table>
-  </div>
-
-  <p style="font-size:.86rem;color:var(--ink-soft);margin-bottom:34px">
-    Provider costs are separate and go directly to whoever carries your calls.
-    VoiceKernel never resells minutes, so there is no margin for us in your
-    call volume and no reason for us to make switching providers difficult.</p>
-
-  <div class="eyebrow" id="contact">Getting started</div>
-  <h2 style="font-family:'Archivo';font-size:1.3rem;margin:0 0 12px">How this usually goes</h2>
-  <div class="steps">
-    <div class="step"><span class="n">01</span><b>Run Community</b>
-      <span>Clone it, point it at your provider account, put a real queue
-      through it. No conversation with us required.</span></div>
-    <div class="step"><span class="n">02</span><b>Prove it internally</b>
-      <span>Show your security and compliance teams the source, the audit log
-      and the isolation model. They will have questions; the answers are in
-      the repository.</span></div>
-    <div class="step"><span class="n">03</span><b>Buy the guarantees</b>
-      <span>When it is carrying real volume and needs an SLA behind it, talk to
-      us. Nothing about your deployment has to change.</span></div>
-  </div>
-
-  <div class="faqs" style="margin-top:44px">
-    <div class="faq"><b>Is Community a trial?</b>
-      <p>No. It is the same software, MIT licensed, with no expiry, no usage
-      ceiling and no feature gates. If you never contact us, nothing stops
-      working.</p></div>
-    <div class="faq"><b>What exactly is licensed in Enterprise?</b>
-      <p>The support relationship and the contractual commitments, not access to
-      the code. You are buying response times, accountability and the paperwork
-      procurement needs.</p></div>
-    <div class="faq"><b>Can we start on Community and move later?</b>
-      <p>That is the intended path, and the reason it is not crippled. Moving is
-      a contract, not a migration.</p></div>
-    <div class="faq"><b>Do you take a cut of our call spend?</b>
-      <p>No. You hold the provider account and pay your provider directly.</p></div>
-    <div class="faq"><b>We are a systems integrator, not an end user.</b>
-      <p>See the <a href="/partners">partner programme</a>.</p></div>
-  </div>
+  <div class="note">These describe how the layers fit together for a given kind of
+  organisation. They are not customer testimonials, and none of them names or
+  implies a real deployment.</div>
 </div>
-
 <footer>
   <div class="foot-inner">
     <span>© 2026 VoiceKernel · PayFar Global Ltd</span>
