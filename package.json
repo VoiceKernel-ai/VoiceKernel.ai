@@ -23,7 +23,9 @@
     "test:sdk": "cd packages/sdk-typescript && npx tsx --test test/sdk.test.ts",
     "gen:favicons": "tsx scripts/gen-favicons.ts",
     "gen:docs": "tsx scripts/gen-docs.ts",
-    "gen:provider": "tsx scripts/gen-provider-operations.ts && tsx scripts/gen-provider-catalog.ts"
+    "gen:provider": "tsx scripts/gen-provider-operations.ts && tsx scripts/gen-provider-catalog.ts",
+    "gen:marketing": "tsx scripts/gen-marketing.ts",
+    "build:site": "npm run gen:docs && npm run gen:marketing && npm run build:web"
   },
   "dependencies": {
     "@daily-co/daily-js": "^0.91.0",

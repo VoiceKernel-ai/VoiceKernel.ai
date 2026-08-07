@@ -26,7 +26,9 @@
  * visitor with no account and no backend, so it ships as a static page built
  * from the same sources the API uses.
  */
-const API_PREFIXES = ['/v1/', '/auth/', '/webhooks/'];
+// '/partners/' with the trailing slash, so the partner *page* at '/partners'
+// stays a static asset while '/partners/apply' reaches the API.
+const API_PREFIXES = ['/v1/', '/auth/', '/webhooks/', '/partners/'];
 const API_EXACT = new Set(['/health', '/healthz']);
 
 function isApiPath(pathname) {

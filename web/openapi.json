@@ -440,7 +440,7 @@
         "tags": [
           "Provider passthrough"
         ],
-        "summary": "Mediated access to any of the 97 provider operations",
+        "summary": "Mediated access to any of the 98 provider operations",
         "description": "Same auth, tenant isolation, rate limiting and audit as native routes. GET /v1/provider/_operations lists everything reachable.",
         "responses": {
           "200": {

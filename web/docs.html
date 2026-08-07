@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>API reference - VoiceKernel</title>
-<meta name="description" content="VoiceKernel API reference: agents, calls, webhooks, the TypeScript SDK, and complete coverage of 97 upstream voice operations.">
+<meta name="description" content="VoiceKernel API reference: agents, calls, webhooks, the TypeScript SDK, and complete coverage of 98 upstream voice operations.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -209,6 +209,7 @@ footer a:hover{color:#D7E3EE}
       <a href="/#platform">Platform</a>
       <a href="/industries">Industries</a>
       <a href="/pricing">Pricing</a>
+      <a href="/partners">Partners</a>
       <a href="/docs" aria-current="page">Docs</a>
     </div>
     <div class="nav-right">
@@ -248,7 +249,7 @@ footer a:hover{color:#D7E3EE}
       every event into your systems - with tenant isolation, an audit trail and
       signed webhooks as defaults rather than add-ons.</p>
       <div class="stats">
-        <div class="stat"><b>97</b><span>operations covered</span></div>
+        <div class="stat"><b>98</b><span>operations covered</span></div>
         <div class="stat"><b>202</b><span>models</span></div>
         <div class="stat"><b>20</b><span>voice providers</span></div>
         <div class="stat"><b>26</b><span>action types</span></div>
@@ -413,7 +414,7 @@ learns your endpoint URL can forge call events.</p>
     <tr><td><code>/v1/scorecards</code></td><td>CRUD for scorecards</td></tr>
     <tr><td><code>/v1/boards</code></td><td>CRUD for boards</td></tr>
     <tr><td><code>/v1/insights</code></td><td>CRUD for insights</td></tr>
-    <tr><td><code>/v1/provider/*</code></td><td><b>All 97 upstream operations</b>, mediated</td></tr>
+    <tr><td><code>/v1/provider/*</code></td><td><b>All 98 upstream operations</b>, mediated</td></tr>
   </tbody>
 </table>
 
@@ -536,7 +537,7 @@ accept - <code>GET /v1/catalog</code> returns the same data at runtime.</p>
 </table></section>
 
     <section id="operations"><h2>Upstream operations</h2>
-<p class="lede">97 operations, generated from the upstream OpenAPI
+<p class="lede">98 operations, generated from the upstream OpenAPI
 document - so this list is what the API accepts, not what someone remembered to
 write down.</p>
 
@@ -704,6 +705,12 @@ write down.</p>
       <td class="m"><span class="method get">GET</span></td>
       <td><code>/v1/provider/call/{id}/video-recording</code></td>
       <td>Download Call Video Recording</td>
+      <td class="r"></td>
+    </tr>
+    <tr>
+      <td class="m"><span class="method post">POST</span></td>
+      <td><code>/v1/provider/call/web</code></td>
+      <td>Create Web Call</td>
       <td class="r"></td>
     </tr>
   </tbody>

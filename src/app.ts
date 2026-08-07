@@ -12,6 +12,7 @@ import { healthcheck } from './db';
 import { requestId } from './middleware/context';
 import { errorHandler, notFoundHandler } from './middleware/errors';
 import { rateLimit } from './middleware/ratelimit';
+import { partnersRouter } from './routes/partners';
 import { authRouter } from './routes/auth';
 import { v1Router } from './routes/v1';
 import { inboundWebhooksRouter } from './routes/webhooks-in';
@@ -157,6 +158,11 @@ export function createApp(): express.Express {
   // ---- API ---------------------------------------------------------------
 
   app.use('/auth', authRouter);
+
+  // Public: an integration partner applying has no account yet. Rate limited
+  // by IP inside the router rather than sharing the API's credential-keyed
+  // bucket, which would be meaningless for anonymous callers.
+  app.use('/partners', partnersRouter);
 
   // A coarse per-IP limit in front of authentication, so a flood of invalid
   // keys cannot force an unbounded number of credential lookups. The per-tenant
